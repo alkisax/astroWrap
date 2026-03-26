@@ -10,7 +10,7 @@ type Props = {
   data: ChartSummary;
 };
 
-export default function PlanetTable({ data }: Props) {
+const PlanetTable = ({ data }: Props) => {
   const [opened, setOpened] = useState(false);
   const [selected, setSelected] = useState<{
     planet: string;
@@ -82,22 +82,23 @@ export default function PlanetTable({ data }: Props) {
           <Stack gap="xs">
             <Text fw={600}>🪐 {selected.planet}</Text>
             <Text size="sm">
-  {planetKeywords[selected.planet as keyof typeof planetKeywords]?.join(", ")}
+              {planetKeywords[selected.planet as keyof typeof planetKeywords]?.join(", ")}
             </Text>
 
             <Text fw={600}>♈ {selected.sign}</Text>
             <Text size="sm">
-  {signKeywords[selected.sign as keyof typeof signKeywords]?.join(", ")}
+              {signKeywords[selected.sign as keyof typeof signKeywords]?.join(", ")}
             </Text>
 
             <Text fw={600}>🏠 House {selected.house}</Text>
             <Text size="sm">
-  {houseKeywords[selected.house as keyof typeof houseKeywords]?.join(", ")}
+              {houseKeywords[selected.house as keyof typeof houseKeywords]?.join(", ")}
             </Text>
           </Stack>
         )}
       </Modal>
     </>
-
   );
 }
+
+export default PlanetTable

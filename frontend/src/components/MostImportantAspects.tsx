@@ -6,7 +6,7 @@ type Props = {
   data: ChartSummary;
 };
 
-export default function MostImportantAspects({ data }: Props) {
+const MostImportantAspects = ({ data }: Props) => {
   const aspects = data.aspects ?? [];
 
   if (!aspects.length) return null;
@@ -38,3 +38,5 @@ export default function MostImportantAspects({ data }: Props) {
     </Paper>
   );
 }
+
+export default MostImportantAspects

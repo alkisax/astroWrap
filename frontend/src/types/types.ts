@@ -42,3 +42,11 @@ export interface ChartSummary {
   houses: House[];
   aspects?: Aspect[];
 }
+
+export type DateType = {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+};
