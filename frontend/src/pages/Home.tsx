@@ -11,9 +11,25 @@ import ChartRuler from "../components/ChartRuler";
 import MostImportantAspects from "../components/MostImportantAspects";
 import DispositorTree from "../components/DispositorTree";
 import TimeControls from "../components/TimeControls";
+import PlanetSelector from "../components/PlanetSelector";
+import EssentialDignities from "../components/EssentialDignities";
+import HouseRulers from "../components/HouseRulers";
+import BalanceSummary from "../components/BalanceSummary";
 
 const Home = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
+  const [visiblePlanets, setVisiblePlanets] = useState<string[]>([
+    "Sun",
+    "Moon",
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto",
+  ]);
   const [date, setDate] = useState({
     year: 1981,
     month: 1,
@@ -69,20 +85,30 @@ const Home = () => {
 
   if (!data) return <div>Loading...</div>;
 
-  const chartData = mapToChartData(data);
+  const chartData = mapToChartData(data, visiblePlanets);
 
   return (
 
     <>
       <ChartForm onSubmit={handleSubmit} />
       <div>
-        <AstroChart {...chartData} />
+        <div>
+          <PlanetSelector
+            selected={visiblePlanets}
+            setSelected={setVisiblePlanets}
+          />
+          <AstroChart {...chartData} />
+        </div>
+
 
         <TimeControls date={date} setDate={setDate} coords={coords} />
 
         <div style={{ width: "50vw", margin: "40px auto" }}>
           <PlanetTable data={data} />
           <ChartRuler data={data} />
+          <BalanceSummary data={data} />
+          <HouseRulers data={data} />
+          <EssentialDignities data={data} />
           <DispositorTree data={data} />
           <MostImportantAspects data={data} />
         </div>

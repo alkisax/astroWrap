@@ -2,12 +2,13 @@ import { Paper, Text } from "@mantine/core";
 import { planetIcons } from "../constants/constants";
 import { getAllDispositors } from "../utils/dispositorCalculator";
 import type { ChartSummary } from "../types/types";
+import { getMutualReceptions } from "../utils/mutualReception";
 
 type Props = {
   data: ChartSummary;
 };
 
-const DispositorSummary = ({ data }: Props) =>  {
+const DispositorSummary = ({ data }: Props) => {
   const results = getAllDispositors(data);
 
   const finals = results
@@ -20,6 +21,8 @@ const DispositorSummary = ({ data }: Props) =>  {
     .filter((p): p is string => p !== undefined);
 
   const uniqueLoop = Array.from(new Set(loops));
+
+  const mutual = getMutualReceptions(data);
 
   return (
     <Paper
@@ -51,6 +54,18 @@ const DispositorSummary = ({ data }: Props) =>  {
             <span key={i}>
               {planetIcons[p]} {p}
               {i < uniqueLoop.length - 1 && " ⇄ "}
+            </span>
+          ))}
+        </Text>
+      )}
+
+      {mutual.length > 0 && (
+        <Text mt="sm">
+          🔗 Mutual Reception:{" "}
+          {mutual.map((pair, i) => (
+            <span key={i}>
+              {planetIcons[pair[0]]} {pair[0]} ⇄ {planetIcons[pair[1]]} {pair[1]}
+              {i < mutual.length - 1 && ", "}
             </span>
           ))}
         </Text>

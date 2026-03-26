@@ -1,5 +1,5 @@
 import type { ChartSummary } from "../types/types";
-import { signToPlanet } from "../constants/constants";
+import { planets, signToPlanet } from "../constants/constants";
 
 type Result = {
   chain: string[];
@@ -77,18 +77,7 @@ export function getDispositorChain(
 }
 
 export function getAllDispositors(data: ChartSummary) {
-  const planets = [
-    "Sun",
-    "Moon",
-    "Mercury",
-    "Venus",
-    "Mars",
-    "Jupiter",
-    "Saturn",
-    "Uranus",
-    "Neptune",
-    "Pluto",
-  ];
+
 
   return planets.map((p) => ({
     planet: p,

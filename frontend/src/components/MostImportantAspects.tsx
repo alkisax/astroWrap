@@ -24,13 +24,16 @@ const MostImportantAspects = ({ data }: Props) => {
 
       <Stack mt="sm">
         {aspects.map((a, i) => {
+          // console.log("i: ", i, " , a:", a );
+          const orb = a.orb != null ? a.orb.toFixed(2) : "?";
+
           const p1 = a.point1Label;
           const p2 = a.point2Label;
 
           return (
             <Text key={i} ta="center">
               {planetIcons[p1]} {p1} {aspectIcons[a.type]} {planetIcons[p2]} {p2}{" "}
-              ({a.type})
+              ({a.type}, orb {orb}°)
             </Text>
           );
         })}

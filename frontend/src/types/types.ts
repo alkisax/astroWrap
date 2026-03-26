@@ -50,3 +50,18 @@ export type DateType = {
   hour: number;
   minute: number;
 };
+
+export type Planet =
+  | "Sun"
+  | "Moon"
+  | "Mercury"
+  | "Venus"
+  | "Mars"
+  | "Jupiter"
+  | "Saturn"
+  | "Uranus"
+  | "Neptune"
+  | "Pluto";
+
+export type Element = "Fire" | "Earth" | "Air" | "Water";
+export type Modality = "Cardinal" | "Fixed" | "Mutable";

@@ -1,3 +1,5 @@
+import type { Planet, Element, Modality } from "../types/types";
+
 // frontend\src\constants\constants.ts
 export const url = "http://localhost:3011/api/astro/calculate";
 
@@ -15,6 +17,34 @@ export const signs = [
   "Aquarius",
   "Pisces",
 ];
+
+export const planets: Planet[] = [
+  "Sun",
+  "Moon",
+  "Mercury",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Pluto",
+];
+
+export const signToModality: Record<string, Modality> = {
+  Aries: "Cardinal",
+  Cancer: "Cardinal",
+  Libra: "Cardinal",
+  Capricorn: "Cardinal",
+  Taurus: "Fixed",
+  Leo: "Fixed",
+  Scorpio: "Fixed",
+  Aquarius: "Fixed",
+  Gemini: "Mutable",
+  Virgo: "Mutable",
+  Sagittarius: "Mutable",
+  Pisces: "Mutable",
+};
 
 export const planetIcons: Record<string, string> = {
   Sun: "☀️",
@@ -42,7 +72,7 @@ export const planetSymbolToName: Record<string, string> = {
   "♇": "Pluto",
 };
 
-export const signToPlanet: Record<string, string> = {
+export const signToPlanet: Record<string, Planet> = {
   Aries: "Mars",
   Taurus: "Venus",
   Gemini: "Mercury",
@@ -55,6 +85,24 @@ export const signToPlanet: Record<string, string> = {
   Capricorn: "Saturn",
   Aquarius: "Saturn",
   Pisces: "Jupiter",
+};
+
+export const signToElement: Record<string, Element> = {
+  Aries: "Fire",
+  Leo: "Fire",
+  Sagittarius: "Fire",
+
+  Taurus: "Earth",
+  Virgo: "Earth",
+  Capricorn: "Earth",
+
+  Gemini: "Air",
+  Libra: "Air",
+  Aquarius: "Air",
+
+  Cancer: "Water",
+  Scorpio: "Water",
+  Pisces: "Water",
 };
 
 export const aspectIcons: Record<string, string> = {
