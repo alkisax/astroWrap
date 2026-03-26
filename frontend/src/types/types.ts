@@ -15,6 +15,15 @@ export interface House {
   longitude?: number | null;
 }
 
+export interface Aspect {
+  point1Key: string;
+  point1Label: string;
+  point2Key: string;
+  point2Label: string;
+  type: string;
+  orb?: number;
+}
+
 export interface ChartSummary {
   ascendant: BasicPlacement | null;
   midheaven: BasicPlacement | null;
@@ -31,4 +40,5 @@ export interface ChartSummary {
   pluto: BasicPlacement | null;
 
   houses: House[];
+  aspects?: Aspect[];
 }

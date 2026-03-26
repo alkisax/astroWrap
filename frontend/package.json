@@ -11,7 +11,13 @@
   },
   "dependencies": {
     "@astrodraw/astrochart": "^3.0.2",
+    "@mantine/core": "^8.3.18",
+    "@mantine/dates": "^8.3.18",
+    "@mantine/hooks": "^8.3.18",
+    "@mantine/modals": "^8.3.18",
     "axios": "^1.13.6",
+    "country-state-city": "^3.2.1",
+    "dayjs": "^1.11.20",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
