@@ -10,6 +10,7 @@ import ChartForm from "./components/ChartForm";
 import PlanetTable from "./components/PlanetTable";
 import ChartRuler from "./components/ChartRuler";
 import MostImportantAspects from "./components/MostImportantAspects";
+import DispositorTree from "./components/DispositorTree";
 
 function App() {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -120,7 +121,7 @@ function App() {
   }
 
   // console.log(data);
-  
+
 
   if (!data) return <div>Loading...</div>;
 
@@ -132,36 +133,38 @@ function App() {
       <ChartForm onSubmit={handleSubmit} />
       <div>
         <AstroChart {...chartData} />
+
+        <Paper withBorder p="sm" radius="md" style={{ maxWidth: 400, margin: "20px auto" }}>
+          <Text ta="center" size="sm" mb="xs">
+            {`${date.day}/${date.month}/${date.year} ${date.hour}:${String(date.minute).padStart(2, "0")} — Athens`}
+          </Text>
+
+          <Group justify="center" gap="xs">
+            <Button size="xs" variant="light" onClick={() => setDate((d) => addDays(d, -1))}>
+              -1d
+            </Button>
+
+            <Button size="xs" variant="light" onClick={() => setDate((d) => addDays(d, 1))}>
+              +1d
+            </Button>
+
+            <Button size="xs" variant="outline" onClick={() => setDate((d) => addHours(d, -1))}>
+              -1h
+            </Button>
+
+            <Button size="xs" variant="outline" onClick={() => setDate((d) => addHours(d, 1))}>
+              +1h
+            </Button>
+          </Group>
+        </Paper>
+
         <div style={{ width: "50vw", margin: "40px auto" }}>
           <PlanetTable data={data} />
           <ChartRuler data={data} />
           <MostImportantAspects data={data} />
+          <DispositorTree data={data} />
         </div>
       </div>
-
-      <Paper withBorder p="sm" radius="md" style={{ maxWidth: 400, margin: "20px auto" }}>
-        <Text ta="center" size="sm" mb="xs">
-          {`${date.day}/${date.month}/${date.year} ${date.hour}:${String(date.minute).padStart(2, "0")} — Athens`}
-        </Text>
-
-        <Group justify="center" gap="xs">
-          <Button size="xs" variant="light" onClick={() => setDate((d) => addDays(d, -1))}>
-            -1d
-          </Button>
-
-          <Button size="xs" variant="light" onClick={() => setDate((d) => addDays(d, 1))}>
-            +1d
-          </Button>
-
-          <Button size="xs" variant="outline" onClick={() => setDate((d) => addHours(d, -1))}>
-            -1h
-          </Button>
-
-          <Button size="xs" variant="outline" onClick={() => setDate((d) => addHours(d, 1))}>
-            +1h
-          </Button>
-        </Group>
-      </Paper>
     </>
   );
 }

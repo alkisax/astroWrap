@@ -42,6 +42,21 @@ export const planetSymbolToName: Record<string, string> = {
   "♇": "Pluto",
 };
 
+export const signToPlanet: Record<string, string> = {
+  Aries: "Mars",
+  Taurus: "Venus",
+  Gemini: "Mercury",
+  Cancer: "Moon",
+  Leo: "Sun",
+  Virgo: "Mercury",
+  Libra: "Venus",
+  Scorpio: "Mars",
+  Sagittarius: "Jupiter",
+  Capricorn: "Saturn",
+  Aquarius: "Saturn",
+  Pisces: "Jupiter",
+};
+
 export const aspectIcons: Record<string, string> = {
   conjunction: "☌",
   sextile: "⚹",
