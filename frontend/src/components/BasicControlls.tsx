@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 import ChartForm from "./ChartForm";
 import PlanetSelector from "./PlanetSelector";
 import TimeControls from "./TimeControls";
+import { useMediaQuery } from "@mui/material";
 
 type Props = {
   onSubmit: (input: {
@@ -30,10 +31,13 @@ const BasicControls = ({
   setDate,
   coords,
 }: Props) => {
+
+  const isMobile = useMediaQuery("(max-width:768px)");
+
   return (
     <div
       style={{
-        width: "280px",
+        width: isMobile ? "100%" : "280px",
         margin: "0px auto",
         padding: "5px",
         borderRadius: "12px",
@@ -41,6 +45,7 @@ const BasicControls = ({
         backdropFilter: "blur(10px)",
         display: "flex",
         flexDirection: "column",
+        alignItems: "flex-start",
         gap: "5px",
       }}
     >

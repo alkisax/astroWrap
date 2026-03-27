@@ -13,6 +13,7 @@ import EssentialDignities from "../components/EssentialDignities";
 import HouseRulers from "../components/HouseRulers";
 import BalanceSummary from "../components/BalanceSummary";
 import BasicControls from "../components/BasicControlls";
+import { useMediaQuery } from "@mui/material";
 
 const Home = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -73,6 +74,8 @@ const Home = () => {
 
   console.log(data);
 
+  const isMobile = useMediaQuery("(max-width:768px)");
+
   if (!data) return <div>Loading...</div>;
 
   const chartData = mapToChartData(data, visiblePlanets);
@@ -80,44 +83,53 @@ const Home = () => {
   return (
 
     <>
-<div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: "20px",
-    marginTop: "20px",
-  }}
->
-    <div
-    style={{
-      display: "flex",
-      gap: "20px",
-      padding: "20px",
-      borderRadius: "16px",
-      background: "rgba(20,20,30,0.6)",
-      backdropFilter: "blur(2px)",
-      border: "1px solid rgba(255,255,255,0.1)",
-      alignItems: "center",
-    }}
-  >
-  <BasicControls
-    onSubmit={handleSubmit}
-    visiblePlanets={visiblePlanets}
-    setVisiblePlanets={setVisiblePlanets}
-    date={date}
-    setDate={setDate}
-    coords={coords}
-  />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          gap: "20px",
+          marginTop: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            gap: "20px",
+            padding: "20px",
+            borderRadius: "16px",
+            background: "rgba(20,20,30,0.6)",
+            backdropFilter: "blur(2px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            alignItems: "flex-start",
+            maxWidth: "1000px",
+            width: "100%",
+          }}
+        >
+          <BasicControls
+            onSubmit={handleSubmit}
+            visiblePlanets={visiblePlanets}
+            setVisiblePlanets={setVisiblePlanets}
+            date={date}
+            setDate={setDate}
+            coords={coords}
+          />
 
-  <AstroChart {...chartData} />    
-  </div>
-
-</div>
+          <div
+            style={{
+              flex: 1,
+              minWidth: 0,
+              maxWidth: isMobile ? "100%" : "600px",
+            }}
+          >
+            <AstroChart {...chartData} />
+          </div>
+        </div>
+      </div>
 
       <div>
-
-
         <div style={{ width: "50vw", margin: "40px auto" }}>
           <MostImportantAspects data={data} />
           <PlanetTable data={data} />
