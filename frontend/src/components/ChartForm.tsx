@@ -32,6 +32,15 @@ export default function ChartForm({ onSubmit }: Props) {
     });
   };
 
+  function toDate(value: unknown): Date | null {
+    if (!value) return null;
+    if (value instanceof Date) return value;
+
+    // fallback αν είναι string
+    const d = new Date(value as string);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
   console.log("chatform", date, lat, lng);
 
   return (
@@ -51,7 +60,10 @@ export default function ChartForm({ onSubmit }: Props) {
           <DateTimePicker
             label="Date & Time"
             value={date}
-            onChange={(value) => setDate(value as Date | null)}
+            onChange={(value) => {
+              const d = toDate(value);
+              if (d) setDate(d);
+            }}
           />
 
           <NumberInput
