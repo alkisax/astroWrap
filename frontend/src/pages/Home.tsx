@@ -96,13 +96,14 @@ const Home = () => {
         <TimeControls date={date} setDate={setDate} coords={coords} />
 
         <div style={{ width: "50vw", margin: "40px auto" }}>
+                    <MostImportantAspects data={data} />
           <PlanetTable data={data} />
           <ChartRuler data={data} />
           <BalanceSummary data={data} />
           <HouseRulers data={data} />
           <EssentialDignities data={data} />
           <DispositorTree data={data} />
-          <MostImportantAspects data={data} />
+
         </div>
       </div>
     </>

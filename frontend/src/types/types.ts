@@ -65,3 +65,10 @@ export type Planet =
 
 export type Element = "Fire" | "Earth" | "Air" | "Water";
 export type Modality = "Cardinal" | "Fixed" | "Mutable";
+
+// gia aspects σε ASC MC
+export type Point = {
+  key: string;
+  label: string;
+  longitude: number;
+};

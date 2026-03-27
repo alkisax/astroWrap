@@ -113,6 +113,14 @@ export const aspectIcons: Record<string, string> = {
   opposition: "☍",
 };
 
+export const aspectDefs = [
+  { type: "conjunction", angle: 0, orb: 8 },
+  { type: "sextile", angle: 60, orb: 4 },
+  { type: "square", angle: 90, orb: 6 },
+  { type: "trine", angle: 120, orb: 6 },
+  { type: "opposition", angle: 180, orb: 8 },
+];
+
 export const signIcons: Record<string, string> = {
   Aries: "♈",
   Taurus: "♉",

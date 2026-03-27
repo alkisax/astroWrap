@@ -1,6 +1,7 @@
 import { Paper, Text, Stack } from "@mantine/core";
 import type { ChartSummary } from "../types/types";
 import { aspectIcons, planetIcons } from "../constants/constants";
+import { getAngleAspects } from "../utils/getAngleAspects";
 
 type Props = {
   data: ChartSummary;
@@ -10,6 +11,11 @@ const MostImportantAspects = ({ data }: Props) => {
   const aspects = data.aspects ?? [];
 
   if (!aspects.length) return null;
+
+  const allAspects = [
+    ...(data.aspects ?? []),
+    ...getAngleAspects(data),
+  ];
 
   return (
     <Paper
@@ -23,7 +29,7 @@ const MostImportantAspects = ({ data }: Props) => {
       </Text>
 
       <Stack mt="sm">
-        {aspects.map((a, i) => {
+        {allAspects.map((a, i) => {
           // console.log("i: ", i, " , a:", a );
           const orb = a.orb != null ? a.orb.toFixed(2) : "?";
 
