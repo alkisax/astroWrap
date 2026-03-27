@@ -6,7 +6,9 @@ import {
   Paper,
   Stack,
   Title,
+  Group,
 } from "@mantine/core";
+import { colors } from "../constants/constants";
 import { DateTimePicker } from "@mantine/dates";
 
 type Props = {
@@ -44,13 +46,19 @@ export default function ChartForm({ onSubmit }: Props) {
   console.log("chatform", date, lat, lng);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
+    <div style={{ display: "flex", justifyContent: "center", paddingTop: 40 }}>
       <Paper
         shadow="md"
         p="lg"
         radius="md"
         withBorder
-        style={{ width: 320 }}
+        style={{
+          width: 235,
+          background: colors.panel,
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          color: colors.text,
+        }}
       >
         <Stack gap="sm">
           <Title order={4} ta="center">
@@ -66,23 +74,35 @@ export default function ChartForm({ onSubmit }: Props) {
             }}
           />
 
-          <NumberInput
-            label="Latitude"
-            value={lat}
-            onChange={(val) => setLat(Number(val))}
-          />
+          <Group grow>
+            <NumberInput
+              label="Lat"
+              value={lat}
+              decimalScale={4}
+              onChange={(val) => setLat(Number(val))}
+            />
 
-          <NumberInput
-            label="Longitude"
-            value={lng}
-            onChange={(val) => setLng(Number(val))}
-          />
+            <NumberInput
+              label="Lng"
+              value={lng}
+              decimalScale={4}
+              onChange={(val) => setLng(Number(val))}
+            />
+          </Group>
 
-          <Text size="xs" c="dimmed" ta="center">
+          <Text size="xs" c={colors.dim} ta="center">
             Coordinates: latlong.net
           </Text>
 
-          <Button fullWidth mt="sm" onClick={handleSubmit}>
+          <Button
+            fullWidth
+            mt="sm"
+            onClick={handleSubmit}
+            style={{
+              backgroundColor: colors.primary,
+              color: "#000",
+            }}
+          >
             Calculate
           </Button>
         </Stack>

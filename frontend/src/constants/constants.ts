@@ -3,6 +3,15 @@ import type { Planet, Element, Modality } from "../types/types";
 // frontend\src\constants\constants.ts
 export const url = "http://localhost:3011/api/astro/calculate";
 
+export const colors = {
+  bg: "#0f0f1a",
+  panel: "rgba(20, 20, 30, 0.7)",
+  primary: "#f5a623",     // πορτοκαλοκίτρινο
+  secondary: "#6c63ff",   // μωβ/astro vibe
+  text: "#ffffff",
+  dim: "#aaaaaa",
+};
+
 export const signs = [
   "Aries",
   "Taurus",
