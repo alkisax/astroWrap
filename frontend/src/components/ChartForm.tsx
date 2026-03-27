@@ -18,21 +18,21 @@ type Props = {
 };
 
 export default function ChartForm({ onSubmit }: Props) {
-  const [date, setDate] = useState<string | null>(new Date().toISOString());
-  const [lat, setLat] = useState<number | string>("");
-  const [lng, setLng] = useState<number | string>("");
+  const [date, setDate] = useState<Date | null>(new Date());
+  const [lat, setLat] = useState<number>(37.9838);
+  const [lng, setLng] = useState<number>(23.7275);
 
   const handleSubmit = () => {
-    if (!date || lat === "" || lng === "") return;
-
-    const d = new Date(date);
+    if (!date || lat == null || lng == null) return;
 
     onSubmit({
-      date: d,
+      date, // ήδη Date
       lat: Number(lat),
       lng: Number(lng),
     });
   };
+
+  console.log("chatform", date, lat, lng);
 
   return (
     <div style={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
@@ -51,21 +51,19 @@ export default function ChartForm({ onSubmit }: Props) {
           <DateTimePicker
             label="Date & Time"
             value={date}
-            onChange={setDate}
+            onChange={(value) => setDate(value as Date | null)}
           />
 
           <NumberInput
             label="Latitude"
-            placeholder="37.9838"
             value={lat}
-            onChange={setLat}
+            onChange={(val) => setLat(Number(val))}
           />
 
           <NumberInput
             label="Longitude"
-            placeholder="23.7275"
             value={lng}
-            onChange={setLng}
+            onChange={(val) => setLng(Number(val))}
           />
 
           <Text size="xs" c="dimmed" ta="center">

@@ -30,13 +30,7 @@ const Home = () => {
     "Neptune",
     "Pluto",
   ]);
-  const [date, setDate] = useState({
-    year: 1981,
-    month: 1,
-    day: 1,
-    hour: 23,
-    minute: 30,
-  });
+  const [date, setDate] = useState<Date>(new Date());
   const [coords, setCoords] = useState({
     lat: 37.9838,
     lng: 23.7275,
@@ -46,7 +40,11 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const res = await axios.post(url, {
-          ...date,
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          day: date.getDate(),
+          hour: date.getHours(),
+          minute: date.getMinutes(),
           latitude: coords.lat,
           longitude: coords.lng,
           houseSystem: "placidus",
@@ -67,13 +65,7 @@ const Home = () => {
     lat: number;
     lng: number;
   }) => {
-    setDate({
-      year: input.date.getFullYear(),
-      month: input.date.getMonth() + 1,
-      day: input.date.getDate(),
-      hour: input.date.getHours(),
-      minute: input.date.getMinutes(),
-    });
+    setDate(input.date);
 
     setCoords({
       lat: input.lat,
