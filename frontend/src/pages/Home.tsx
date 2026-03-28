@@ -5,15 +5,9 @@ import AstroChart from "../components/AstroChart";
 import { mapToChartData } from "../utils/mapToChart";
 import type { ChartSummary } from "../types/types"
 import { url } from '../constants/constants';
-import PlanetTable from "../components/PlanetTable";
-import ChartRuler from "../components/ChartRuler";
-import MostImportantAspects from "../components/MostImportantAspects";
-import DispositorTree from "../components/DispositorTree";
-import EssentialDignities from "../components/EssentialDignities";
-import HouseRulers from "../components/HouseRulers";
-import BalanceSummary from "../components/BalanceSummary";
 import BasicControls from "../components/BasicControlls";
 import { useMediaQuery } from "@mui/material";
+import BasicChartInfo from "../components/BasicChartInfo";
 
 const Home = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -171,20 +165,10 @@ const Home = () => {
             </div>
           )}
         </div>
-      </div>
 
-      <div>
-        <div style={{ width: "50vw", margin: "40px auto" }}>
-          <MostImportantAspects data={data} />
-          <PlanetTable data={data} />
-          <ChartRuler data={data} />
-          <BalanceSummary data={data} />
-          <HouseRulers data={data} />
-          <EssentialDignities data={data} />
-          <DispositorTree data={data} />
-
-        </div>
       </div>
+        <BasicChartInfo data={data}/>
+
     </>
   );
 }
