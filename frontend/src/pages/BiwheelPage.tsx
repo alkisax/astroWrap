@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import AstroChartTransits from "../components/AstroChartTransits";
+// import AstroChartTransits from "../components/AstroChartTransits";
 import { mapToChartData } from "../utils/mapToChart";
 import type { ChartInput, ChartSummary } from "../types/types";
 import { url } from "../constants/constants";
 import ChartFormBiwheel from "../components/biwheel/ChartFormBiwheel";
 import PlanetSelector from "../components/PlanetSelector";
 import PlanetTable from "../components/PlanetTable";
+import InnerChart from "../components/biwheel/InnerChart";
+import OuterChart from "../components/biwheel/OuterChart";
 
 const BiwheelPage = () => {
   // 🔹 raw api data
@@ -110,15 +112,40 @@ const BiwheelPage = () => {
 
   return (
     <>
-      {/* 🪐 BIWHEEL */}
-      <div style={{ padding: "20px" }}>
-        <AstroChartTransits
+      {/* <AstroChartTransits
           radixPlanets={radixChart.planets}
           radixCusps={radixChart.cusps}
           transitPlanets={transitChart.planets}
           transitCusps={transitChart.cusps}
-        />
-      </div>
+        /> */}
+      {/* 🪐 BIWHEEL */}
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    flexWrap: "wrap", // 🔥 responsive
+    padding: "20px",
+  }}
+>
+  {/* RADIX */}
+  <div>
+    <h3 style={{ textAlign: "center", color: "white" }}>Radix</h3>
+    <InnerChart
+      planets={radixChart.planets}
+      cusps={radixChart.cusps}
+    />
+  </div>
+
+  {/* TRANSITS */}
+  <div>
+    <h3 style={{ textAlign: "center", color: "white" }}>Transits</h3>
+    <OuterChart
+      planets={transitChart.planets}
+      cusps={transitChart.cusps}
+    />
+  </div>
+</div>
 
       {/* 🧾 TABLES */}
       <div
