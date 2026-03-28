@@ -14,6 +14,7 @@ import MostImportantAspects from "./MostImportantAspects";
 import HouseRulers from "./HouseRulers";
 import EssentialDignities from "./EssentialDignities";
 import DispositorTree from "./DispositorTree";
+import { useMediaQuery } from "@mantine/hooks";
 
 type Props = {
   data: ChartSummary;
@@ -25,9 +26,9 @@ const BasicChartInfo = ({ data }: Props) => {
   const [showDignities, setShowDignities] = useState(false);
   const [showTree, setShowTree] = useState(false);
 
+  const isMobile = useMediaQuery("(max-width:768px)");
+
   return (
-
-
     <>
       <Paper
         p="md"
@@ -45,7 +46,7 @@ const BasicChartInfo = ({ data }: Props) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
             gap: "10px",
             alignItems: "stretch",
           }}

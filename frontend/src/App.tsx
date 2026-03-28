@@ -11,7 +11,7 @@ function App() {
         minHeight: "100vh",
         backgroundImage: `url(${bgImage})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: "150% auto",
+        backgroundSize: "100% auto",
         backgroundColor: "black",
       }}
     >

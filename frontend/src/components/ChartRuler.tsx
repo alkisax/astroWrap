@@ -43,7 +43,7 @@ export default function ChartRuler({ data }: Props) {
 
         <Text mt="sm">
           {planetIcons[ruler.planet]} {ruler.planet} in{" "}
-          {signIcons[ruler.sign]} {ruler.sign} — House {ruler.house}
+          {signIcons[ruler.sign]} {ruler.sign} - House {ruler.house}
         </Text>
       </Paper>
 
