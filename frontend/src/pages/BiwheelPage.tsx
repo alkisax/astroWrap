@@ -211,83 +211,83 @@ const BiwheelPage = () => {
         </div>
       </div>
 
-<Accordion
-  variant="unstyled"
-  multiple
-  defaultValue={[]}
-  styles={{
-    control: {
-      color: colors.text, // ✅ αυτό θες
-      fontWeight: 500,
-    },
-    label: {
-      color: colors.text, // extra safety
-    },
-  }}
->
-  {/* 🏠 House + Aspects */}
-  <Accordion.Item value="radix-transit">
-    <Accordion.Control>
-      🪐 Radix / Transit Analysis
-    </Accordion.Control>
+      <Accordion
+        variant="unstyled"
+        multiple
+        defaultValue={[]}
+        styles={{
+          control: {
+            color: colors.text, // ✅ αυτό θες
+            fontWeight: 500,
+          },
+          label: {
+            color: colors.text, // extra safety
+          },
+        }}
+      >
+        {/* 🏠 House + Aspects */}
+        <Accordion.Item value="radix-transit">
+          <Accordion.Control>
+            🪐 Radix / Transit Analysis
+          </Accordion.Control>
 
-    <Accordion.Panel>
-      <Grid gutter="md" mb="md">
-        <Grid.Col span={6}>
-          <HouseRulers data={radixData} />
-          <MostImportantAspects data={radixData} />
-        </Grid.Col>
+          <Accordion.Panel>
+            <Grid gutter="md" mb="md">
+              <Grid.Col span={6}>
+                <HouseRulers data={radixData} />
+                <MostImportantAspects data={radixData} />
+              </Grid.Col>
 
-        <Grid.Col span={6}>
-          <HouseRulers data={transitData} />
-          <MostImportantAspects data={transitData} />
-        </Grid.Col>
-      </Grid>
-    </Accordion.Panel>
-  </Accordion.Item>
+              <Grid.Col span={6}>
+                <HouseRulers data={transitData} />
+                <MostImportantAspects data={transitData} />
+              </Grid.Col>
+            </Grid>
+          </Accordion.Panel>
+        </Accordion.Item>
 
-  {/* 🔮 Transit Aspects Table */}
-  <Accordion.Item value="two-chart">
-    <Accordion.Control>
-      🔮 Transit Aspects Table
-    </Accordion.Control>
+        {/* 🔮 Transit Aspects Table */}
+        <Accordion.Item value="two-chart">
+          <Accordion.Control>
+            🔮 Transit Aspects Table
+          </Accordion.Control>
 
-    <Accordion.Panel>
-      <TwoChartsAspectsTable
-        radix={radixData}
-        transit={transitData}
-      />
-    </Accordion.Panel>
-  </Accordion.Item>
+          <Accordion.Panel>
+            <TwoChartsAspectsTable
+              radix={radixData}
+              transit={transitData}
+            />
+          </Accordion.Panel>
+        </Accordion.Item>
 
-  {/* 🧩 Grid */}
-  <Accordion.Item value="grid">
-    <Accordion.Control>
-      🧩 Transit Grid
-    </Accordion.Control>
+        {/* 🧩 Grid */}
+        <Accordion.Item value="grid">
+          <Accordion.Control>
+            🧩 Transit Grid
+          </Accordion.Control>
 
-    <Accordion.Panel>
-      <TransitAspectsGrid
-        radix={radixData}
-        transit={transitData}
-      />
-    </Accordion.Panel>
-  </Accordion.Item>
+          <Accordion.Panel>
+            <TransitAspectsGrid
+              radix={radixData}
+              transit={transitData}
+            />
+          </Accordion.Panel>
+        </Accordion.Item>
 
-  {/* 🦅 Eagle*/}
-  <Accordion.Item value="eagle">
-    <Accordion.Control>
-      🦅 Eagle
-    </Accordion.Control>
+        {/* 🦅 Eagle*/}
+        <Accordion.Item value="eagle">
+          <Accordion.Control>
+            🦅 Eagle
+          </Accordion.Control>
 
-    <Accordion.Panel>
-      <EagleLarkGridList
-        radix={radixData}
-        transit={transitData}
-      />
-    </Accordion.Panel>
-  </Accordion.Item>
-</Accordion>
+          <Accordion.Panel>
+            <EagleLarkGridList
+              radix={radixData}
+              transit={transitData}
+            />
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
     </>
   );
 };
