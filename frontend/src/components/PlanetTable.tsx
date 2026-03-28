@@ -22,6 +22,7 @@ const PlanetTable = ({ data }: Props) => {
 
   const planets: { name: string; value: number | null | undefined }[] = [
     { name: "Sun", value: data.sun?.longitude },
+    { name: "ASC", value: data.ascendant?.longitude },
     { name: "Moon", value: data.moon?.longitude },
     { name: "Mercury", value: data.mercury?.longitude },
     { name: "Venus", value: data.venus?.longitude },

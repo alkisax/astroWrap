@@ -66,6 +66,7 @@ export const planetIcons: Record<string, string> = {
   Uranus: "♅",
   Neptune: "♆",
   Pluto: "♇",
+  ASC: "⬆️"
 };
 
 export const planetSymbolToName: Record<string, string> = {
@@ -156,6 +157,7 @@ export const planetKeywords = {
   Uranus: ["rebellion", "change", "innovation", "freedom"],
   Neptune: ["dreams", "illusion", "spirituality", "escape"],
   Pluto: ["power", "transformation", "control", "rebirth"],
+  ASC: ["self", "appearance", "persona", "first impression"],
 };
 
 export const signKeywords = {

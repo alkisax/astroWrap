@@ -72,3 +72,15 @@ export type Point = {
   label: string;
   longitude: number;
 };
+
+// biwheel
+export type ChartInput = {
+  date: Date;
+  lat: number;
+  lng: number;
+};
+
+export type BiwheelInput = {
+  radix: ChartInput;
+  transit: ChartInput;
+};

@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import TransitPage from "./pages/TransitPage";
 import bgImage from "./assets/bubblePRNGrayInvertLong.jpg";
+import BiwheelPage from "./pages/BiwheelPage";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/transit" element={<TransitPage />} />
+        <Route path="/biwheel" element={<BiwheelPage />} />
       </Routes>
     </div>
   );
