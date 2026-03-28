@@ -35,7 +35,7 @@ const BasicChartInfo = ({ data }: Props) => {
         radius="md"
         style={{
           width: "100%",
-          maxWidth: "700px",
+          maxWidth: "1700px",
           margin: "20px auto",
           background: colors.panel,
           backdropFilter: "blur(1px)",
