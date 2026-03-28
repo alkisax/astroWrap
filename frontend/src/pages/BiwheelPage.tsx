@@ -142,38 +142,38 @@ const BiwheelPage = () => {
         </div>
       </div>
 
-<div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "20px",
-    padding: "10px",
-  }}
->
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: "20px",
-      width: "fit-content", 
-      margin: "0 auto", 
-      alignItems: "stretch",
-    }}
-  >
-    <ChartFormBiwheel
-      onSubmit={({ radix, transit }) => {
-        setRadixInput(radix);
-        setTransitInput(transit);
-      }}
-    />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "20px",
+          padding: "10px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: "20px",
+            width: "fit-content",
+            margin: "0 auto",
+            alignItems: "stretch",
+          }}
+        >
+          <ChartFormBiwheel
+            onSubmit={({ radix, transit }) => {
+              setRadixInput(radix);
+              setTransitInput(transit);
+            }}
+          />
 
-    <PlanetSelector
-      selected={selectedPlanets}
-      setSelected={setSelectedPlanets}
-    />
-  </div>
-</div>
+          <PlanetSelector
+            selected={selectedPlanets}
+            setSelected={setSelectedPlanets}
+          />
+        </div>
+      </div>
     </>
   );
 };
