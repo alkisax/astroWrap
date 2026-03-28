@@ -87,10 +87,8 @@ const Home = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "flex-start",
-          gap: "20px",
           marginTop: "20px",
-          flexWrap: "wrap",
+          padding: isMobile ? "10px" : "0px",
         }}
       >
         <div
@@ -101,31 +99,77 @@ const Home = () => {
             padding: "20px",
             borderRadius: "16px",
             background: "rgba(20,20,30,0.6)",
-            backdropFilter: "blur(2px)",
+            backdropFilter: "blur(1px)",
             border: "1px solid rgba(255,255,255,0.1)",
-            alignItems: "flex-start",
-            maxWidth: "1000px",
+            alignItems: "stretch",
             width: "100%",
+            maxWidth: "1000px",
           }}
         >
-          <BasicControls
-            onSubmit={handleSubmit}
-            visiblePlanets={visiblePlanets}
-            setVisiblePlanets={setVisiblePlanets}
-            date={date}
-            setDate={setDate}
-            coords={coords}
-          />
+          {/* 🔥 MOBILE: chart FIRST */}
+          {isMobile && (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: isMobile ? "100%" : "600px",
+                }}
+              >
+                <AstroChart {...chartData} />
+              </div>
+            </div>
+          )}
 
-          <div
-            style={{
-              flex: 1,
-              minWidth: 0,
-              maxWidth: isMobile ? "100%" : "600px",
-            }}
-          >
-            <AstroChart {...chartData} />
-          </div>
+          {/* 🔥 DESKTOP: controls left */}
+          {!isMobile && (
+            <BasicControls
+              onSubmit={handleSubmit}
+              visiblePlanets={visiblePlanets}
+              setVisiblePlanets={setVisiblePlanets}
+              date={date}
+              setDate={setDate}
+              coords={coords}
+            />
+          )}
+
+          {/* 🔥 DESKTOP: chart right */}
+          {!isMobile && (
+            <div
+              style={{
+                flex: 1,
+                minWidth: 0,
+                maxWidth: "600px",
+              }}
+            >
+              <AstroChart {...chartData} />
+            </div>
+          )}
+
+          {/* 🔥 MOBILE: controls κάτω */}
+          {isMobile && (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <BasicControls
+                onSubmit={handleSubmit}
+                visiblePlanets={visiblePlanets}
+                setVisiblePlanets={setVisiblePlanets}
+                date={date}
+                setDate={setDate}
+                coords={coords}
+              />
+            </div>
+          )}
         </div>
       </div>
 

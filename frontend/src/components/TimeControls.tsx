@@ -44,12 +44,12 @@ const TimeControls = ({ date, setDate, coords }: Props) => {
     minute: "2-digit",
   });
 
-const btnStyle = {
-  backgroundColor: colors.primary,
-  color: "#000",
-  width: 70,
-  padding: "6px 0",
-};
+  const btnStyle = {
+    backgroundColor: colors.primary,
+    color: "#000",
+    width: 70,
+    padding: "6px 0",
+  };
 
   return (
     <Paper
@@ -72,54 +72,52 @@ const btnStyle = {
         ({coords.lat.toFixed(2)}, {coords.lng.toFixed(2)})
       </Text>
 
-<Group justify="center" gap="xs" grow mt="xs">
+      <Group justify="center" gap="xs" grow mt="xs">
+        <Group justify="center" gap="xs">
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addHours(d, -1))}>
+            -1h
+          </Button>
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addHours(d, 1))}>
+            +1h
+          </Button>
+        </Group>
 
+        <Group justify="center" gap="xs">
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, -1))}>
+            -1d
+          </Button>
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, 1))}>
+            +1d
+          </Button>
+        </Group>
 
-      <Group justify="center" gap="xs">
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addHours(d, -1))}>
-          -1h
-        </Button>
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addHours(d, 1))}>
-          +1h
-        </Button>
+        <Group justify="center" gap="xs">
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, -7))}>
+            -1w
+          </Button>
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, 7))}>
+            +1w
+          </Button>
+        </Group>
+
+        <Group justify="center" gap="xs">
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addMonths(d, -1))}>
+            -1m
+          </Button>
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addMonths(d, 1))}>
+            +1m
+          </Button>
+        </Group>
+
+        <Group justify="center" gap="xs">
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addYears(d, -1))}>
+            -1y
+          </Button>
+          <Button size="xs" style={btnStyle} onClick={() => setDate(d => addYears(d, 1))}>
+            +1y
+          </Button>
+        </Group>
       </Group>
-
-      <Group justify="center" gap="xs">
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, -1))}>
-          -1d
-        </Button>
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, 1))}>
-          +1d
-        </Button>
-      </Group>
-
-      <Group justify="center" gap="xs">
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, -7))}>
-          -1w
-        </Button>
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addDays(d, 7))}>
-          +1w
-        </Button>
-      </Group>
-
-      <Group justify="center" gap="xs">
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addMonths(d, -1))}>
-          -1m
-        </Button>
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addMonths(d, 1))}>
-          +1m
-        </Button>
-      </Group>
-
-      <Group justify="center" gap="xs">
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addYears(d, -1))}>
-          -1y
-        </Button>
-        <Button size="xs" style={btnStyle} onClick={() => setDate(d => addYears(d, 1))}>
-          +1y
-        </Button>
-      </Group>
-</Group>
     </Paper>
   );
 }

@@ -41,11 +41,11 @@ const BasicControls = ({
         margin: "0px auto",
         padding: "5px",
         borderRadius: "12px",
-        background: "rgba(0,0,0,0.6)",
+        background: "rgba(0,0,0,0.4)",
         backdropFilter: "blur(10px)",
         display: "flex",
         flexDirection: "column",
-        alignItems: "flex-start",
+        alignItems: isMobile ? "center" : "stretch",
         gap: "5px",
       }}
     >

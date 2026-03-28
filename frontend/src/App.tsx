@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import TransitPage from "./pages/TransitPage";
-import bgImage from "./assets/bubblePRNGrayInvert.jpg";
+import bgImage from "./assets/bubblePRNGrayInvertLong.jpg";
 
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
         minHeight: "100vh",
         backgroundImage: `url(${bgImage})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: "100% auto",
+        backgroundSize: "300% auto",
         backgroundColor: "black",
       }}
     >

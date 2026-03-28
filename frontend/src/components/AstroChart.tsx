@@ -72,15 +72,51 @@ const AstroChart = ({ planets, cusps }: Props) => {
     };
   }, [planets, cusps]);
 
+  // ui
+  const size = 600;
+  const containerWidth =
+    typeof window !== "undefined"
+      ? Math.min(window.innerWidth - 40, 600)
+      : 600;
+
+  const scale = containerWidth / size;
+
   return (
+  <div
+    style={{
+      width: "100%",
+      display: "flex",
+      justifyContent: "center", // 🔥 center horizontally
+    }}
+  >
     <div
-      id="paper"
       style={{
-        width: "600px",
-        height: "600px",
-        margin: "0 auto",
+        width: `${600 * scale}px`,   // 🔥 πραγματικό scaled width
+        height: `${600 * scale}px`,  // 🔥 πραγματικό scaled height
+        position: "relative",
       }}
-    />
+    >
+      <div
+        style={{
+          transform: `scale(${scale})`,
+          transformOrigin: "top left", // 🔥 IMPORTANT CHANGE
+          width: "600px",
+          height: "600px",
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      >
+        <div
+          id="paper"
+          style={{
+            width: "600px",
+            height: "600px",
+          }}
+        />
+      </div>
+    </div>
+  </div>
   );
 };
 

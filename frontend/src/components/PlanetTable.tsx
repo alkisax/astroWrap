@@ -1,6 +1,6 @@
-import { Table } from "@mantine/core";
+import { Table, Paper } from "@mantine/core";
 import type { ChartSummary } from "../types/types";
-import { planetIcons, signIcons } from "../constants/constants";
+import { colors, planetIcons, signIcons } from "../constants/constants";
 import { getZodiacSign, getHouse } from "../utils/astroHelpers";
 import { Modal, Text, Stack } from "@mantine/core";
 import { useState } from "react";
@@ -46,18 +46,30 @@ const PlanetTable = ({ data }: Props) => {
     return (
       <tr
         key={p.name}
-        onClick={() => handleClick(p.name, sign, getHouse(p.value as number, cusps))}
-        style={{ cursor: "pointer" }}
+        onClick={() =>
+          handleClick(p.name, sign, getHouse(p.value as number, cusps))
+        }
+        style={{
+          cursor: "pointer",
+          transition: "background 0.2s",
+          backgroundColor: "rgba(255,255,255,0.02)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.02)";
+        }}
       >
-        <td style={{ textAlign: "center" }}>
+        <td style={{ textAlign: "left", padding: "4px 12px" }}>
           {planetIcons[p.name]} {p.name}
         </td>
 
-        <td style={{ textAlign: "center" }}>
+        <td style={{ textAlign: "left", padding: "4px 12px" }}>
           {signIcons[sign]} {sign}
         </td>
 
-        <td style={{ textAlign: "center" }}>
+        <td style={{ textAlign: "left", padding: "4px 12px" }}>
           {getHouse(p.value, cusps)}
         </td>
       </tr>
@@ -66,34 +78,95 @@ const PlanetTable = ({ data }: Props) => {
 
   return (
     <>
-      <Table striped highlightOnHover withTableBorder mt="lg">
+    <Paper
+      p="md"
+      radius="md"
+      style={{
+        width: "100%",
+        maxWidth: "300px",
+        margin: "20px auto",
+        background: colors.panel,
+        backdropFilter: "blur(10px)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        color: colors.text,
+      }}
+    >
+      <Table 
+        striped
+        highlightOnHover
+        mt="sm"
+        styles={{
+          table: {
+            color: colors.text,
+          },
+          th: {
+            color: colors.dim,
+            borderColor: "rgba(255,255,255,0.1)",
+          },
+          td: {
+            borderColor: "rgba(255,255,255,0.05)",
+          },
+        }}
+      >
         <thead>
           <tr>
-            <th>Planet</th>
-            <th>Sign</th>
-            <th>House</th>
+            <th style={{
+              textAlign: "left"
+            }}>Planet</th>
+            <th style={{
+              textAlign: "left"
+            }}>Sign</th>
+            <th style={{
+              textAlign: "left"
+            }}>House</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
-      </Table>
+      </Table>      
+    </Paper>
 
-      <Modal opened={opened} onClose={() => setOpened(false)} title="Details" centered>
+
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title="Details"
+        centered
+        styles={{
+          content: {
+            background: colors.panel,
+            color: colors.text,
+            backdropFilter: "blur(10px)",
+          },
+          header: {
+            background: "transparent",
+            borderBottom: "1px solid rgba(255,255,255,0.1)",
+          },
+        }}
+      >
         {selected && (
           <Stack gap="xs">
-            <Text fw={600}>🪐 {selected.planet}</Text>
-            <Text size="sm">
-              {planetKeywords[selected.planet as keyof typeof planetKeywords]?.join(", ")}
-            </Text>
+            <div
+              style={{
+                width: "220px",
+                margin: "0 auto", // 🔥 αυτό κάνει το centering
+                textAlign: "left",
+              }}
+            >
+              <Text fw={600}>🪐 {selected.planet}</Text>
+              <Text size="sm">
+                {planetKeywords[selected.planet as keyof typeof planetKeywords]?.join(", ")}
+              </Text>
 
-            <Text fw={600}>♈ {selected.sign}</Text>
-            <Text size="sm">
-              {signKeywords[selected.sign as keyof typeof signKeywords]?.join(", ")}
-            </Text>
+              <Text fw={600} mt="xs">♈ {selected.sign}</Text>
+              <Text size="sm">
+                {signKeywords[selected.sign as keyof typeof signKeywords]?.join(", ")}
+              </Text>
 
-            <Text fw={600}>🏠 House {selected.house}</Text>
-            <Text size="sm">
-              {houseKeywords[selected.house as keyof typeof houseKeywords]?.join(", ")}
-            </Text>
+              <Text fw={600} mt="xs">🏠 House {selected.house}</Text>
+              <Text size="sm">
+                {houseKeywords[selected.house as keyof typeof houseKeywords]?.join(", ")}
+              </Text>
+            </div>
           </Stack>
         )}
       </Modal>

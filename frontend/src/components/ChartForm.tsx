@@ -46,7 +46,7 @@ export default function ChartForm({ onSubmit }: Props) {
   console.log("chatform", date, lat, lng);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", paddingTop: 40 }}>
+    <div style={{ display: "flex", justifyContent: "center", paddingTop: 5 }}>
       <Paper
         shadow="md"
         p="lg"
