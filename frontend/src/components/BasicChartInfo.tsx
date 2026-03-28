@@ -28,111 +28,111 @@ const BasicChartInfo = ({ data }: Props) => {
   return (
 
 
-<>
-    <Paper
-      p="md"
-      radius="md"
-      style={{
-        width: "100%",
-        maxWidth: "700px",
-        margin: "20px auto",
-        background: colors.panel,
-        backdropFilter: "blur(10px)",
-        border: "1px solid rgba(255,255,255,0.1)",
-        color: colors.text,
-      }}
-    >
-      <div
+    <>
+      <Paper
+        p="md"
+        radius="md"
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "10px",
-          alignItems: "stretch",
+          width: "100%",
+          maxWidth: "700px",
+          margin: "20px auto",
+          background: colors.panel,
+          backdropFilter: "blur(1px)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          color: colors.text,
         }}
       >
-        {/* LEFT */}
-        <div>
-          <PlanetTable data={data} />
-        </div>
-
-        {/* RIGHT */}
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
             gap: "10px",
-            height: "100%",
+            alignItems: "stretch",
           }}
         >
-          {/* 🔝 ChartRuler */}
-          <div style={{ flex: 1 }}>
-            <ChartRuler data={data} />
+          {/* LEFT */}
+          <div>
+            <PlanetTable data={data} />
           </div>
 
-          {/* ⚖️ Balance */}
-          <div style={{ flex: 1 }}>
-            <BalanceSummary data={data} />
-          </div>
+          {/* RIGHT */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              height: "100%",
+            }}
+          >
+            {/* 🔝 ChartRuler */}
+            <div style={{ flex: 1 }}>
+              <ChartRuler data={data} />
+            </div>
 
-          {/* 🔘 Buttons area */}
-          <div style={{ flex: 1 }}>
-<Group grow>
-  <Button
-    size="xs"
-    style={{
-      backgroundColor: showAspects ? colors.primary : "rgba(255,255,255,0.1)",
-      color: showAspects ? "#000" : colors.text,
-    }}
-    onClick={() => setShowAspects(v => !v)}
-  >
-    ⭐
-  </Button>
+            {/* ⚖️ Balance */}
+            <div style={{ flex: 1 }}>
+              <BalanceSummary data={data} />
+            </div>
 
-  <Button
-    size="xs"
-    style={{
-      backgroundColor: showHouses ? colors.primary : "rgba(255,255,255,0.1)",
-      color: showHouses ? "#000" : colors.text,
-    }}
-    onClick={() => setShowHouses(v => !v)}
-  >
-    🏠
-  </Button>
+            {/* 🔘 Buttons area */}
+            <div style={{ flex: 1 }}>
+              <Group grow>
+                <Button
+                  size="xs"
+                  style={{
+                    backgroundColor: showAspects ? colors.primary : "rgba(255,255,255,0.1)",
+                    color: showAspects ? "#000" : colors.text,
+                  }}
+                  onClick={() => setShowAspects(v => !v)}
+                >
+                  ⭐
+                </Button>
 
-  <Button
-    size="xs"
-    style={{
-      backgroundColor: showDignities ? colors.primary : "rgba(255,255,255,0.1)",
-      color: showDignities ? "#000" : colors.text,
-    }}
-    onClick={() => setShowDignities(v => !v)}
-  >
-    👑
-  </Button>
+                <Button
+                  size="xs"
+                  style={{
+                    backgroundColor: showHouses ? colors.primary : "rgba(255,255,255,0.1)",
+                    color: showHouses ? "#000" : colors.text,
+                  }}
+                  onClick={() => setShowHouses(v => !v)}
+                >
+                  🏠
+                </Button>
 
-  <Button
-    size="xs"
-    style={{
-      backgroundColor: showTree ? colors.primary : "rgba(255,255,255,0.1)",
-      color: showTree ? "#000" : colors.text,
-    }}
-    onClick={() => setShowTree(v => !v)}
-  >
-    🌳
-  </Button>
-</Group>
+                <Button
+                  size="xs"
+                  style={{
+                    backgroundColor: showDignities ? colors.primary : "rgba(255,255,255,0.1)",
+                    color: showDignities ? "#000" : colors.text,
+                  }}
+                  onClick={() => setShowDignities(v => !v)}
+                >
+                  👑
+                </Button>
+
+                <Button
+                  size="xs"
+                  style={{
+                    backgroundColor: showTree ? colors.primary : "rgba(255,255,255,0.1)",
+                    color: showTree ? "#000" : colors.text,
+                  }}
+                  onClick={() => setShowTree(v => !v)}
+                >
+                  🌳
+                </Button>
+              </Group>
+            </div>
           </div>
         </div>
-      </div>
-    </Paper>
+      </Paper>
 
-    <div style={{ width: "100%", maxWidth: "700px", margin: "10px auto" }}>
-  {showAspects && <MostImportantAspects data={data} />}
-  {showHouses && <HouseRulers data={data} />}
-  {showDignities && <EssentialDignities data={data} />}
-  {showTree && <DispositorTree data={data} />}
-</div>
-</>
+      <div style={{ width: "100%", maxWidth: "700px", margin: "10px auto" }}>
+        {showAspects && <MostImportantAspects data={data} />}
+        {showHouses && <HouseRulers data={data} />}
+        {showDignities && <EssentialDignities data={data} />}
+        {showTree && <DispositorTree data={data} />}
+      </div>
+    </>
   );
 };
 
