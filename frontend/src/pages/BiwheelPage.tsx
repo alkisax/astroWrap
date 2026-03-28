@@ -3,12 +3,18 @@ import axios from "axios";
 // import AstroChartTransits from "../components/AstroChartTransits";
 import { mapToChartData } from "../utils/mapToChart";
 import type { ChartInput, ChartSummary } from "../types/types";
-import { url } from "../constants/constants";
+import { colors, url } from "../constants/constants";
 import ChartFormBiwheel from "../components/biwheel/ChartFormBiwheel";
 import PlanetSelector from "../components/PlanetSelector";
 import PlanetTable from "../components/PlanetTable";
 import InnerChart from "../components/biwheel/InnerChart";
 import OuterChart from "../components/biwheel/OuterChart";
+import TwoChartsAspectsTable from "../components/biwheel/TwoChartsAspectsTable";
+import HouseRulers from "../components/HouseRulers";
+import MostImportantAspects from "../components/MostImportantAspects";
+import { Accordion, Grid } from "@mantine/core";
+import TransitAspectsGrid from "../components/TransitAspectsGrid";
+import EagleLarkGridList from "../components/biwheel/EagleLarkGridList";
 
 const BiwheelPage = () => {
   // 🔹 raw api data
@@ -110,6 +116,9 @@ const BiwheelPage = () => {
   const radixChart = mapToChartData(radixData, selectedPlanets);
   const transitChart = mapToChartData(transitData, selectedPlanets);
 
+  console.log("radixData:", radixData);
+  console.log("transitData:", transitData);
+
   return (
     <>
       {/* <AstroChartTransits
@@ -119,33 +128,33 @@ const BiwheelPage = () => {
           transitCusps={transitChart.cusps}
         /> */}
       {/* 🪐 BIWHEEL */}
-<div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    gap: "20px",
-    flexWrap: "wrap", // 🔥 responsive
-    padding: "20px",
-  }}
->
-  {/* RADIX */}
-  <div>
-    <h3 style={{ textAlign: "center", color: "white" }}>Radix</h3>
-    <InnerChart
-      planets={radixChart.planets}
-      cusps={radixChart.cusps}
-    />
-  </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "20px",
+          flexWrap: "wrap", // 🔥 responsive
+          padding: "20px",
+        }}
+      >
+        {/* RADIX */}
+        <div>
+          <h3 style={{ textAlign: "center", color: "white" }}>Radix</h3>
+          <InnerChart
+            planets={radixChart.planets}
+            cusps={radixChart.cusps}
+          />
+        </div>
 
-  {/* TRANSITS */}
-  <div>
-    <h3 style={{ textAlign: "center", color: "white" }}>Transits</h3>
-    <OuterChart
-      planets={transitChart.planets}
-      cusps={transitChart.cusps}
-    />
-  </div>
-</div>
+        {/* TRANSITS */}
+        <div>
+          <h3 style={{ textAlign: "center", color: "white" }}>Transits</h3>
+          <OuterChart
+            planets={transitChart.planets}
+            cusps={transitChart.cusps}
+          />
+        </div>
+      </div>
 
       {/* 🧾 TABLES */}
       <div
@@ -201,6 +210,84 @@ const BiwheelPage = () => {
           />
         </div>
       </div>
+
+<Accordion
+  variant="unstyled"
+  multiple
+  defaultValue={[]}
+  styles={{
+    control: {
+      color: colors.text, // ✅ αυτό θες
+      fontWeight: 500,
+    },
+    label: {
+      color: colors.text, // extra safety
+    },
+  }}
+>
+  {/* 🏠 House + Aspects */}
+  <Accordion.Item value="radix-transit">
+    <Accordion.Control>
+      🪐 Radix / Transit Analysis
+    </Accordion.Control>
+
+    <Accordion.Panel>
+      <Grid gutter="md" mb="md">
+        <Grid.Col span={6}>
+          <HouseRulers data={radixData} />
+          <MostImportantAspects data={radixData} />
+        </Grid.Col>
+
+        <Grid.Col span={6}>
+          <HouseRulers data={transitData} />
+          <MostImportantAspects data={transitData} />
+        </Grid.Col>
+      </Grid>
+    </Accordion.Panel>
+  </Accordion.Item>
+
+  {/* 🔮 Transit Aspects Table */}
+  <Accordion.Item value="two-chart">
+    <Accordion.Control>
+      🔮 Transit Aspects Table
+    </Accordion.Control>
+
+    <Accordion.Panel>
+      <TwoChartsAspectsTable
+        radix={radixData}
+        transit={transitData}
+      />
+    </Accordion.Panel>
+  </Accordion.Item>
+
+  {/* 🧩 Grid */}
+  <Accordion.Item value="grid">
+    <Accordion.Control>
+      🧩 Transit Grid
+    </Accordion.Control>
+
+    <Accordion.Panel>
+      <TransitAspectsGrid
+        radix={radixData}
+        transit={transitData}
+      />
+    </Accordion.Panel>
+  </Accordion.Item>
+
+  {/* 🦅 Eagle*/}
+  <Accordion.Item value="eagle">
+    <Accordion.Control>
+      🦅 Eagle
+    </Accordion.Control>
+
+    <Accordion.Panel>
+      <EagleLarkGridList
+        radix={radixData}
+        transit={transitData}
+      />
+    </Accordion.Panel>
+  </Accordion.Item>
+</Accordion>
     </>
   );
 };

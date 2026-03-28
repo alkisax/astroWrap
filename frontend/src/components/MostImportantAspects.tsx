@@ -8,13 +8,31 @@ type Props = {
 };
 
 const MostImportantAspects = ({ data }: Props) => {
+
+  const allowedPoints = [
+    "Sun",
+    "Moon",
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto",
+    // "ASC", // optional
+  ];
+
   const aspects = data.aspects ?? [];
   if (!aspects.length) return null;
 
   const allAspects = [
     ...aspects,
     ...getAngleAspects(data),
-  ];
+  ].filter(a =>
+    allowedPoints.includes(a.point1Label) &&
+    allowedPoints.includes(a.point2Label)
+  );
 
   return (
     <Paper
