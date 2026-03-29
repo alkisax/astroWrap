@@ -1,14 +1,46 @@
+// frontend\src\components\HouseRulers.tsx
+/*
+Οι κυβερνήτες οίκων (house rulers) δείχνουν ΠΟΥ εκφράζεται το περιεχόμενο ενός οίκου.
+
+Βήματα:
+
+Κάθε οίκος έχει ένα ζώδιο στην ακμή του.
+Το ζώδιο έχει κυβερνήτη πλανήτη (π.χ. Κριός → Άρης).
+Βρίσκουμε που βρίσκεται αυτός ο πλανήτης στο χάρτη (σε ποιο ζώδιο και οίκο).
+
+Ερμηνεία:
+
+Ο οίκος δείχνει το "θέμα"
+Ο κυβερνήτης δείχνει "ποιος το διαχειρίζεται"
+Η θέση του κυβερνήτη δείχνει "που εκδηλώνεται"
+
+Παράδειγμα:
+7ος οίκος (σχέσεις) στον Αιγόκερω → κυβερνήτης Κρόνος
+Αν ο Κρόνος είναι στον 10ο:
+→ οι σχέσεις συνδέονται με καριέρα, ευθύνη, δημόσια εικόνα
+
+Άρα:
+House → θέμα
+Ruler → μηχανισμός
+Ruler position → πεδίο εκδήλωσης
+*/
 import { Paper, Text, Stack } from "@mantine/core";
-import type { ChartSummary } from "../types/types";
+import type { ChartSummary, CustomHouseRuler } from "../types/types";
 import { computeHouseRulers } from "../utils/houseRulers";
 import { planetIcons, signIcons, colors } from "../constants/constants";
+import { useEffect } from "react";
 
 type Props = {
   data: ChartSummary;
+  setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void;
 };
 
-const HouseRulers = ({ data }: Props) => {
+const HouseRulers = ({ data, setCustomHouseRulers }: Props) => {
   const results = computeHouseRulers(data);
+
+  useEffect(() => {
+    setCustomHouseRulers(results);
+  }, [results, setCustomHouseRulers]);
 
   return (
     <Paper

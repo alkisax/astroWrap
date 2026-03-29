@@ -1,18 +1,27 @@
 import { Paper, Text, Group, Stack } from "@mantine/core";
-import type { ChartSummary } from "../types/types";
+import type { ChartSummary, CustomBalance } from "../types/types";
 import {
   calculateElementBalance,
   calculateModalityBalance,
 } from "../utils/balanceCalculator";
 import { colors } from "../constants/constants";
+import { useEffect } from "react";
 
 type Props = {
   data: ChartSummary;
+  setCustomBalance: (balance: CustomBalance) => void;
 };
 
-const BalanceSummary = ({ data }: Props) => {
+const BalanceSummary = ({ data, setCustomBalance }: Props) => {
   const elements = calculateElementBalance(data);
   const modalities = calculateModalityBalance(data);
+
+  useEffect(() => {
+    setCustomBalance({
+      elements,
+      modalities,
+    });
+  }, [elements, modalities, setCustomBalance]);
 
   return (
     <Paper

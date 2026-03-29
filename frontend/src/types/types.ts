@@ -84,3 +84,36 @@ export type BiwheelInput = {
   radix: ChartInput;
   transit: ChartInput;
 };
+
+// json creator
+export type CustomPlanetInfo = {
+  planet: string;
+  sign: string;
+  house: number | null;
+};
+
+export type CustomChartRuler = {
+  planet: string;
+  sign: string;
+  house: number | null;
+};
+export type CustomBalance = {
+  elements: {
+    Fire: number;
+    Earth: number;
+    Air: number;
+    Water: number;
+  };
+  modalities: {
+    Cardinal: number;
+    Fixed: number;
+    Mutable: number;
+  };
+};
+export type CustomHouseRuler = {
+  house: number;
+  sign: string;
+  ruler: string;
+  inSign: string | null;
+  inHouse: number | null;
+};

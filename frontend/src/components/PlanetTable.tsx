@@ -1,16 +1,17 @@
 import { Table, Paper } from "@mantine/core";
-import type { ChartSummary } from "../types/types";
+import type { ChartSummary, CustomPlanetInfo } from "../types/types";
 import { colors, planetIcons, signIcons } from "../constants/constants";
 import { getZodiacSign, getHouse } from "../utils/astroHelpers";
 import { Modal, Text, Stack } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { planetKeywords, signKeywords, houseKeywords } from "../constants/constants";
 
 type Props = {
   data: ChartSummary;
+  setCustomPlanetInfo: (info: CustomPlanetInfo[]) => void
 };
 
-const PlanetTable = ({ data }: Props) => {
+const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
   const [opened, setOpened] = useState(false);
   const [selected, setSelected] = useState<{
     planet: string;
@@ -20,7 +21,7 @@ const PlanetTable = ({ data }: Props) => {
 
   const cusps = data.houses.map((h) => h.longitude ?? 0);
 
-  const planets: { name: string; value: number | null | undefined }[] = [
+  const planets = useMemo(() => [
     { name: "Sun", value: data.sun?.longitude },
     { name: "ASC", value: data.ascendant?.longitude },
     { name: "Moon", value: data.moon?.longitude },
@@ -32,7 +33,19 @@ const PlanetTable = ({ data }: Props) => {
     { name: "Uranus", value: data.uranus?.longitude },
     { name: "Neptune", value: data.neptune?.longitude },
     { name: "Pluto", value: data.pluto?.longitude },
-  ];
+  ], [data]);
+
+  useEffect(() => {
+    const info: CustomPlanetInfo[] = planets
+      .filter(p => p.value != null)
+      .map(p => ({
+        planet: p.name,
+        sign: getZodiacSign(p.value as number),
+        house: getHouse(p.value as number, cusps),
+      }));
+
+    setCustomPlanetInfo(info);
+  }, [cusps, data, planets, setCustomPlanetInfo]);
 
   const handleClick = (planet: string, sign: string, house: number | null) => {
     setSelected({ planet, sign, house });
@@ -79,52 +92,52 @@ const PlanetTable = ({ data }: Props) => {
 
   return (
     <>
-    <Paper
-      p="md"
-      radius="md"
-      style={{
-        width: "100%",
-        maxWidth: "300px",
-        margin: "20px auto",
-        background: colors.panel,
-        backdropFilter: "blur(10px)",
-        border: "1px solid rgba(255,255,255,0.1)",
-        color: colors.text,
-      }}
-    >
-      <Table 
-        striped
-        highlightOnHover
-        mt="sm"
-        styles={{
-          table: {
-            color: colors.text,
-          },
-          th: {
-            color: colors.dim,
-            borderColor: "rgba(255,255,255,0.1)",
-          },
-          td: {
-            borderColor: "rgba(255,255,255,0.05)",
-          },
+      <Paper
+        p="md"
+        radius="md"
+        style={{
+          width: "100%",
+          maxWidth: "300px",
+          margin: "20px auto",
+          background: colors.panel,
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          color: colors.text,
         }}
       >
-        <thead>
-          <tr>
-            <th style={{
-              textAlign: "left"
-            }}>Planet</th>
-            <th style={{
-              textAlign: "left"
-            }}>Sign</th>
-            <th style={{
-              textAlign: "left"
-            }}>House</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>      
-    </Paper>
+        <Table
+          striped
+          highlightOnHover
+          mt="sm"
+          styles={{
+            table: {
+              color: colors.text,
+            },
+            th: {
+              color: colors.dim,
+              borderColor: "rgba(255,255,255,0.1)",
+            },
+            td: {
+              borderColor: "rgba(255,255,255,0.05)",
+            },
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{
+                textAlign: "left"
+              }}>Planet</th>
+              <th style={{
+                textAlign: "left"
+              }}>Sign</th>
+              <th style={{
+                textAlign: "left"
+              }}>House</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </Table>
+      </Paper>
 
 
       <Modal

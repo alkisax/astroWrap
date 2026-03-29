@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AstroChart from "../components/AstroChart";
 import { mapToChartData } from "../utils/mapToChart";
-import type { ChartSummary } from "../types/types"
+import type { ChartSummary, CustomBalance, CustomChartRuler, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
 import { url } from '../constants/constants';
 import BasicControls from "../components/BasicControlls";
 import { useMediaQuery } from "@mui/material";
 import BasicChartInfo from "../components/BasicChartInfo";
+import ChartDataDebug from "../components/ChartDataDebug";
 
 const Home = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -28,6 +29,12 @@ const Home = () => {
     lat: 37.9838,
     lng: 23.7275,
   });
+
+  // για την δημιουργία του συγγεντρωτικού json πρέπει να περάσουμε όλους τους υπολογισμούς στον parent για αυτό φτιάχνουμε state
+  const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
+  const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
+  const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
+  const [customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -149,9 +156,26 @@ const Home = () => {
           </div>
 
           {/* 🔽 BOTTOM PANEL (ALWAYS SAME WIDTH) */}
-          <BasicChartInfo data={data} />
+          <BasicChartInfo
+            data={data}
+            setCustomPlanetInfo={setCustomPlanetInfo}
+            setCustomChartRuler={setCustomChartRuler}
+            setCustomBalance={setCustomBalance}
+            setCustomHouseRulers={setCustomHouseRulers}
+          />
         </div>
       </div>
+
+      <ChartDataDebug
+        data={data}
+        visiblePlanets={visiblePlanets}
+        date={date}
+        coords={coords}
+        customPlanetInfo={customPlanetInfo}
+        customChartRuler={customChartRuler}
+        customBalance={customBalance}
+        customHouseRulers={customHouseRulers}
+      />
     </>
   );
 }

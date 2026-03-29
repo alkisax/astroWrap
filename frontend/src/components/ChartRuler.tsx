@@ -1,15 +1,16 @@
 import { Text, Paper } from "@mantine/core";
-import type { ChartSummary } from "../types/types";
+import type { ChartSummary, CustomChartRuler } from "../types/types";
 import { computeChartRuler } from "../utils/computeChartRuler";
 import { colors, planetIcons, signIcons } from "../constants/constants";
 import AstroDetailsModal from "./AstroDetailsModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   data: ChartSummary;
+  setCustomChartRuler: (ruler: CustomChartRuler | null) => void;
 };
 
-export default function ChartRuler({ data }: Props) {
+export default function ChartRuler({ data, setCustomChartRuler }: Props) {
   const [opened, setOpened] = useState(false);
 
   const handleClick = () => {
@@ -17,6 +18,19 @@ export default function ChartRuler({ data }: Props) {
   };
 
   const ruler = computeChartRuler(data);
+
+  useEffect(() => {
+    if (!ruler) {
+      setCustomChartRuler(null);
+      return;
+    }
+
+    setCustomChartRuler({
+      planet: ruler.planet,
+      sign: ruler.sign,
+      house: ruler.house,
+    });
+  }, [ruler, setCustomChartRuler]);
 
   if (!ruler) return null;
 
