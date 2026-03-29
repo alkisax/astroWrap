@@ -16,6 +16,8 @@ import MostImportantAspects from "../components/MostImportantAspects";
 import { Accordion, Grid } from "@mantine/core";
 import TransitAspectsGrid from "../components/TransitAspectsGrid";
 import EagleLarkGridList from "../components/biwheel/EagleLarkGridList";
+import { useChartDataDebug } from "../hooks/componentHooks/useChartDataDebug";
+import { useChartAnalysis } from "../hooks/componentHooks/useChartAnalysis";
 
 const BiwheelPage = () => {
   // 🔹 raw api data
@@ -41,13 +43,14 @@ const BiwheelPage = () => {
   ]);
 
   //  για την δημιουργία του json
-  const [_customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
-  const [_customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
-  // const [customAspects, setCustomAspects] = useState<CustomAspect[]>([])
-  // const [customDignities, setCustomDignities] = useState<CustomDignity[]>([])
-  // const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
-  // const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
-  // const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
+  // RADIX
+  const [radixCustomPlanetInfo, setRadixCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
+  const [radixCustomHouseRulers, setRadixCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+
+  // // TRANSIT
+  const [transitCustomPlanetInfo, setTransitCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
+  const [transitCustomHouseRulers, setTransitCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+
 
   // 🔥 fetch RADIX
   useEffect(() => {
@@ -103,6 +106,49 @@ const BiwheelPage = () => {
     fetchTransit();
   }, [transitInput]);
 
+  const radixAnalysis = useChartAnalysis(radixData)
+  const transitAnalysis = useChartAnalysis(transitData)
+
+  const radixPayload = useChartDataDebug({
+    data: radixData,
+    visiblePlanets: selectedPlanets,
+    date: radixInput?.date ?? null,
+    coords: radixInput
+      ? { lat: radixInput.lat, lng: radixInput.lng }
+      : null,
+
+    customPlanetInfo: radixCustomPlanetInfo,
+    customChartRuler: radixAnalysis.chartRuler,
+    customBalance: radixAnalysis.balance,
+    customHouseRulers: radixCustomHouseRulers,
+    customAspects: radixAnalysis.aspects,
+    customDignities: radixAnalysis.dignities,
+    customDispositors: radixAnalysis.dispositors,
+    customDynamics: radixAnalysis.dynamics,
+  })
+
+  const transitPayload = useChartDataDebug({
+    data: transitData,
+    visiblePlanets: selectedPlanets,
+    date: radixInput?.date ?? null,
+    coords: radixInput
+      ? { lat: radixInput.lat, lng: radixInput.lng }
+      : null,
+
+    customPlanetInfo: transitCustomPlanetInfo,
+    customChartRuler: transitAnalysis.chartRuler,
+    customBalance: transitAnalysis.balance,
+    customHouseRulers: transitCustomHouseRulers,
+    customAspects: transitAnalysis.aspects,
+    customDignities: transitAnalysis.dignities,
+    customDispositors: transitAnalysis.dispositors,
+    customDynamics: transitAnalysis.dynamics,
+  })
+
+  // if (!radixData || !transitData || !radixInput || !transitInput) {
+  //   return
+  // }
+
   // ⛔ ακόμα δεν έχουμε data
   if (!radixData || !transitData) {
     return (
@@ -128,6 +174,8 @@ const BiwheelPage = () => {
 
   console.log("radixData:", radixData);
   console.log("transitData:", transitData);
+  console.log("radix json creator: ", radixPayload);
+  console.log("transit json creator: ", transitPayload);
 
   return (
     <>
@@ -178,13 +226,13 @@ const BiwheelPage = () => {
         {/* RADIX */}
         <div>
           <h3 style={{ textAlign: "center", color: "white" }}>Radix</h3>
-          <PlanetTable data={radixData} setCustomPlanetInfo={setCustomPlanetInfo}/>
+          <PlanetTable data={radixData} setCustomPlanetInfo={setRadixCustomPlanetInfo} />
         </div>
 
         {/* TRANSITS */}
         <div>
           <h3 style={{ textAlign: "center", color: "white" }}>Transits</h3>
-          <PlanetTable data={transitData} setCustomPlanetInfo={setCustomPlanetInfo}/>
+          <PlanetTable data={transitData} setCustomPlanetInfo={setTransitCustomPlanetInfo} />
         </div>
       </div>
 
@@ -244,12 +292,12 @@ const BiwheelPage = () => {
           <Accordion.Panel>
             <Grid gutter="md" mb="md">
               <Grid.Col span={6}>
-                <HouseRulers data={radixData} setCustomHouseRulers={setCustomHouseRulers}/>
+                <HouseRulers data={radixData} setCustomHouseRulers={setRadixCustomHouseRulers} />
                 <MostImportantAspects data={radixData} />
               </Grid.Col>
 
               <Grid.Col span={6}>
-                <HouseRulers data={transitData} setCustomHouseRulers={setCustomHouseRulers}/>
+                <HouseRulers data={transitData} setCustomHouseRulers={setTransitCustomHouseRulers} />
                 <MostImportantAspects data={transitData} />
               </Grid.Col>
             </Grid>

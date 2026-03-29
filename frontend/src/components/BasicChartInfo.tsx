@@ -66,20 +66,22 @@ const BasicChartInfo = ({
     dynamics
   } = useChartAnalysis(data)
 
-const firstRun = useRef(true)
+  const firstRun = useRef(true)
 
-useEffect(() => {
-  if (!firstRun.current) return
-  firstRun.current = false
+  useEffect(() => {
+    if (!firstRun.current) return
+    firstRun.current = false
 
-  setCustomHouseRulers(houseRulers)
-  setCustomBalance(balance)
-  setCustomAspects(aspects)
-  setCustomDignities(dignities)
-  setCustomDispositors(dispositors)
-  setCustomDynamics(dynamics)
+    setCustomHouseRulers(houseRulers)
+    if (balance) {
+      setCustomBalance(balance)
+    }
+    setCustomAspects(aspects)
+    setCustomDignities(dignities)
+    setCustomDispositors(dispositors)
+    setCustomDynamics(dynamics)
 
-}, [aspects, balance, dignities, dispositors, dynamics, houseRulers, setCustomAspects, setCustomBalance, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomHouseRulers])
+  }, [aspects, balance, dignities, dispositors, dynamics, houseRulers, setCustomAspects, setCustomBalance, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomHouseRulers])
 
   return (
     <>

@@ -1,5 +1,6 @@
 // src/components/ChartDataDebug.tsx
-import type { ChartSummary, BasicPlacement, CustomPlanetInfo, CustomChartRuler, CustomBalance, CustomHouseRuler, CustomAspect, CustomDignity, CustomDispositor, CustomDynamics } from '../types/types'
+import { useChartDataDebug } from '../hooks/componentHooks/useChartDataDebug'
+import type { ChartSummary, CustomPlanetInfo, CustomChartRuler, CustomBalance, CustomHouseRuler, CustomAspect, CustomDignity, CustomDispositor, CustomDynamics } from '../types/types'
 
 type Props = {
   data: ChartSummary
@@ -14,22 +15,6 @@ type Props = {
   customDignities: CustomDignity[]
   customDispositors: CustomDispositor[]
   customDynamics: CustomDynamics | null
-}
-
-// 🔥 helper για να μαζέψουμε τα flat fields
-const extractPlanets = (data: ChartSummary): Record<string, BasicPlacement> => {
-  const entries = Object.entries(data)
-
-  const placements = entries.filter(([, value]) => {
-    // κρατάμε μόνο objects που έχουν longitude (πλανήτες + angles)
-    return (
-      value &&
-      typeof value === 'object' &&
-      'longitude' in value
-    )
-  })
-
-  return Object.fromEntries(placements)
 }
 
 const ChartDataDebug = ({
@@ -47,50 +32,21 @@ const ChartDataDebug = ({
   customDynamics,
 }: Props) => {
 
-  const allPoints = extractPlanets(data)
-
-  // 🔥 filter visible
-  const filteredPlanets = Object.fromEntries(
-    Object.entries(allPoints).filter(([key]) =>
-      visiblePlanets.includes(key.charAt(0).toUpperCase() + key.slice(1))
-    )
-  )
-
-  const points = {
-    ...filteredPlanets,
-    ascendant: data.ascendant,
-    midheaven: data.midheaven,
-  }
-
-  const payload = {
-    meta: {
-      date: date.toISOString(),
-      location: coords,
-      zodiac: 'tropical',
-      houseSystem: 'placidus'
-    },
-
-    // 🔥 1 source of truth
-    points: points,
-
-    houses: data.houses,
-
-    // ❌ raw aspects δεν χρειάζονται πλέον
-    // aspects: data.aspects ?? [],
-
-    // 🔥 όλα τα derived σε ένα σημείο
-    analysis: {
-      planets: customPlanetInfo,
-      chartRuler: customChartRuler,
-      balance: customBalance,
-      houseRulers: customHouseRulers,
-      aspects: customAspects,
-      dignities: customDignities,
-      dispositors: customDispositors,
-      dynamics: customDynamics
-    }
-  }
-
+  const payload = useChartDataDebug({
+    data,
+    visiblePlanets,
+    date,
+    coords,
+    customPlanetInfo,
+    customChartRuler,
+    customBalance,
+    customHouseRulers,
+    customAspects,
+    customDignities,
+    customDispositors,
+    customDynamics,
+  })
+  
   return (
     <div
       style={{
