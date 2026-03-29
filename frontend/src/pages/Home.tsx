@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AstroChart from "../components/AstroChart";
 import { mapToChartData } from "../utils/mapToChart";
-import type { ChartSummary, CustomBalance, CustomChartRuler, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
+import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
 import { url } from '../constants/constants';
 import BasicControls from "../components/BasicControlls";
 import { useMediaQuery } from "@mui/material";
@@ -35,6 +35,9 @@ const Home = () => {
   const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
   const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
   const [customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+  const [customAspects, setCustomAspects] = useState<CustomAspect[]>([])
+  const [customDignities, setCustomDignities] = useState<CustomDignity[]>([])
+  const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -162,6 +165,9 @@ const Home = () => {
             setCustomChartRuler={setCustomChartRuler}
             setCustomBalance={setCustomBalance}
             setCustomHouseRulers={setCustomHouseRulers}
+            setCustomAspects={setCustomAspects}
+            setCustomDignities={setCustomDignities}
+            setCustomDispositors={setCustomDispositors}
           />
         </div>
       </div>
@@ -175,6 +181,9 @@ const Home = () => {
         customChartRuler={customChartRuler}
         customBalance={customBalance}
         customHouseRulers={customHouseRulers}
+        customAspects={customAspects}
+        customDignities={customDignities}
+        customDispositors={customDispositors}
       />
     </>
   );

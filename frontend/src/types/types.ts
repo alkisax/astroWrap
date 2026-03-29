@@ -117,3 +117,29 @@ export type CustomHouseRuler = {
   inSign: string | null;
   inHouse: number | null;
 };
+export type CustomAspect = {
+  point1: string;
+  point2: string;
+  type: string;
+  orb: number | null;
+};
+export type DignityType =
+  | "domicile"
+  | "exaltation"
+  | "detriment"
+  | "fall"
+  | "neutral";
+export type CustomDignity = {
+  planet: Planet;
+  sign: string;
+  dignity: DignityType;
+};
+export type DispositorResult = {
+  chain: string[];
+  type: "final" | "loop";
+  loopStart?: string;
+};
+export type CustomDispositor = {
+  planet: string;
+  result: DispositorResult;
+};

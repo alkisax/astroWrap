@@ -1,6 +1,6 @@
 // components/BasicChartInfo.tsx
 
-import type { ChartSummary, CustomBalance, CustomChartRuler, CustomHouseRuler, CustomPlanetInfo } from "../types/types";
+import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomHouseRuler, CustomPlanetInfo, DignityType } from "../types/types";
 import { Paper } from "@mantine/core";
 import { colors, planets } from "../constants/constants";
 import PlanetTable from "./PlanetTable";
@@ -20,6 +20,7 @@ import { getAngleAspects } from "../utils/getAngleAspects";
 import { calculateElementBalance, calculateModalityBalance } from "../utils/balanceCalculator";
 import { getZodiacSign } from "../utils/astroHelpers";
 import { getAllDispositors } from "../utils/dispositorCalculator";
+import { detriment, domicile, exaltation, fall } from "../constants/dignities";
 
 type Props = {
   data: ChartSummary;
@@ -27,6 +28,9 @@ type Props = {
   setCustomChartRuler: (ruler: CustomChartRuler | null) => void;
   setCustomBalance: (balance: CustomBalance) => void;
   setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void;
+  setCustomAspects: (a: CustomAspect[]) => void;
+  setCustomDignities: (d: CustomDignity[]) => void;
+  setCustomDispositors: (d: CustomDispositor[]) => void;
 };
 
 const BasicChartInfo = ({
@@ -34,7 +38,10 @@ const BasicChartInfo = ({
   setCustomPlanetInfo,
   setCustomChartRuler,
   setCustomBalance,
-  setCustomHouseRulers
+  setCustomHouseRulers,
+  setCustomAspects,
+  setCustomDignities,
+  setCustomDispositors,
 }: Props) => {
   const [showAspects, setShowAspects] = useState(false);
   const [showHouses, setShowHouses] = useState(false);
@@ -48,49 +55,85 @@ const BasicChartInfo = ({
   const houseRulers = computeHouseRulers(data);
 
   // 🔥 2. ASPECTS
-  // const allowedPoints = [
-  //   "Sun", "Moon", "Mercury", "Venus", "Mars",
-  //   "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"
-  // ];
+  const allowedPoints = [
+    "Sun", "Moon", "Mercury", "Venus", "Mars",
+    "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"
+  ];
 
-  // const aspects = [
-  //   ...(data.aspects ?? []),
-  //   ...getAngleAspects(data)
-  // ].filter(a =>
-  //   allowedPoints.includes(a.point1Label) &&
-  //   allowedPoints.includes(a.point2Label)
-  // );
+  const aspects: CustomAspect[] = [
+    ...(data.aspects ?? []),
+    ...getAngleAspects(data)
+  ]
+    .filter(a =>
+      allowedPoints.includes(a.point1Label) &&
+      allowedPoints.includes(a.point2Label)
+    )
+    .map(a => ({
+      point1: a.point1Label,
+      point2: a.point2Label,
+      type: a.type,
+      orb: a.orb ?? null,
+    }));
 
   // 🔥 3. BALANCE
   const elements = calculateElementBalance(data);
   const modalities = calculateModalityBalance(data);
 
   // 🔥 4. DIGNITIES
-  const dignities = planets.map(p => {
-    const val = data[p.toLowerCase() as keyof ChartSummary]?.longitude;
-    if (val == null) return null;
+  const planetMap = {
+    Sun: data.sun,
+    Moon: data.moon,
+    Mercury: data.mercury,
+    Venus: data.venus,
+    Mars: data.mars,
+    Jupiter: data.jupiter,
+    Saturn: data.saturn,
+    Uranus: data.uranus,
+    Neptune: data.neptune,
+    Pluto: data.pluto,
+  };
 
-    const sign = getZodiacSign(val);
+  const dignities: CustomDignity[] = planets
+    .map((p): CustomDignity | null => {
+      const val = planetMap[p]?.longitude;
+      if (val == null) return null;
 
-    let dignity = "neutral";
-    if (domicile[p]?.includes(sign)) dignity = "domicile";
-    else if (exaltation[p] === sign) dignity = "exaltation";
-    else if (detriment[p]?.includes(sign)) dignity = "detriment";
-    else if (fall[p] === sign) dignity = "fall";
+      const sign = getZodiacSign(val);
 
-    return { planet: p, sign, dignity };
-  }).filter(Boolean);
+      let dignity: DignityType = "neutral";
+
+      if (domicile[p]?.includes(sign)) dignity = "domicile";
+      else if (exaltation[p] === sign) dignity = "exaltation";
+      else if (detriment[p]?.includes(sign)) dignity = "detriment";
+      else if (fall[p] === sign) dignity = "fall";
+
+      return { planet: p, sign, dignity };
+    })
+    .filter((x): x is CustomDignity => x !== null);
 
   // 🔥 5. DISPOSITOR TREE
-  // const dispositors = getAllDispositors(data);
+  const dispositors = getAllDispositors(data);
 
   useEffect(() => {
     setCustomHouseRulers(houseRulers);
     setCustomBalance({ elements, modalities });
-    // setCustomAspects(aspects);
-    // setCustomDignities(dignities);
-    // setCustomDispositors(dispositors);
-  }, [houseRulers, elements, modalities, setCustomHouseRulers, setCustomBalance]);
+    setCustomAspects(aspects);
+    setCustomDignities(dignities);
+    setCustomDispositors(dispositors);
+  }, [
+    houseRulers,
+    elements,
+    modalities,
+    aspects,
+    dignities,
+    dispositors,
+    setCustomHouseRulers,
+    setCustomBalance,
+    setCustomAspects,
+    setCustomDignities,
+    setCustomDispositors
+  ]);
+
 
   return (
     <>
