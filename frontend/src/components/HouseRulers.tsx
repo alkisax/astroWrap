@@ -28,7 +28,7 @@ import { Paper, Text, Stack } from "@mantine/core";
 import type { ChartSummary, CustomHouseRuler } from "../types/types";
 import { computeHouseRulers } from "../utils/houseRulers";
 import { planetIcons, signIcons, colors } from "../constants/constants";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 type Props = {
   data: ChartSummary;
@@ -36,7 +36,7 @@ type Props = {
 };
 
 const HouseRulers = ({ data, setCustomHouseRulers }: Props) => {
-  const results = computeHouseRulers(data);
+  const results = useMemo(() => computeHouseRulers(data), [data])
 
   useEffect(() => {
     setCustomHouseRulers(results);

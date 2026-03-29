@@ -144,3 +144,8 @@ export type CustomDispositor = {
   planet: string;
   result: DispositorResult;
 };
+export type CustomDynamics = {
+  backbone: PlanetKey[]          // final dispositors
+  loops: PlanetKey[]             // loop starters (unique)
+  mutualReceptions: [PlanetKey, PlanetKey][]  // pairs
+}

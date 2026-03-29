@@ -7,6 +7,7 @@ import type {
   CustomChartRuler,
   CustomDignity,
   CustomDispositor,
+  CustomDynamics,
   CustomHouseRuler,
   CustomPlanetInfo,
   DignityType,
@@ -37,6 +38,7 @@ import {
 import { getZodiacSign } from '../utils/astroHelpers'
 import { getAllDispositors } from '../utils/dispositorCalculator'
 import { detriment, domicile, exaltation, fall } from '../constants/dignities'
+import { getMutualReceptions } from '../utils/mutualReception'
 
 type Props = {
   data: ChartSummary
@@ -47,6 +49,7 @@ type Props = {
   setCustomAspects: (a: CustomAspect[]) => void
   setCustomDignities: (d: CustomDignity[]) => void
   setCustomDispositors: (d: CustomDispositor[]) => void
+  setCustomDynamics: (d: CustomDynamics | null) => void
 }
 
 const BasicChartInfo = ({
@@ -57,7 +60,8 @@ const BasicChartInfo = ({
   setCustomHouseRulers,
   setCustomAspects,
   setCustomDignities,
-  setCustomDispositors
+  setCustomDispositors,
+  setCustomDynamics,
 }: Props) => {
   const [showAspects, setShowAspects] = useState(false)
   const [showHouses, setShowHouses] = useState(false)
@@ -149,15 +153,49 @@ const BasicChartInfo = ({
     })),
     [data])
 
+  const dynamics = useMemo<CustomDynamics>(() => {
+    const allDispositors = getAllDispositors(data)
+    const toPlanetKey = (p: string): PlanetKey =>
+      p.toLowerCase() as PlanetKey
+
+    const backbone = Array.from(
+      new Set(
+        allDispositors
+          .filter(r => r.result.type === 'final')
+          .map(r => {
+            const chain = r.result.chain
+            return toPlanetKey(chain[chain.length - 1]) // ✅ τελευταίος
+          })
+      )
+    )
+
+    const loops = Array.from(
+      new Set(
+        allDispositors
+          .filter(r => r.result.type === 'loop' && r.result.loopStart)
+          .map(r => toPlanetKey(r.result.loopStart!))
+      )
+    )
+
+    const mutualReceptions = getMutualReceptions(data)
+      .map(([a, b]) => [toPlanetKey(a), toPlanetKey(b)] as [PlanetKey, PlanetKey])
+
+    return {
+      backbone,
+      loops,
+      mutualReceptions
+    }
+  }, [data])
+
   useEffect(() => {
     setCustomHouseRulers(houseRulers)
     setCustomBalance({ elements, modalities })
     setCustomAspects(aspects)
     setCustomDignities(dignities)
     setCustomDispositors(dispositors)
-  }, [houseRulers, elements, modalities, aspects, dignities, dispositors, setCustomHouseRulers, setCustomBalance, setCustomAspects, setCustomDignities, setCustomDispositors])
+    setCustomDynamics(dynamics)
+  }, [houseRulers, elements, modalities, aspects, dignities, dispositors, setCustomHouseRulers, setCustomBalance, setCustomAspects, setCustomDignities, setCustomDispositors, dynamics, setCustomDynamics])
 
-  
   return (
     <>
       <Paper

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AstroChart from "../components/AstroChart";
 import { mapToChartData } from "../utils/mapToChart";
-import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
+import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomDynamics, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
 import { url } from '../constants/constants';
 import BasicControls from "../components/BasicControlls";
 import { useMediaQuery } from "@mui/material";
@@ -38,6 +38,7 @@ const Home = () => {
   const [customAspects, setCustomAspects] = useState<CustomAspect[]>([])
   const [customDignities, setCustomDignities] = useState<CustomDignity[]>([])
   const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
+  const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,6 +169,7 @@ const Home = () => {
             setCustomAspects={setCustomAspects}
             setCustomDignities={setCustomDignities}
             setCustomDispositors={setCustomDispositors}
+            setCustomDynamics={setCustomDynamics}
           />
         </div>
       </div>
@@ -184,6 +186,7 @@ const Home = () => {
         customAspects={customAspects}
         customDignities={customDignities}
         customDispositors={customDispositors}
+        customDynamics={customDynamics}
       />
     </>
   );

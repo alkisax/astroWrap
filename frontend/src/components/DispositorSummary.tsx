@@ -11,9 +11,16 @@ type Props = {
 const DispositorSummary = ({ data }: Props) => {
   const results = getAllDispositors(data);
 
-  const finals = results
-    .filter((r) => r.result.type === "final")
-    .map((r) => r.planet);
+  const finals = Array.from(
+    new Set(
+      results
+        .filter(r => r.result.type === 'final')
+        .map(r => {
+          const chain = r.result.chain
+          return chain[chain.length - 1] // 🔥 τελευταίος πλανήτης
+        })
+    )
+  )
 
   const loops = results
     .filter((r) => r.result.type === "loop" && r.result.loopStart)

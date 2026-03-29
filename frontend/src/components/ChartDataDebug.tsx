@@ -1,5 +1,5 @@
 // src/components/ChartDataDebug.tsx
-import type { ChartSummary, BasicPlacement, CustomPlanetInfo, CustomChartRuler, CustomBalance, CustomHouseRuler, CustomAspect, CustomDignity, CustomDispositor } from '../types/types'
+import type { ChartSummary, BasicPlacement, CustomPlanetInfo, CustomChartRuler, CustomBalance, CustomHouseRuler, CustomAspect, CustomDignity, CustomDispositor, CustomDynamics } from '../types/types'
 
 type Props = {
   data: ChartSummary
@@ -13,6 +13,7 @@ type Props = {
   customAspects: CustomAspect[]
   customDignities: CustomDignity[]
   customDispositors: CustomDispositor[]
+  customDynamics: CustomDynamics | null
 }
 
 // 🔥 helper για να μαζέψουμε τα flat fields
@@ -43,6 +44,7 @@ const ChartDataDebug = ({
   customAspects,
   customDignities,
   customDispositors,
+  customDynamics,
 }: Props) => {
 
   const allPoints = extractPlanets(data)
@@ -54,6 +56,12 @@ const ChartDataDebug = ({
     )
   )
 
+  const points = {
+    ...filteredPlanets,
+    ascendant: data.ascendant,
+    midheaven: data.midheaven,
+  }
+
   const payload = {
     meta: {
       date: date.toISOString(),
@@ -63,7 +71,7 @@ const ChartDataDebug = ({
     },
 
     // 🔥 1 source of truth
-    points: filteredPlanets,
+    points: points,
 
     houses: data.houses,
 
@@ -79,6 +87,7 @@ const ChartDataDebug = ({
       aspects: customAspects,
       dignities: customDignities,
       dispositors: customDispositors,
+      dynamics: customDynamics
     }
   }
 
