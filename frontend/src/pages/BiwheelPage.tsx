@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import axios from "axios";
 // import AstroChartTransits from "../components/AstroChartTransits";
 import { mapToChartData } from "../utils/mapToChart";
-import type { ChartInput, ChartSummary } from "../types/types";
+import type { ChartInput, ChartSummary, CustomHouseRuler, CustomPlanetInfo } from "../types/types";
 import { colors, url } from "../constants/constants";
 import ChartFormBiwheel from "../components/biwheel/ChartFormBiwheel";
 import PlanetSelector from "../components/PlanetSelector";
@@ -38,6 +39,15 @@ const BiwheelPage = () => {
     "Neptune",
     "Pluto",
   ]);
+
+  //  για την δημιουργία του json
+  const [_customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
+  const [_customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+  // const [customAspects, setCustomAspects] = useState<CustomAspect[]>([])
+  // const [customDignities, setCustomDignities] = useState<CustomDignity[]>([])
+  // const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
+  // const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
+  // const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
 
   // 🔥 fetch RADIX
   useEffect(() => {
@@ -168,13 +178,13 @@ const BiwheelPage = () => {
         {/* RADIX */}
         <div>
           <h3 style={{ textAlign: "center", color: "white" }}>Radix</h3>
-          <PlanetTable data={radixData} />
+          <PlanetTable data={radixData} setCustomPlanetInfo={setCustomPlanetInfo}/>
         </div>
 
         {/* TRANSITS */}
         <div>
           <h3 style={{ textAlign: "center", color: "white" }}>Transits</h3>
-          <PlanetTable data={transitData} />
+          <PlanetTable data={transitData} setCustomPlanetInfo={setCustomPlanetInfo}/>
         </div>
       </div>
 
@@ -234,12 +244,12 @@ const BiwheelPage = () => {
           <Accordion.Panel>
             <Grid gutter="md" mb="md">
               <Grid.Col span={6}>
-                <HouseRulers data={radixData} />
+                <HouseRulers data={radixData} setCustomHouseRulers={setCustomHouseRulers}/>
                 <MostImportantAspects data={radixData} />
               </Grid.Col>
 
               <Grid.Col span={6}>
-                <HouseRulers data={transitData} />
+                <HouseRulers data={transitData} setCustomHouseRulers={setCustomHouseRulers}/>
                 <MostImportantAspects data={transitData} />
               </Grid.Col>
             </Grid>
