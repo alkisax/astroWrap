@@ -23,7 +23,7 @@ import HouseRulers from './HouseRulers'
 import EssentialDignities from './EssentialDignities'
 import DispositorTree from './DispositorTree'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from '@mantine/hooks'
 import { useChartAnalysis } from '../hooks/componentHooks/useChartAnalysis'
 
@@ -66,14 +66,20 @@ const BasicChartInfo = ({
     dynamics
   } = useChartAnalysis(data)
 
-  useEffect(() => {
-    setCustomHouseRulers(houseRulers)
-    setCustomBalance(balance)
-    setCustomAspects(aspects)
-    setCustomDignities(dignities)
-    setCustomDispositors(dispositors)
-    setCustomDynamics(dynamics)
-  }, [houseRulers, aspects, dignities, dispositors, setCustomHouseRulers, setCustomBalance, setCustomAspects, setCustomDignities, setCustomDispositors, dynamics, setCustomDynamics, balance])
+const firstRun = useRef(true)
+
+useEffect(() => {
+  if (!firstRun.current) return
+  firstRun.current = false
+
+  setCustomHouseRulers(houseRulers)
+  setCustomBalance(balance)
+  setCustomAspects(aspects)
+  setCustomDignities(dignities)
+  setCustomDispositors(dispositors)
+  setCustomDynamics(dynamics)
+
+}, [aspects, balance, dignities, dispositors, dynamics, houseRulers, setCustomAspects, setCustomBalance, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomHouseRulers])
 
   return (
     <>
