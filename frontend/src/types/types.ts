@@ -63,6 +63,7 @@ export type Planet =
   | "Neptune"
   | "Pluto";
 
+export type PlanetKey = Lowercase<Planet>;
 export type Element = "Fire" | "Earth" | "Air" | "Water";
 export type Modality = "Cardinal" | "Fixed" | "Mutable";
 
@@ -130,7 +131,7 @@ export type DignityType =
   | "fall"
   | "neutral";
 export type CustomDignity = {
-  planet: Planet;
+  planet: PlanetKey;
   sign: string;
   dignity: DignityType;
 };

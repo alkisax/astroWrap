@@ -5,7 +5,7 @@ import {
   calculateModalityBalance,
 } from "../utils/balanceCalculator";
 import { colors } from "../constants/constants";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 type Props = {
   data: ChartSummary;
@@ -13,8 +13,15 @@ type Props = {
 };
 
 const BalanceSummary = ({ data, setCustomBalance }: Props) => {
-  const elements = calculateElementBalance(data);
-  const modalities = calculateModalityBalance(data);
+  const elements = useMemo(
+    () => calculateElementBalance(data),
+    [data]
+  )
+
+  const modalities = useMemo(
+    () => calculateModalityBalance(data),
+    [data]
+  )
 
   useEffect(() => {
     setCustomBalance({

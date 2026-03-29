@@ -19,7 +19,10 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
     house: number | null;
   } | null>(null);
 
-  const cusps = data.houses.map((h) => h.longitude ?? 0);
+  const cusps = useMemo(
+    () => data.houses.map(h => h.longitude ?? 0),
+    [data.houses]
+  )
 
   const planets = useMemo(() => [
     { name: "Sun", value: data.sun?.longitude },
@@ -35,17 +38,19 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
     { name: "Pluto", value: data.pluto?.longitude },
   ], [data]);
 
-  useEffect(() => {
-    const info: CustomPlanetInfo[] = planets
+  const planetInfo = useMemo<CustomPlanetInfo[]>(() =>
+    planets
       .filter(p => p.value != null)
       .map(p => ({
         planet: p.name,
         sign: getZodiacSign(p.value as number),
         house: getHouse(p.value as number, cusps),
-      }));
+      })),
+    [planets, cusps])
 
-    setCustomPlanetInfo(info);
-  }, [cusps, data, planets, setCustomPlanetInfo]);
+  useEffect(() => {
+    setCustomPlanetInfo(planetInfo)
+  }, [planetInfo, setCustomPlanetInfo])
 
   const handleClick = (planet: string, sign: string, house: number | null) => {
     setSelected({ planet, sign, house });

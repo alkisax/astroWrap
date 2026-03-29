@@ -62,19 +62,24 @@ const ChartDataDebug = ({
       houseSystem: 'placidus'
     },
 
-    points: filteredPlanets, // 🔥 planets + asc + mc μαζί
+    // 🔥 1 source of truth
+    points: filteredPlanets,
 
     houses: data.houses,
-    aspects: data.aspects ?? [],
 
-    customPlanetInfo,
-    customChartRuler,
-    customBalance,
-    customHouseRulers,
-    customAspects,
-    customDignities,
-    customDispositors,
-    analysis: {}
+    // ❌ raw aspects δεν χρειάζονται πλέον
+    // aspects: data.aspects ?? [],
+
+    // 🔥 όλα τα derived σε ένα σημείο
+    analysis: {
+      planets: customPlanetInfo,
+      chartRuler: customChartRuler,
+      balance: customBalance,
+      houseRulers: customHouseRulers,
+      aspects: customAspects,
+      dignities: customDignities,
+      dispositors: customDispositors,
+    }
   }
 
   return (

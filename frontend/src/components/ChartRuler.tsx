@@ -3,7 +3,7 @@ import type { ChartSummary, CustomChartRuler } from "../types/types";
 import { computeChartRuler } from "../utils/computeChartRuler";
 import { colors, planetIcons, signIcons } from "../constants/constants";
 import AstroDetailsModal from "./AstroDetailsModal";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Props = {
   data: ChartSummary;
@@ -17,20 +17,20 @@ export default function ChartRuler({ data, setCustomChartRuler }: Props) {
     setOpened(true);
   };
 
-  const ruler = computeChartRuler(data);
+  const ruler = useMemo(() => computeChartRuler(data), [data])
 
   useEffect(() => {
     if (!ruler) {
-      setCustomChartRuler(null);
-      return;
+      setCustomChartRuler(null)
+      return
     }
 
     setCustomChartRuler({
       planet: ruler.planet,
       sign: ruler.sign,
       house: ruler.house,
-    });
-  }, [ruler, setCustomChartRuler]);
+    })
+  }, [ruler, setCustomChartRuler])
 
   if (!ruler) return null;
 

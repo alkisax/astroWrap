@@ -1,37 +1,53 @@
 // components/BasicChartInfo.tsx
 
-import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomHouseRuler, CustomPlanetInfo, DignityType } from "../types/types";
-import { Paper } from "@mantine/core";
-import { colors, planets } from "../constants/constants";
-import PlanetTable from "./PlanetTable";
-import ChartRuler from "./ChartRuler";
-import BalanceSummary from "./BalanceSummary";
+import type {
+  ChartSummary,
+  CustomAspect,
+  CustomBalance,
+  CustomChartRuler,
+  CustomDignity,
+  CustomDispositor,
+  CustomHouseRuler,
+  CustomPlanetInfo,
+  DignityType,
+  Planet,
+  PlanetKey
+} from '../types/types'
 
-import { useEffect, useState } from "react";
-import { Button, Group } from "@mantine/core";
+import { Paper, Button, Group } from '@mantine/core'
+import { colors, planets } from '../constants/constants'
 
-import MostImportantAspects from "./MostImportantAspects";
-import HouseRulers from "./HouseRulers";
-import EssentialDignities from "./EssentialDignities";
-import DispositorTree from "./DispositorTree";
-import { useMediaQuery } from "@mantine/hooks";
-import { computeHouseRulers } from "../utils/houseRulers";
-import { getAngleAspects } from "../utils/getAngleAspects";
-import { calculateElementBalance, calculateModalityBalance } from "../utils/balanceCalculator";
-import { getZodiacSign } from "../utils/astroHelpers";
-import { getAllDispositors } from "../utils/dispositorCalculator";
-import { detriment, domicile, exaltation, fall } from "../constants/dignities";
+import PlanetTable from './PlanetTable'
+import ChartRuler from './ChartRuler'
+import BalanceSummary from './BalanceSummary'
+import MostImportantAspects from './MostImportantAspects'
+import HouseRulers from './HouseRulers'
+import EssentialDignities from './EssentialDignities'
+import DispositorTree from './DispositorTree'
+
+import { useEffect, useMemo, useState } from 'react'
+import { useMediaQuery } from '@mantine/hooks'
+
+import { computeHouseRulers } from '../utils/houseRulers'
+import { getAngleAspects } from '../utils/getAngleAspects'
+import {
+  calculateElementBalance,
+  calculateModalityBalance
+} from '../utils/balanceCalculator'
+import { getZodiacSign } from '../utils/astroHelpers'
+import { getAllDispositors } from '../utils/dispositorCalculator'
+import { detriment, domicile, exaltation, fall } from '../constants/dignities'
 
 type Props = {
-  data: ChartSummary;
-  setCustomPlanetInfo: (info: CustomPlanetInfo[]) => void;
-  setCustomChartRuler: (ruler: CustomChartRuler | null) => void;
-  setCustomBalance: (balance: CustomBalance) => void;
-  setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void;
-  setCustomAspects: (a: CustomAspect[]) => void;
-  setCustomDignities: (d: CustomDignity[]) => void;
-  setCustomDispositors: (d: CustomDispositor[]) => void;
-};
+  data: ChartSummary
+  setCustomPlanetInfo: (info: CustomPlanetInfo[]) => void
+  setCustomChartRuler: (ruler: CustomChartRuler | null) => void
+  setCustomBalance: (balance: CustomBalance) => void
+  setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void
+  setCustomAspects: (a: CustomAspect[]) => void
+  setCustomDignities: (d: CustomDignity[]) => void
+  setCustomDispositors: (d: CustomDispositor[]) => void
+}
 
 const BasicChartInfo = ({
   data,
@@ -41,124 +57,130 @@ const BasicChartInfo = ({
   setCustomHouseRulers,
   setCustomAspects,
   setCustomDignities,
-  setCustomDispositors,
+  setCustomDispositors
 }: Props) => {
-  const [showAspects, setShowAspects] = useState(false);
-  const [showHouses, setShowHouses] = useState(false);
-  const [showDignities, setShowDignities] = useState(false);
-  const [showTree, setShowTree] = useState(false);
+  const [showAspects, setShowAspects] = useState(false)
+  const [showHouses, setShowHouses] = useState(false)
+  const [showDignities, setShowDignities] = useState(false)
+  const [showTree, setShowTree] = useState(false)
 
-  const isMobile = useMediaQuery("(max-width:768px)");
+  const isMobile = useMediaQuery('(max-width:768px)')
 
-  // μεταφέραμε εδώ ολον τον υπολογισμό και τα components είναι πλέον μόνο UI για να έχουμε σε ένα σημείο όλα τα state για την δημιουργία του json
-  // 🔥 1. HOUSE RULERS
-  const houseRulers = computeHouseRulers(data);
+  // 🔥 1. HOUSE RULERS (normalize keys)
+  const houseRulers = useMemo<CustomHouseRuler[]>(() =>
+    computeHouseRulers(data).map(r => ({
+      ...r,
+      ruler: r.ruler.toLowerCase(),
+    })),
+    [data])
 
-  // 🔥 2. ASPECTS
-  const allowedPoints = [
-    "Sun", "Moon", "Mercury", "Venus", "Mars",
-    "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"
-  ];
-
-  const aspects: CustomAspect[] = [
-    ...(data.aspects ?? []),
-    ...getAngleAspects(data)
-  ]
-    .filter(a =>
-      allowedPoints.includes(a.point1Label) &&
-      allowedPoints.includes(a.point2Label)
-    )
-    .map(a => ({
-      point1: a.point1Label,
-      point2: a.point2Label,
-      type: a.type,
-      orb: a.orb ?? null,
-    }));
+  // 🔥 2. ASPECTS (KEYS όχι labels)
+  const aspects = useMemo<CustomAspect[]>(() => {
+    const allowedPoints = [
+      'sun', 'moon', 'mercury', 'venus', 'mars',
+      'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'
+    ]
+    return [
+      ...(data.aspects ?? []),
+      ...getAngleAspects(data)
+    ]
+      .filter(a =>
+        allowedPoints.includes(a.point1Key) &&
+        allowedPoints.includes(a.point2Key)
+      )
+      .map(a => ({
+        point1: a.point1Key,
+        point2: a.point2Key,
+        type: a.type,
+        orb: a.orb ?? null
+      }))
+  }, [data])
 
   // 🔥 3. BALANCE
-  const elements = calculateElementBalance(data);
-  const modalities = calculateModalityBalance(data);
+  const elements = useMemo(() => calculateElementBalance(data), [data])
+  const modalities = useMemo(() => calculateModalityBalance(data), [data])
 
-  // 🔥 4. DIGNITIES
-  const planetMap = {
-    Sun: data.sun,
-    Moon: data.moon,
-    Mercury: data.mercury,
-    Venus: data.venus,
-    Mars: data.mars,
-    Jupiter: data.jupiter,
-    Saturn: data.saturn,
-    Uranus: data.uranus,
-    Neptune: data.neptune,
-    Pluto: data.pluto,
-  };
+  // 🔥 4. DIGNITIES (normalize planet key)
+  const toPlanetKey = (p: Planet): PlanetKey =>
+    p.toLowerCase() as PlanetKey
 
-  const dignities: CustomDignity[] = planets
-    .map((p): CustomDignity | null => {
-      const val = planetMap[p]?.longitude;
-      if (val == null) return null;
+  const dignities = useMemo<CustomDignity[]>(() => {
+    const planetMap = {
+      Sun: data.sun,
+      Moon: data.moon,
+      Mercury: data.mercury,
+      Venus: data.venus,
+      Mars: data.mars,
+      Jupiter: data.jupiter,
+      Saturn: data.saturn,
+      Uranus: data.uranus,
+      Neptune: data.neptune,
+      Pluto: data.pluto
+    }
 
-      const sign = getZodiacSign(val);
+    return planets
+      .map((p): CustomDignity | null => {
+        const val = planetMap[p]?.longitude
+        if (val == null) return null
 
-      let dignity: DignityType = "neutral";
+        const sign = getZodiacSign(val)
 
-      if (domicile[p]?.includes(sign)) dignity = "domicile";
-      else if (exaltation[p] === sign) dignity = "exaltation";
-      else if (detriment[p]?.includes(sign)) dignity = "detriment";
-      else if (fall[p] === sign) dignity = "fall";
+        let dignity: DignityType = 'neutral'
 
-      return { planet: p, sign, dignity };
-    })
-    .filter((x): x is CustomDignity => x !== null);
+        if (domicile[p]?.includes(sign)) dignity = 'domicile'
+        else if (exaltation[p] === sign) dignity = 'exaltation'
+        else if (detriment[p]?.includes(sign)) dignity = 'detriment'
+        else if (fall[p] === sign) dignity = 'fall'
 
-  // 🔥 5. DISPOSITOR TREE
-  const dispositors = getAllDispositors(data);
+        return {
+          planet: toPlanetKey(p),
+          sign,
+          dignity
+        }
+      })
+      .filter((x): x is CustomDignity => x !== null)
+  }, [data])
+
+  // 🔥 5. DISPOSITORS (normalize)
+  const dispositors = useMemo<CustomDispositor[]>(() =>
+    getAllDispositors(data).map(d => ({
+      ...d,
+      planet: d.planet.toLowerCase()
+    })),
+    [data])
 
   useEffect(() => {
-    setCustomHouseRulers(houseRulers);
-    setCustomBalance({ elements, modalities });
-    setCustomAspects(aspects);
-    setCustomDignities(dignities);
-    setCustomDispositors(dispositors);
-  }, [
-    houseRulers,
-    elements,
-    modalities,
-    aspects,
-    dignities,
-    dispositors,
-    setCustomHouseRulers,
-    setCustomBalance,
-    setCustomAspects,
-    setCustomDignities,
-    setCustomDispositors
-  ]);
+    setCustomHouseRulers(houseRulers)
+    setCustomBalance({ elements, modalities })
+    setCustomAspects(aspects)
+    setCustomDignities(dignities)
+    setCustomDispositors(dispositors)
+  }, [houseRulers, elements, modalities, aspects, dignities, dispositors, setCustomHouseRulers, setCustomBalance, setCustomAspects, setCustomDignities, setCustomDispositors])
 
-
+  
   return (
     <>
       <Paper
-        p="md"
-        radius="md"
+        p='md'
+        radius='md'
         style={{
-          width: "100%",
-          maxWidth: "1700px",
-          margin: "20px auto",
+          width: '100%',
+          maxWidth: '1700px',
+          margin: '20px auto',
           background: colors.panel,
-          backdropFilter: "blur(1px)",
-          border: "1px solid rgba(255,255,255,0.1)",
-          color: colors.text,
+          backdropFilter: 'blur(1px)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          color: colors.text
         }}
       >
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-            gap: "10px",
-            alignItems: "stretch",
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+            gap: '10px',
+            alignItems: 'stretch'
           }}
         >
-          {/* LEFT */}
           <div>
             <PlanetTable
               data={data}
@@ -166,91 +188,35 @@ const BasicChartInfo = ({
             />
           </div>
 
-          {/* RIGHT */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              height: "100%",
-            }}
-          >
-            {/* 🔝 ChartRuler */}
-            <div style={{ flex: 1 }}>
-              <ChartRuler
-                data={data}
-                setCustomChartRuler={setCustomChartRuler}
-              />
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <ChartRuler
+              data={data}
+              setCustomChartRuler={setCustomChartRuler}
+            />
 
-            {/* ⚖️ Balance */}
-            <div style={{ flex: 1 }}>
-              <BalanceSummary
-                data={data}
-                setCustomBalance={setCustomBalance}
-              />
-            </div>
+            <BalanceSummary
+              data={data}
+              setCustomBalance={setCustomBalance}
+            />
 
-            {/* 🔘 Buttons area */}
-            <div style={{ flex: 1 }}>
-              <Group grow>
-                <Button
-                  size="xs"
-                  style={{
-                    backgroundColor: showAspects ? colors.primary : "rgba(255,255,255,0.1)",
-                    color: showAspects ? "#000" : colors.text,
-                  }}
-                  onClick={() => setShowAspects(v => !v)}
-                >
-                  ⭐
-                </Button>
-
-                <Button
-                  size="xs"
-                  style={{
-                    backgroundColor: showHouses ? colors.primary : "rgba(255,255,255,0.1)",
-                    color: showHouses ? "#000" : colors.text,
-                  }}
-                  onClick={() => setShowHouses(v => !v)}
-                >
-                  🏠
-                </Button>
-
-                <Button
-                  size="xs"
-                  style={{
-                    backgroundColor: showDignities ? colors.primary : "rgba(255,255,255,0.1)",
-                    color: showDignities ? "#000" : colors.text,
-                  }}
-                  onClick={() => setShowDignities(v => !v)}
-                >
-                  👑
-                </Button>
-
-                <Button
-                  size="xs"
-                  style={{
-                    backgroundColor: showTree ? colors.primary : "rgba(255,255,255,0.1)",
-                    color: showTree ? "#000" : colors.text,
-                  }}
-                  onClick={() => setShowTree(v => !v)}
-                >
-                  🌳
-                </Button>
-              </Group>
-            </div>
+            <Group grow>
+              <Button size='xs' onClick={() => setShowAspects(v => !v)}>⭐</Button>
+              <Button size='xs' onClick={() => setShowHouses(v => !v)}>🏠</Button>
+              <Button size='xs' onClick={() => setShowDignities(v => !v)}>👑</Button>
+              <Button size='xs' onClick={() => setShowTree(v => !v)}>🌳</Button>
+            </Group>
           </div>
         </div>
       </Paper>
 
-      <div style={{ width: "100%", maxWidth: "700px", margin: "10px auto" }}>
+      <div style={{ width: '100%', maxWidth: '700px', margin: '10px auto' }}>
         {showAspects && <MostImportantAspects data={data} />}
         {showHouses && <HouseRulers data={data} setCustomHouseRulers={setCustomHouseRulers} />}
         {showDignities && <EssentialDignities data={data} />}
         {showTree && <DispositorTree data={data} />}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default BasicChartInfo;
+export default BasicChartInfo
