@@ -7,8 +7,11 @@ frontend/package.json
 3. vite.config.ts
 για gh-pages:
 export default defineConfig({
-  base: '/astro-wrap/',
-});
+  plugins: [react()],
+  base: process.env.VITE_DEPLOY_TARGET === 'gh'
+    ? '/astroWrap/'
+    : '/',
+})
 4. npm run build
 5. npm run deploy:gh
 6. GitHub settings
@@ -16,6 +19,8 @@ Repo → Settings
 Pages
 Source: Deploy from branch
 Branch: gh-pages
+
+VITE_DEPLOY_TARGET=gh npm run deploy:gh
 
 
 https://www.freeastroapi.com/dashboard
