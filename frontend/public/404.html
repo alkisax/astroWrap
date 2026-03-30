@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      sessionStorage.redirect = location.pathname;
-      location.replace('/astroWrap/');
+      const path = location.pathname.replace("/astroWrap", "");
+      sessionStorage.redirect = path;
+      location.replace("/astroWrap/");
     </script>
   </head>
   <body></body>
