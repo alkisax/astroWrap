@@ -38,31 +38,40 @@ const allowedKeys = [
   "uranus",
   "neptune",
   "pluto",
+  "ascendant",
+  "midheaven",
 ];
 
-const getPlanets = (data: ChartSummary): Point[] => {
-  return allowedKeys
+const getPoints = (data: ChartSummary): Point[] => {
+  const base = allowedKeys
     .map((k) => data[k as keyof ChartSummary])
     .filter((p): p is Point => isPoint(p));
+
+  return base;
 };
 
 export const findTwoChartAspects = (
   radix: ChartSummary,
-  transit: ChartSummary
+  transit: ChartSummary,
 ): Aspect[] => {
   const results: Aspect[] = [];
 
-  const radixPlanets = getPlanets(radix);
-  const transitPlanets = getPlanets(transit);
+  const radixPoints = getPoints(radix);
+  const transitPoints = getPoints(transit);
 
-  for (const t of transitPlanets) {
-    for (const r of radixPlanets) {
+  const isAngle = (key: string) => key === "ascendant" || key === "midheaven";
+
+  for (const t of transitPoints) {
+    for (const r of radixPoints) {
       const diff = angleDiff(t.longitude, r.longitude);
 
       for (const asp of aspectDefs) {
         const orb = Math.abs(diff - asp.angle);
 
-        if (orb <= asp.orb) {
+        const maxOrb =
+          isAngle(t.key) || isAngle(r.key) ? Math.min(asp.orb, 3) : asp.orb;
+
+        if (orb <= maxOrb) {
           results.push({
             point1Key: t.key,
             point1Label: `T-${t.label}`,
@@ -76,5 +85,5 @@ export const findTwoChartAspects = (
     }
   }
 
-return results.sort((a, b) => (a.orb ?? 999) - (b.orb ?? 999));
+  return results.sort((a, b) => (a.orb ?? 999) - (b.orb ?? 999));
 };

@@ -66,7 +66,8 @@ export const planetIcons: Record<string, string> = {
   Uranus: "♅",
   Neptune: "♆",
   Pluto: "♇",
-  ASC: "⬆️"
+  ASC: "⬆️",
+  MC: "MC"
 };
 
 export const planetSymbolToName: Record<string, string> = {

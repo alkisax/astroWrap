@@ -18,8 +18,7 @@ const TwoChartsAspectsTable = ({ radix, transit }: Props) => {
     // 2️⃣ κράτα μόνο βασικούς πλανήτες (optional αλλά recommended)
     .filter(a => {
       const allowed = [
-        "Sun", "Moon", "Mercury", "Venus", "Mars",
-        "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"
+        "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Ascendant","Midheaven"
       ];
 
       const t = a.point1Label.replace("T-", "");
