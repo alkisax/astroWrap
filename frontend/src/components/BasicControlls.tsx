@@ -49,14 +49,14 @@ const BasicControls = ({
         gap: "5px",
       }}
     >
+      <TimeControls date={date} setDate={setDate} coords={coords} />
+
       <PlanetSelector
         selected={visiblePlanets}
         setSelected={setVisiblePlanets}
       />
 
       <ChartForm onSubmit={onSubmit} />
-
-      <TimeControls date={date} setDate={setDate} coords={coords} />
     </div>
   );
 };
