@@ -10,7 +10,12 @@ export default defineConfig({
   base: '/astro-wrap/',
 });
 4. npm run build
-5. 
+5. npm run deploy:gh
+6. GitHub settings
+Repo → Settings
+Pages
+Source: Deploy from branch
+Branch: gh-pages
 
 
 https://www.freeastroapi.com/dashboard
