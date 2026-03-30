@@ -20,9 +20,23 @@ IMPORTANT:
   the first time it appears
 - Write in a way understandable to a general audience (not overly technical at first).
 - Build interpretation step-by-step (from simple → advanced).
-- call the describing person "chart native" ("ιθαγενής του διαγράμματος")
+- call the describing person "chart native" ("το άτομο")
 - Use natural language, not bullet-point dumping.
 - Base everything strictly on the provided data.
+
+- Focus on psychological and behavioral interpretation
+- Describe how the person thinks, feels, and acts in real life
+- Prefer "how this shows up in daily behavior" over abstract meanings
+- Avoid textbook-style definitions of planets/signs
+- Instead of describing what something "means",
+  explain how it is experienced and expressed
+- When possible, describe:
+  → reactions
+  → habits
+  → relationship patterns
+  → inner conflicts
+  → decision-making style
+- Make the interpretation feel like a real person, not a concept
 
 ---
 

@@ -18,6 +18,7 @@ import { computeCompatibility } from "../../utils/synastryCompatibilityHelper";
 import { buildEagleLarkGrids } from "../../utils/buildEagleLarkGrids";
 import { findTwoChartAspects } from "../../utils/TwoChartsAspectFinder";
 import { calculateChart } from "../../services/astroService";
+import { getBiwheelInterpretation } from "../../services/llmService";
 
 export const useBiwheelPage = () => {
   // 🔹 raw data
@@ -56,6 +57,9 @@ export const useBiwheelPage = () => {
   const [transitCustomHouseRulers, setTransitCustomHouseRulers] = useState<
     CustomHouseRuler[]
   >([]);
+
+  const [llmLoading, setLlmLoading] = useState(false);
+  const [llmError, setLlmError] = useState<string | null>(null);
 
   // // 🔥 fetch RADIX
   // useEffect(() => {
@@ -233,6 +237,29 @@ export const useBiwheelPage = () => {
     generatedAt: new Date().toISOString(),
   };
 
+  const handleBiwheelLLM = async (): Promise<string | null> => {
+    if (!synastryShakenTreeJson || !compatibility) return null;
+
+    setLlmLoading(true);
+    setLlmError(null);
+
+    try {
+      const result = await getBiwheelInterpretation(
+        synastryShakenTreeJson,
+        compatibility,
+      );
+
+      console.log("LLM BIWHEEL RESULT:", result);
+      return result;
+    } catch (err) {
+      console.log(err);
+      setLlmError("LLM request failed");
+      return null;
+    } finally {
+      setLlmLoading(false);
+    }
+  };
+
   console.log("synastry: ", synastryShakenTreeJson);
   console.log("compatibility:", compatibility);
   console.log("eagle grids: ", eagleJson);
@@ -269,5 +296,11 @@ export const useBiwheelPage = () => {
     radixPayload,
     transitPayload,
     biwheelPayload,
+    compatibility,
+
+    //llm
+    handleBiwheelLLM,
+    llmLoading,
+    llmError,
   };
 };

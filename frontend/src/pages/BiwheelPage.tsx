@@ -13,12 +13,18 @@ import MostImportantAspects from '../components/MostImportantAspects'
 import TransitAspectsGrid from '../components/TransitAspectsGrid'
 import EagleLarkGridList from '../components/biwheel/EagleLarkGridList'
 
-import { Accordion, Grid } from '@mantine/core'
+import { Accordion, Button, Grid, Paper } from '@mantine/core'
 
 import { useBiwheelPage } from '../hooks/componentHooks/useBiwheelPage'
 import HouseOverlayBiwheel from '../components/biwheel/HouseOverlayBiwheel'
+import { useState } from 'react'
+import { CircularProgress } from '@mui/material'
+import ReactMarkdown from 'react-markdown'
+import CompatibilityViewer from '../components/biwheel/CompatibilityViewer'
 
 const BiwheelPage = () => {
+  const [llmResult, setLlmResult] = useState<string | null>(null);
+  const [showLLM, setShowLLM] = useState(false);
 
   // 🔥 όλη η λογική έρχεται από hook
   const {
@@ -45,8 +51,20 @@ const BiwheelPage = () => {
     // debug payloads (optional)
     // radixPayload,
     // transitPayload
+    compatibility,
+
+    handleBiwheelLLM,
+    llmLoading,
+    llmError,
 
   } = useBiwheelPage()
+
+  const handleLLMClick = async () => {
+    setShowLLM(true);
+
+    const res = await handleBiwheelLLM();
+    setLlmResult(res);
+  };
 
 
   // 🔥 GUARD → μέχρι να έχουμε data ΔΕΝ κάνουμε render charts
@@ -180,6 +198,53 @@ const BiwheelPage = () => {
         </div>
       </div>
 
+      {/* 🔮 LLM BIWHEEL */}
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Button
+          size='md'
+          onClick={handleLLMClick}
+          disabled={llmLoading}
+          style={{
+            whiteSpace: 'normal',
+            lineHeight: '1.3',
+            display: 'block',
+            margin: '0 auto',
+            width: '280px',
+          }}
+        >
+          {llmLoading ? (
+            <CircularProgress size={18} />
+          ) : llmError ? (
+            'Error ❌'
+          ) : (
+            <>
+              call Lark 🦜 <br />
+              (relationship analysis)
+            </>
+          )}
+        </Button>
+      </div>
+
+      {showLLM && llmResult && (
+        <Paper
+          p="md"
+          radius="md"
+          style={{
+            width: "100%",
+            maxWidth: "700px",
+            margin: "10px auto",
+            background: colors.panel,
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: colors.text,
+          }}
+        >
+          <CompatibilityViewer compatibility={compatibility} />
+          <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+            <ReactMarkdown>{llmResult}</ReactMarkdown>
+          </div>
+        </Paper>
+      )}
 
       {/* ======================= */}
       {/* 📊 ANALYSIS ACCORDION */}
