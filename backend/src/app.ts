@@ -3,6 +3,7 @@ import cors from "cors";
 import type { Request, Response } from "express";
 import path from "path";
 import astroRoutes from "./astro/astro.routes";
+import astroInterpretationRoutes from "./openAI/astroInterpretation.routes"
 
 
 export const app = express();
@@ -26,6 +27,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/astro", astroRoutes);
+app.use('/api/astro-interpretation', astroInterpretationRoutes);
 console.log("Registered /api/astro routes");
 
 const publicPath = path.join(__dirname, '../dist');
