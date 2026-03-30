@@ -204,6 +204,7 @@ $ curl -X POST "https://api.freeastroapi.com/api/v1/natal/calculate" \
   }
 }
 
+## Synastry prompt
 
 You are an expert astrologer.
 
@@ -280,3 +281,183 @@ STYLE:
 - No astrology jargon without explanation
 - No generic horoscope tone
 - Explain like you're talking to an intelligent non-astrologer
+
+
+---
+## natal chart
+{
+  "meta": {
+    "date": "1981-01-01T21:30:00.000Z",
+    "location": {
+      "lat": 37.9838,
+      "lng": 23.7275
+    },
+    "zodiac": "tropical",
+    "houseSystem": "placidus"
+  },
+  "planets": [
+    { "planet": "Sun", "sign": "Capricorn", "house": 4 },
+    { "planet": "ASC", "sign": "Virgo", "house": 1 },
+    { "planet": "Moon", "sign": "Scorpio", "house": 2 },
+    { "planet": "Mercury", "sign": "Capricorn", "house": 4 },
+    { "planet": "Venus", "sign": "Sagittarius", "house": 3 },
+    { "planet": "Mars", "sign": "Aquarius", "house": 5 },
+    { "planet": "Jupiter", "sign": "Libra", "house": 1 },
+    { "planet": "Saturn", "sign": "Libra", "house": 1 }
+  ],
+  "houses": [
+    { "house": 1, "sign": "Virgo", "longitude": 178.1037 },
+    { "house": 2, "sign": "Libra", "longitude": 204.4877 },
+    { "house": 3, "sign": "Scorpio", "longitude": 234.886 },
+    { "house": 4, "sign": "Sagittarius", "longitude": 267.8631 },
+    { "house": 5, "sign": "Aquarius", "longitude": 300.8795 },
+    { "house": 6, "sign": "Pisces", "longitude": 331.4361 },
+    { "house": 7, "sign": "Pisces", "longitude": 358.1037 },
+    { "house": 8, "sign": "Aries", "longitude": 24.4877 },
+    { "house": 9, "sign": "Taurus", "longitude": 54.886 },
+    { "house": 10, "sign": "Gemini", "longitude": 87.8631 },
+    { "house": 11, "sign": "Leo", "longitude": 120.8795 },
+    { "house": 12, "sign": "Virgo", "longitude": 151.4361 }
+  ],
+  "chartRuler": {
+    "planet": "Mercury",
+    "sign": "Capricorn",
+    "house": 4
+  },
+  "balance": {
+    "elements": {
+      "Fire": 2,
+      "Earth": 2,
+      "Air": 4,
+      "Water": 2
+    },
+    "modalities": {
+      "Cardinal": 5,
+      "Fixed": 3,
+      "Mutable": 2
+    }
+  },
+  "aspects": [
+    {
+      "point1": "saturn",
+      "point2": "pluto",
+      "type": "sextile",
+      "orb": 0.1597
+    }
+  ],
+  "dignities": [
+    { "planet": "sun", "dignity": "exaltation" },
+    { "planet": "moon", "dignity": "neutral" },
+    { "planet": "mercury", "dignity": "detriment" },
+    { "planet": "venus", "dignity": "detriment" },
+    { "planet": "mars", "dignity": "neutral" },
+    { "planet": "jupiter", "dignity": "exaltation" },
+    { "planet": "saturn", "dignity": "fall" },
+    { "planet": "uranus", "dignity": "neutral" },
+    { "planet": "neptune", "dignity": "neutral" },
+    { "planet": "pluto", "dignity": "neutral" }
+  ],
+  "dispositors": {
+    "loops": ["jupiter", "moon", "mercury"],
+    "backbone": []
+  }
+}
+
+You are an expert astrologer. Analyze the following natal chart data and provide a structured, clear interpretation.
+
+IMPORTANT:
+- Write in a way understandable to a general audience (not overly technical at first).
+- Build interpretation step-by-step (from simple → advanced).
+- Use natural language, not bullet-point dumping.
+- Base everything strictly on the provided data.
+
+---
+
+STEP 1 — CORE PERSONALITY (most important, easy to understand)
+
+Start with the fundamental identity of the person:
+
+1. Ascendant (ASC):
+- What impression they give
+- How they approach life
+
+2. Sun sign:
+- Core identity, ego, purpose
+
+3. Moon sign:
+- Emotional nature, needs, inner world
+
+Explain how these three combine into a coherent personality.
+
+---
+
+STEP 2 — PLANETARY EXPRESSIONS (planet + sign + house)
+
+For each planet (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn):
+
+- Explain:
+  → what the planet represents
+  → how the sign modifies it
+  → how the house expresses it in real life
+
+Focus especially on:
+- Sun
+- Moon
+- Venus
+- Mars
+
+Connect placements where relevant (e.g. Sun + Mercury same sign/house).
+
+---
+
+STEP 3 — STRUCTURE & BALANCE
+
+Analyze the overall chart structure:
+
+1. Element balance (Fire / Earth / Air / Water)
+→ what dominates or is lacking
+
+2. Modalities (Cardinal / Fixed / Mutable)
+→ behavioral style
+
+3. House emphasis / hemispheres / quadrants:
+→ where life focus is (e.g. inner vs outer world, personal vs social)
+
+---
+
+STEP 4 — KEY ASPECTS
+
+Interpret the most important aspects:
+
+- Explain what each aspect means psychologically and practically
+- Focus on strong/tight aspects (low orb)
+- Describe how they create harmony or tension
+
+Avoid listing — interpret them meaningfully.
+
+---
+
+STEP 5 — REFINEMENT (advanced layer)
+
+Now deepen the analysis using:
+
+- Chart ruler → overall life direction
+- Dignities → strengths / weaknesses of planets
+- Dispositor patterns → underlying energy flow
+- Any notable patterns (loops, dominance, etc.)
+
+---
+
+FINAL OUTPUT STYLE:
+
+- Write as a coherent interpretation, not raw data explanation
+- Smooth transitions between sections
+- Avoid repeating the same meaning
+- Prioritize clarity over jargon
+- Give a sense of personality, behavior, and life tendencies
+
+---
+
+Here is the chart data:
+
+{{INSERT_JSON_HERE}}

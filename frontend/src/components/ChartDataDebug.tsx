@@ -1,5 +1,6 @@
 // src/components/ChartDataDebug.tsx
 import { useChartDataDebug } from '../hooks/componentHooks/useChartDataDebug'
+import { natalChartShakeJSONTreeHelper } from '../utils/natalChartShakeJSONTreeHelper'
 import type { ChartSummary, CustomPlanetInfo, CustomChartRuler, CustomBalance, CustomHouseRuler, CustomAspect, CustomDignity, CustomDispositor, CustomDynamics } from '../types/types'
 
 type Props = {
@@ -46,6 +47,10 @@ const ChartDataDebug = ({
     customDispositors,
     customDynamics,
   })
+
+  const shaken = natalChartShakeJSONTreeHelper(payload)
+  console.log('SHAKEN:', shaken)
+  
   
   return (
     <div
