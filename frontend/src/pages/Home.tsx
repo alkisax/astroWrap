@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/App.tsx
 import { useEffect, useMemo, useState } from "react";
 // import axios from "axios";
 // import { url } from '../constants/constants';
 // import ChartDataDebug from "../components/ChartDataDebug";
+
 import AstroChart from "../components/AstroChart";
 import { mapToChartData } from "../utils/mapToChart";
 import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomDynamics, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
@@ -11,6 +11,8 @@ import BasicControls from "../components/BasicControlls";
 import { useMediaQuery } from "@mui/material";
 import BasicChartInfo from "../components/BasicChartInfo";
 import { calculateChart } from '../services/astroService';
+import { useChartDataDebug } from "../hooks/componentHooks/useChartDataDebug";
+import { natalChartShakeJSONTreeHelper } from "../utils/natalChartShakeJSONTreeHelper";
 
 const Home = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -33,14 +35,37 @@ const Home = () => {
   });
 
   // για την δημιουργία του συγκεντρωτικού json πρέπει να περάσουμε όλους τους υπολογισμούς στον parent για αυτό φτιάχνουμε state
-  const [_customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
-  const [_customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
-  const [_customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
-  const [_customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
-  const [_customAspects, setCustomAspects] = useState<CustomAspect[]>([])
-  const [_customDignities, setCustomDignities] = useState<CustomDignity[]>([])
-  const [_customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
-  const [_customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(null)
+  const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
+  const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
+  const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
+  const [customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+  const [customAspects, setCustomAspects] = useState<CustomAspect[]>([])
+  const [customDignities, setCustomDignities] = useState<CustomDignity[]>([])
+  const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
+  const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(null)
+  // const [shaken, setShaken] = useState<unknown>(null)
+
+  const payload = useChartDataDebug({
+    data,
+    visiblePlanets,
+    date,
+    coords,
+    customPlanetInfo,
+    customChartRuler,
+    customBalance,
+    customHouseRulers,
+    customAspects,
+    customDignities,
+    customDispositors,
+    customDynamics,
+  });
+
+  const shaken = useMemo(() => {
+    if (!payload) return null;
+    return natalChartShakeJSONTreeHelper(payload);
+  }, [payload]);
+  console.log("shaken: ", shaken);
+  
 
   const chart = useMemo(() => {
     try {
@@ -104,7 +129,7 @@ const Home = () => {
     });
   };
 
-  console.log(data);
+  // console.log(data);
 
   const isMobile = useMediaQuery("(max-width:768px)");
 
@@ -214,6 +239,7 @@ const Home = () => {
         customDignities={customDignities}
         customDispositors={customDispositors}
         customDynamics={customDynamics}
+        // setShaken={setShaken}
       /> */}
     </>
   );
