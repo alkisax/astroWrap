@@ -30,10 +30,13 @@ export default function ChartFormBiwheel({ onSubmit }: Props) {
   const [radixDate, setRadixDate] = useState<Date | null>(new Date());
   const [transitDate, setTransitDate] = useState<Date | null>(new Date());
 
-  const [lat, setLat] = useState<number>(37.9838);
-  const [lng, setLng] = useState<number>(23.7275);
+  const [radixLat, setRadixLat] = useState<number>(37.9838);
+  const [radixLng, setRadixLng] = useState<number>(23.7275);
 
-  function toDate(value: unknown): Date | null {
+  const [transitLat, setTransitLat] = useState<number>(37.9838);
+  const [transitLng, setTransitLng] = useState<number>(23.7275);
+
+  const toDate = (value: unknown): Date | null => {
     if (!value) return null;
     if (value instanceof Date) return value;
 
@@ -42,18 +45,18 @@ export default function ChartFormBiwheel({ onSubmit }: Props) {
   }
 
   const handleSubmit = () => {
-    if (!radixDate || !transitDate || lat == null || lng == null) return;
-
+    if (!radixDate || !transitDate) return;
+    
     onSubmit({
       radix: {
         date: radixDate,
-        lat: Number(lat),
-        lng: Number(lng),
+        lat: radixLat,
+        lng: radixLng,
       },
       transit: {
         date: transitDate,
-        lat: Number(lat),
-        lng: Number(lng),
+        lat: transitLat,
+        lng: transitLng,
       },
     });
   };
@@ -88,6 +91,23 @@ export default function ChartFormBiwheel({ onSubmit }: Props) {
             }}
           />
 
+          {/* 🔹 LOCATION */}
+          <Group grow>
+            <NumberInput
+              label="Radix Lat"
+              value={radixLat}
+              decimalScale={4}
+              onChange={(val) => setRadixLat(Number(val))}
+            />
+
+            <NumberInput
+              label="Radix Lng"
+              value={radixLng}
+              decimalScale={4}
+              onChange={(val) => setRadixLng(Number(val))}
+            />
+          </Group>
+
           {/* 🔹 TRANSITS */}
           <DateTimePicker
             label="Transit Date"
@@ -98,20 +118,19 @@ export default function ChartFormBiwheel({ onSubmit }: Props) {
             }}
           />
 
-          {/* 🔹 LOCATION */}
           <Group grow>
             <NumberInput
-              label="Lat"
-              value={lat}
+              label="Transit Lat"
+              value={transitLat}
               decimalScale={4}
-              onChange={(val) => setLat(Number(val))}
+              onChange={(val) => setTransitLat(Number(val))}
             />
 
             <NumberInput
-              label="Lng"
-              value={lng}
+              label="Transit Lng"
+              value={transitLng}
               decimalScale={4}
-              onChange={(val) => setLng(Number(val))}
+              onChange={(val) => setTransitLng(Number(val))}
             />
           </Group>
 
