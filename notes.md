@@ -30,6 +30,20 @@ VITE_DEPLOY_TARGET=gh npm run deploy:gh
  npm run build:gh
 npm run deploy:gh 
 
+public/404.html
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      sessionStorage.redirect = location.pathname;
+      location.replace('/astroWrap/');
+    </script>
+  </head>
+  <body></body>
+</html>
+
 
 
 https://www.freeastroapi.com/dashboard
