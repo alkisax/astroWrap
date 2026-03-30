@@ -1,4 +1,3 @@
-// src/types/astro.types.ts
 
 export interface BasicPlacement {
   key: string;

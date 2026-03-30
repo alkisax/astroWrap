@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/App.tsx
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useMemo, useState } from "react";
+// import axios from "axios";
+// import { url } from '../constants/constants';
+// import ChartDataDebug from "../components/ChartDataDebug";
 import AstroChart from "../components/AstroChart";
 import { mapToChartData } from "../utils/mapToChart";
 import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomDynamics, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
-import { url } from '../constants/constants';
 import BasicControls from "../components/BasicControlls";
 import { useMediaQuery } from "@mui/material";
 import BasicChartInfo from "../components/BasicChartInfo";
-import ChartDataDebug from "../components/ChartDataDebug";
+import { calculateChart } from '../services/astroService';
 
 const Home = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -30,39 +32,64 @@ const Home = () => {
     lng: 23.7275,
   });
 
-  // για την δημιουργία του συγγεντρωτικού json πρέπει να περάσουμε όλους τους υπολογισμούς στον parent για αυτό φτιάχνουμε state
-  const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
-  const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
-  const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
-  const [customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
-  const [customAspects, setCustomAspects] = useState<CustomAspect[]>([])
-  const [customDignities, setCustomDignities] = useState<CustomDignity[]>([])
-  const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
-  const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(null)
+  // για την δημιουργία του συγκεντρωτικού json πρέπει να περάσουμε όλους τους υπολογισμούς στον parent για αυτό φτιάχνουμε state
+  const [_customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
+  const [_customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
+  const [_customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
+  const [_customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+  const [_customAspects, setCustomAspects] = useState<CustomAspect[]>([])
+  const [_customDignities, setCustomDignities] = useState<CustomDignity[]>([])
+  const [_customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
+  const [_customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(null)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.post(url, {
-          year: date.getFullYear(),
-          month: date.getMonth() + 1,
-          day: date.getDate(),
-          hour: date.getHours(),
-          minute: date.getMinutes(),
-          latitude: coords.lat,
-          longitude: coords.lng,
-          houseSystem: "placidus",
-          zodiac: "tropical",
-        });
-
-        setData(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchData();
+  const chart = useMemo(() => {
+    try {
+      return calculateChart({
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate(),
+        hour: date.getHours(),
+        minute: date.getMinutes(),
+        latitude: coords.lat,
+        longitude: coords.lng,
+        houseSystem: 'placidus',
+        zodiac: 'tropical',
+      });
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }, [date, coords]);
+
+  // 🔥 sync → effect (allowed pattern)
+  useEffect(() => {
+    setData(chart);
+  }, [chart]);
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axios.post(url, {
+  //         year: date.getFullYear(),
+  //         month: date.getMonth() + 1,
+  //         day: date.getDate(),
+  //         hour: date.getHours(),
+  //         minute: date.getMinutes(),
+  //         latitude: coords.lat,
+  //         longitude: coords.lng,
+  //         houseSystem: "placidus",
+  //         zodiac: "tropical",
+  //       });
+
+  //       setData(res.data);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [date, coords]);
 
   const handleSubmit = (input: {
     date: Date;
@@ -174,7 +201,7 @@ const Home = () => {
         </div>
       </div>
 
-      <ChartDataDebug
+      {/* <ChartDataDebug
         data={data}
         visiblePlanets={visiblePlanets}
         date={date}
@@ -187,7 +214,7 @@ const Home = () => {
         customDignities={customDignities}
         customDispositors={customDispositors}
         customDynamics={customDynamics}
-      />
+      /> */}
     </>
   );
 }

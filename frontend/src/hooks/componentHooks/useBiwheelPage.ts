@@ -1,16 +1,13 @@
 // frontend\src\hooks\componentHooks\useBiwheelPage.ts
-
-// frontend/src/hooks/componentHooks/useBiwheelPage.ts
-
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState, useMemo } from "react";
+// import axios from "axios";
+// import { url } from "../../constants/constants";
 import type {
   ChartInput,
   ChartSummary,
   CustomHouseRuler,
   CustomPlanetInfo,
 } from "../../types/types";
-import { url } from "../../constants/constants";
 import { mapToChartData } from "../../utils/mapToChart";
 import { useChartAnalysis } from "./useChartAnalysis";
 import { useChartDataDebug } from "./useChartDataDebug";
@@ -18,6 +15,9 @@ import { buildHouseOverlay } from "../../utils/houseOverlayBiwheelHeler";
 import { buildBiwheelPayload } from "../../utils/buildBiwheelPayload";
 import { synastryShakeJSONtreeHelper } from "../../utils/synastryShakeJSONtreeHelper";
 import { computeCompatibility } from "../../utils/synastryCompatibilityHelper";
+import { buildEagleLarkGrids } from "../../utils/buildEagleLarkGrids";
+import { findTwoChartAspects } from "../../utils/TwoChartsAspectFinder";
+import { calculateChart } from "../../services/astroService";
 
 export const useBiwheelPage = () => {
   // 🔹 raw data
@@ -57,12 +57,31 @@ export const useBiwheelPage = () => {
     CustomHouseRuler[]
   >([]);
 
-  // 🔥 fetch RADIX
-  useEffect(() => {
-    if (!radixInput) return;
+  // // 🔥 fetch RADIX
+  // useEffect(() => {
+  //   if (!radixInput) return;
 
-    axios
-      .post(url, {
+  //   axios
+  //     .post(url, {
+  //       year: radixInput.date.getFullYear(),
+  //       month: radixInput.date.getMonth() + 1,
+  //       day: radixInput.date.getDate(),
+  //       hour: radixInput.date.getHours(),
+  //       minute: radixInput.date.getMinutes(),
+  //       latitude: radixInput.lat,
+  //       longitude: radixInput.lng,
+  //       houseSystem: "placidus",
+  //       zodiac: "tropical",
+  //     })
+  //     .then((res) => setRadixData(res.data))
+  //     .catch((err) => console.error("Radix error:", err));
+  // }, [radixInput]);
+
+  const radixChartMemo = useMemo(() => {
+    if (!radixInput) return null;
+
+    try {
+      return calculateChart({
         year: radixInput.date.getFullYear(),
         month: radixInput.date.getMonth() + 1,
         day: radixInput.date.getDate(),
@@ -72,17 +91,42 @@ export const useBiwheelPage = () => {
         longitude: radixInput.lng,
         houseSystem: "placidus",
         zodiac: "tropical",
-      })
-      .then((res) => setRadixData(res.data))
-      .catch((err) => console.error("Radix error:", err));
+      });
+    } catch (err) {
+      console.error("Radix error:", err);
+      return null;
+    }
   }, [radixInput]);
 
-  // 🔥 fetch TRANSIT
   useEffect(() => {
-    if (!transitInput) return;
+    setRadixData(radixChartMemo);
+  }, [radixChartMemo]);
 
-    axios
-      .post(url, {
+  // // 🔥 fetch TRANSIT
+  // useEffect(() => {
+  //   if (!transitInput) return;
+
+  //   axios
+  //     .post(url, {
+  //       year: transitInput.date.getFullYear(),
+  //       month: transitInput.date.getMonth() + 1,
+  //       day: transitInput.date.getDate(),
+  //       hour: transitInput.date.getHours(),
+  //       minute: transitInput.date.getMinutes(),
+  //       latitude: transitInput.lat,
+  //       longitude: transitInput.lng,
+  //       houseSystem: "placidus",
+  //       zodiac: "tropical",
+  //     })
+  //     .then((res) => setTransitData(res.data))
+  //     .catch((err) => console.error("Transit error:", err));
+  // }, [transitInput]);
+
+  const transitChartMemo = useMemo(() => {
+    if (!transitInput) return null;
+
+    try {
+      return calculateChart({
         year: transitInput.date.getFullYear(),
         month: transitInput.date.getMonth() + 1,
         day: transitInput.date.getDate(),
@@ -92,10 +136,16 @@ export const useBiwheelPage = () => {
         longitude: transitInput.lng,
         houseSystem: "placidus",
         zodiac: "tropical",
-      })
-      .then((res) => setTransitData(res.data))
-      .catch((err) => console.error("Transit error:", err));
+      });
+    } catch (err) {
+      console.error("Transit error:", err);
+      return null;
+    }
   }, [transitInput]);
+
+  useEffect(() => {
+    setTransitData(transitChartMemo);
+  }, [transitChartMemo]);
 
   // 🔥 analysis
   const radixAnalysis = useChartAnalysis(radixData);
@@ -158,13 +208,34 @@ export const useBiwheelPage = () => {
   // console.log("transit json creator: ", transitPayload);
   // console.log('🔥 BIWHEEL FULL PAYLOAD:', biwheelPayload);
 
-  const synastryShakenTreeJson = synastryShakeJSONtreeHelper(radixPayload, transitPayload, biwheelPayload)
+  const synastryShakenTreeJson = synastryShakeJSONtreeHelper(
+    radixPayload,
+    transitPayload,
+    biwheelPayload,
+  );
 
   const compatibility = computeCompatibility(synastryShakenTreeJson);
 
+  const eagleAspects =
+    radixData && transitData
+      ? findTwoChartAspects(radixData, transitData).filter(
+          (a) => (a.orb ?? 999) <= 2,
+        )
+      : [];
+
+  const eagleGrids =
+    radixData && transitData
+      ? buildEagleLarkGrids(radixData, transitData, eagleAspects)
+      : [];
+
+  const eagleJson = {
+    grids: eagleGrids,
+    generatedAt: new Date().toISOString(),
+  };
 
   console.log("synastry: ", synastryShakenTreeJson);
-  console.log('compatibility:', compatibility);
+  console.log("compatibility:", compatibility);
+  console.log("eagle grids: ", eagleJson);
 
   return {
     // data
@@ -190,6 +261,9 @@ export const useBiwheelPage = () => {
     setTransitCustomPlanetInfo,
     setRadixCustomHouseRulers,
     setTransitCustomHouseRulers,
+
+    // eagle
+    eagleGrids,
 
     // payloads
     radixPayload,
