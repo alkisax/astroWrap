@@ -15,6 +15,7 @@ import { mapToChartData } from "../../utils/mapToChart";
 import { useChartAnalysis } from "./useChartAnalysis";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { buildHouseOverlay } from "../../utils/houseOverlayBiwheelHeler";
+import { buildBiwheelPayload } from "../../utils/buildBiwheelPayload";
 
 export const useBiwheelPage = () => {
   // 🔹 raw data
@@ -145,9 +146,15 @@ export const useBiwheelPage = () => {
   const houseOverlay =
     radixData && transitData ? buildHouseOverlay(radixData, transitData) : [];
 
+  const biwheelPayload = buildBiwheelPayload({
+    radixData,
+    transitData,
+  });
+
   console.log("houseOverlay (hook):", houseOverlay);
   console.log("radix json creator: ", radixPayload);
   console.log("transit json creator: ", transitPayload);
+  console.log('🔥 BIWHEEL FULL PAYLOAD:', biwheelPayload);
 
   return {
     // data
@@ -177,5 +184,6 @@ export const useBiwheelPage = () => {
     // payloads
     radixPayload,
     transitPayload,
+    biwheelPayload,
   };
 };
