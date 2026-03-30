@@ -43,8 +43,8 @@ const BiwheelPage = () => {
     setTransitCustomHouseRulers,
 
     // debug payloads (optional)
-    radixPayload,
-    transitPayload
+    // radixPayload,
+    // transitPayload
 
   } = useBiwheelPage()
 

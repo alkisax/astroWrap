@@ -17,6 +17,7 @@ import { useChartDataDebug } from "./useChartDataDebug";
 import { buildHouseOverlay } from "../../utils/houseOverlayBiwheelHeler";
 import { buildBiwheelPayload } from "../../utils/buildBiwheelPayload";
 import { synastryShakeJSONtreeHelper } from "../../utils/synastryShakeJSONtreeHelper";
+import { computeCompatibility } from "../../utils/synastryCompatibilityHelper";
 
 export const useBiwheelPage = () => {
   // 🔹 raw data
@@ -156,9 +157,14 @@ export const useBiwheelPage = () => {
   // console.log("radix json creator: ", radixPayload);
   // console.log("transit json creator: ", transitPayload);
   // console.log('🔥 BIWHEEL FULL PAYLOAD:', biwheelPayload);
+
   const synastryShakenTreeJson = synastryShakeJSONtreeHelper(radixPayload, transitPayload, biwheelPayload)
+
+  const compatibility = computeCompatibility(synastryShakenTreeJson);
+
+
   console.log("synastry: ", synastryShakenTreeJson);
-  
+  console.log('compatibility:', compatibility);
 
   return {
     // data
