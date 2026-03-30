@@ -2,82 +2,101 @@
 
 // frontend/src/hooks/componentHooks/useBiwheelPage.ts
 
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useEffect, useState } from "react";
+import axios from "axios";
 import type {
   ChartInput,
   ChartSummary,
   CustomHouseRuler,
-  CustomPlanetInfo
-} from '../../types/types'
-import { url } from '../../constants/constants'
-import { mapToChartData } from '../../utils/mapToChart'
-import { useChartAnalysis } from './useChartAnalysis'
-import { useChartDataDebug } from './useChartDataDebug'
+  CustomPlanetInfo,
+} from "../../types/types";
+import { url } from "../../constants/constants";
+import { mapToChartData } from "../../utils/mapToChart";
+import { useChartAnalysis } from "./useChartAnalysis";
+import { useChartDataDebug } from "./useChartDataDebug";
+import { buildHouseOverlay } from "../../utils/houseOverlayBiwheelHeler";
 
 export const useBiwheelPage = () => {
   // 🔹 raw data
-  const [radixData, setRadixData] = useState<ChartSummary | null>(null)
-  const [transitData, setTransitData] = useState<ChartSummary | null>(null)
+  const [radixData, setRadixData] = useState<ChartSummary | null>(null);
+  const [transitData, setTransitData] = useState<ChartSummary | null>(null);
 
   // 🔹 inputs
-  const [radixInput, setRadixInput] = useState<ChartInput | null>(null)
-  const [transitInput, setTransitInput] = useState<ChartInput | null>(null)
+  const [radixInput, setRadixInput] = useState<ChartInput | null>(null);
+  const [transitInput, setTransitInput] = useState<ChartInput | null>(null);
 
   // 🔹 planets
   const [selectedPlanets, setSelectedPlanets] = useState<string[]>([
-    'Sun','Moon','Mercury','Venus','Mars',
-    'Jupiter','Saturn','Uranus','Neptune','Pluto'
-  ])
+    "Sun",
+    "Moon",
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto",
+  ]);
 
   // 🔹 custom
-  const [radixCustomPlanetInfo, setRadixCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
-  const [radixCustomHouseRulers, setRadixCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+  const [radixCustomPlanetInfo, setRadixCustomPlanetInfo] = useState<
+    CustomPlanetInfo[]
+  >([]);
+  const [radixCustomHouseRulers, setRadixCustomHouseRulers] = useState<
+    CustomHouseRuler[]
+  >([]);
 
-  const [transitCustomPlanetInfo, setTransitCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
-  const [transitCustomHouseRulers, setTransitCustomHouseRulers] = useState<CustomHouseRuler[]>([])
+  const [transitCustomPlanetInfo, setTransitCustomPlanetInfo] = useState<
+    CustomPlanetInfo[]
+  >([]);
+  const [transitCustomHouseRulers, setTransitCustomHouseRulers] = useState<
+    CustomHouseRuler[]
+  >([]);
 
   // 🔥 fetch RADIX
   useEffect(() => {
-    if (!radixInput) return
+    if (!radixInput) return;
 
-    axios.post(url, {
-      year: radixInput.date.getFullYear(),
-      month: radixInput.date.getMonth() + 1,
-      day: radixInput.date.getDate(),
-      hour: radixInput.date.getHours(),
-      minute: radixInput.date.getMinutes(),
-      latitude: radixInput.lat,
-      longitude: radixInput.lng,
-      houseSystem: 'placidus',
-      zodiac: 'tropical'
-    }).then(res => setRadixData(res.data))
-      .catch(err => console.error('Radix error:', err))
-
-  }, [radixInput])
+    axios
+      .post(url, {
+        year: radixInput.date.getFullYear(),
+        month: radixInput.date.getMonth() + 1,
+        day: radixInput.date.getDate(),
+        hour: radixInput.date.getHours(),
+        minute: radixInput.date.getMinutes(),
+        latitude: radixInput.lat,
+        longitude: radixInput.lng,
+        houseSystem: "placidus",
+        zodiac: "tropical",
+      })
+      .then((res) => setRadixData(res.data))
+      .catch((err) => console.error("Radix error:", err));
+  }, [radixInput]);
 
   // 🔥 fetch TRANSIT
   useEffect(() => {
-    if (!transitInput) return
+    if (!transitInput) return;
 
-    axios.post(url, {
-      year: transitInput.date.getFullYear(),
-      month: transitInput.date.getMonth() + 1,
-      day: transitInput.date.getDate(),
-      hour: transitInput.date.getHours(),
-      minute: transitInput.date.getMinutes(),
-      latitude: transitInput.lat,
-      longitude: transitInput.lng,
-      houseSystem: 'placidus',
-      zodiac: 'tropical'
-    }).then(res => setTransitData(res.data))
-      .catch(err => console.error('Transit error:', err))
-
-  }, [transitInput])
+    axios
+      .post(url, {
+        year: transitInput.date.getFullYear(),
+        month: transitInput.date.getMonth() + 1,
+        day: transitInput.date.getDate(),
+        hour: transitInput.date.getHours(),
+        minute: transitInput.date.getMinutes(),
+        latitude: transitInput.lat,
+        longitude: transitInput.lng,
+        houseSystem: "placidus",
+        zodiac: "tropical",
+      })
+      .then((res) => setTransitData(res.data))
+      .catch((err) => console.error("Transit error:", err));
+  }, [transitInput]);
 
   // 🔥 analysis
-  const radixAnalysis = useChartAnalysis(radixData)
-  const transitAnalysis = useChartAnalysis(transitData)
+  const radixAnalysis = useChartAnalysis(radixData);
+  const transitAnalysis = useChartAnalysis(transitData);
 
   // 🔥 payloads
   const radixPayload = useChartDataDebug({
@@ -94,13 +113,15 @@ export const useBiwheelPage = () => {
     customDignities: radixAnalysis.dignities,
     customDispositors: radixAnalysis.dispositors,
     customDynamics: radixAnalysis.dynamics,
-  })
+  });
 
   const transitPayload = useChartDataDebug({
     data: transitData,
     visiblePlanets: selectedPlanets,
     date: transitInput?.date ?? null,
-    coords: transitInput ? { lat: transitInput.lat, lng: transitInput.lng } : null,
+    coords: transitInput
+      ? { lat: transitInput.lat, lng: transitInput.lng }
+      : null,
 
     customPlanetInfo: transitCustomPlanetInfo,
     customChartRuler: transitAnalysis.chartRuler,
@@ -110,15 +131,23 @@ export const useBiwheelPage = () => {
     customDignities: transitAnalysis.dignities,
     customDispositors: transitAnalysis.dispositors,
     customDynamics: transitAnalysis.dynamics,
-  })
+  });
 
   // 🔥 charts
-  const radixChart = radixData ? mapToChartData(radixData, selectedPlanets) : null
-  const transitChart = transitData ? mapToChartData(transitData, selectedPlanets) : null
- 
+  const radixChart = radixData
+    ? mapToChartData(radixData, selectedPlanets)
+    : null;
+  const transitChart = transitData
+    ? mapToChartData(transitData, selectedPlanets)
+    : null;
+
+  // 🔥 house overlay
+  const houseOverlay =
+    radixData && transitData ? buildHouseOverlay(radixData, transitData) : [];
+
+  console.log("houseOverlay (hook):", houseOverlay);
   console.log("radix json creator: ", radixPayload);
   console.log("transit json creator: ", transitPayload);
-
 
   return {
     // data
@@ -128,6 +157,8 @@ export const useBiwheelPage = () => {
     // charts
     radixChart,
     transitChart,
+
+    houseOverlay,
 
     // inputs
     setRadixInput,
@@ -146,5 +177,5 @@ export const useBiwheelPage = () => {
     // payloads
     radixPayload,
     transitPayload,
-  }
-}
+  };
+};

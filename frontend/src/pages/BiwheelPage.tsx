@@ -16,6 +16,7 @@ import EagleLarkGridList from '../components/biwheel/EagleLarkGridList'
 import { Accordion, Grid } from '@mantine/core'
 
 import { useBiwheelPage } from '../hooks/componentHooks/useBiwheelPage'
+import HouseOverlayBiwheel from '../components/biwheel/HouseOverlayBiwheel'
 
 const BiwheelPage = () => {
 
@@ -25,6 +26,7 @@ const BiwheelPage = () => {
     transitData,
     radixChart,
     transitChart,
+    houseOverlay,
 
     // inputs
     setRadixInput,
@@ -74,6 +76,7 @@ const BiwheelPage = () => {
   console.log('transitData:', transitData)
   console.log('radixPayload:', radixPayload)
   console.log('transitPayload:', transitPayload)
+  console.log('overlay:', houseOverlay)
 
 
   return (
@@ -250,6 +253,16 @@ const BiwheelPage = () => {
               radix={radixData}
               transit={transitData}
             />
+          </Accordion.Panel>
+        </Accordion.Item>
+
+        <Accordion.Item value="overlay">
+          <Accordion.Control>
+            🏠 House Overlay
+          </Accordion.Control>
+
+          <Accordion.Panel>
+            <HouseOverlayBiwheel overlays={houseOverlay} />
           </Accordion.Panel>
         </Accordion.Item>
 
