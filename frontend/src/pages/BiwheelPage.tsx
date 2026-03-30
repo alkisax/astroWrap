@@ -72,11 +72,11 @@ const BiwheelPage = () => {
 
 
   // 🔥 DEBUG (αν θες)
-  console.log('radixData:', radixData)
-  console.log('transitData:', transitData)
-  console.log('radixPayload:', radixPayload)
-  console.log('transitPayload:', transitPayload)
-  console.log('overlay:', houseOverlay)
+  // console.log('radixData:', radixData)
+  // console.log('transitData:', transitData)
+  // console.log('radixPayload:', radixPayload)
+  // console.log('transitPayload:', transitPayload)
+  // console.log('overlay:', houseOverlay)
 
 
   return (
