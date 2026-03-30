@@ -1,51 +1,58 @@
-λύση: gh-pages + build από subfolder
+✅ GH Pages deploy (frontend μέσα σε monorepo)
 1. install
-2. npm install gh-pages --save-dev
-frontend/package.json
+npm install gh-pages --save-dev
+2. package.json
+"scripts": {
+  "dev": "vite",
+  "build": "tsc -b && vite build",
+  "preview": "vite preview",
+
   "predeploy": "npm run build",
   "deploy:gh": "gh-pages -d dist"
+}
 3. vite.config.ts
-για gh-pages:
-export default defineConfig({
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: process.env.VITE_DEPLOY_TARGET === 'gh'
-    ? '/astroWrap/'
-    : '/',
-})
-4. npm run build
-5. npm run deploy:gh
-6. GitHub settings
-Repo → Settings
-Pages
-Source: Deploy from branch
-Branch: gh-pages
-
-VITE_DEPLOY_TARGET=gh npm run deploy:gh
-
-<BrowserRouter basename="/astroWrap/">
-
-  "build:gh": "cross-env VITE_DEPLOY_TARGET=gh tsc -b && vite build",
-  "deploy:gh": "gh-pages -d dist"
-
- npm run build:gh
-npm run deploy:gh 
-
-public/404.html
-
+  base: mode === 'production' ? '/astroWrap/' : '/',
+}))
+4. React Router (IMPORTANT)
+`<BrowserRouter basename="/astroWrap/">`
+5. index.html (redirect restore)
+<script>
+  const redirect = sessionStorage.redirect;
+  if (redirect) {
+    delete sessionStorage.redirect;
+    history.replaceState(null, null, '/astroWrap' + redirect);
+  }
+</script>
+6. public/404.html (redirect hack για SPA)
+```
 <!doctype html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
     <script>
-      sessionStorage.redirect = location.pathname;
+      const path = location.pathname.replace('/astroWrap', '');
+      sessionStorage.redirect = path;
       location.replace('/astroWrap/');
     </script>
   </head>
   <body></body>
 </html>
+```
+7. deploy
+npm run deploy:gh
+8. GitHub settings
+Pages → Source: gh-pages branch
+⚠️ βασικά προβλήματα που λύθηκαν
+❌ assets 404 → fixed με base
+❌ routes (/biwheel) → fixed με 404 redirect
+❌ blank page → fixed με index restore script
+❌ local mismatch → expected λόγω base
 
-
-
+```
 https://www.freeastroapi.com/dashboard
  "homepage": "https://USERNAME.github.io/REPO_NAME"
 
@@ -71,9 +78,9 @@ $ curl -X POST "https://api.freeastroapi.com/api/v1/natal/calculate" \
     }
   }'
 {"subject":{"name":"User","datetime":"1981-01-01T23:30:00+02:00","location":{"city":"Athens","lat":37.98376,"lng":23.72784,"timezone":"Europe/Athens"},"settings":{"house_system":"placidus","julian_day":2444606.3958333335,"julian_day_tt":2444606.3964280607,"delta_t_days":0.0005947270795223205,"delta_t_seconds":51.384419670728484,"zodiac_type":"Tropical","time_known":true}},"planets":[{"id":"sun","name":"Sun","sign":"Cap","sign_id":"capricorn","pos":11.401,"abs_pos":281.401,"retrograde":false,"house":4},{"id":"moon","name":"Moon","sign":"Sco","sign_id":"scorpio","pos":20.831,"abs_pos":230.831,"retrograde":false,"house":2},{"id":"mercury","name":"Mercury","sign":"Cap","sign_id":"capricorn","pos":12.274,"abs_pos":282.274,"retrograde":false,"house":4},{"id":"venus","name":"Venus","sign":"Sag","sign_id":"sagittarius","pos":18.259,"abs_pos":258.259,"retrograde":false,"house":3},{"id":"mars","name":"Mars","sign":"Aqu","sign_id":"aquarius","pos":1.536,"abs_pos":301.536,"retrograde":false,"house":5},{"id":"jupiter","name":"Jupiter","sign":"Lib","sign_id":"libra","pos":9.571,"abs_pos":189.571,"retrograde":false,"house":1},{"id":"saturn","name":"Saturn","sign":"Lib","sign_id":"libra","pos":9.53,"abs_pos":189.53,"retrograde":false,"house":1},{"id":"uranus","name":"Uranus","sign":"Sco","sign_id":"scorpio","pos":28.456,"abs_pos":238.456,"retrograde":false,"house":3},{"id":"neptune","name":"Neptune","sign":"Sag","sign_id":"sagittarius","pos":23.085,"abs_pos":263.085,"retrograde":false,"house":3},{"id":"pluto","name":"Pluto","sign":"Lib","sign_id":"libra","pos":24.163,"abs_pos":204.163,"retrograde":false,"house":1},{"id":"north_node","name":"North Node","sign":"Leo","sign_id":"leo","pos":12.466,"abs_pos":132.466,"retrograde":true,"house":11,"variant":"mean"},{"id":"lilith","name":"Lilith","sign":"Sco","sign_id":"scorpio","pos":0.317,"abs_pos":210.317,"retrograde":false,"house":2},{"id":"chiron","name":"Chiron","sign":"Tau","sign_id":"taurus","pos":13.621,"abs_pos":43.621,"retrograde":true,"house":8}],"aspects":[{"p1":"mercury","p2":"sun","type":"conjunction","orb":0.87,"deg":0,"is_major":true},{"p1":"jupiter","p2":"sun","type":"square","orb":1.83,"deg":90,"is_major":true},{"p1":"saturn","p2":"sun","type":"square","orb":1.87,"deg":90,"is_major":true},{"p1":"chiron","p2":"sun","type":"trine","orb":2.22,"deg":120,"is_major":true},{"p1":"jupiter","p2":"mercury","type":"square","orb":2.7,"deg":90,"is_major":true},{"p1":"mercury","p2":"saturn","type":"square","orb":2.74,"deg":90,"is_major":true},{"p1":"chiron","p2":"mercury","type":"trine","orb":1.35,"deg":120,"is_major":true},{"p1":"neptune","p2":"venus","type":"conjunction","orb":4.83,"deg":0,"is_major":true},{"p1":"mars","p2":"uranus","type":"sextile","orb":3.08,"deg":60,"is_major":true},{"p1":"lilith","p2":"mars","type":"square","orb":1.22,"deg":90,"is_major":true},{"p1":"jupiter","p2":"saturn","type":"conjunction","orb":0.04,"deg":0,"is_major":true},{"p1":"jupiter","p2":"north_node","type":"sextile","orb":2.9,"deg":60,"is_major":true},{"p1":"north_node","p2":"saturn","type":"sextile","orb":2.94,"deg":60,"is_major":true},{"p1":"neptune","p2":"pluto","type":"sextile","orb":1.08,"deg":60,"is_major":true},{"p1":"chiron","p2":"north_node","type":"square","orb":1.16,"deg":90,"is_major":true}],"confidence":{"houses":"high","angles":"high","overall":"high"},"houses":[{"house":1,"name":"1","sign":"Vir","sign_id":"virgo","pos":28.101,"abs_pos":178.101},{"house":2,"name":"2","sign":"Lib","sign_id":"libra","pos":24.478,"abs_pos":204.478},{"house":3,"name":"3","sign":"Sco","sign_id":"scorpio","pos":24.832,"abs_pos":234.832},{"house":4,"name":"4","sign":"Sag","sign_id":"sagittarius","pos":27.861,"abs_pos":267.861},{"house":5,"name":"5","sign":"Aqu","sign_id":"aquarius","pos":0.938,"abs_pos":300.938},{"house":6,"name":"6","sign":"Pis","sign_id":"pisces","pos":1.445,"abs_pos":331.445},{"house":7,"name":"7","sign":"Pis","sign_id":"pisces","pos":28.101,"abs_pos":358.101},{"house":8,"name":"8","sign":"Ari","sign_id":"aries","pos":24.478,"abs_pos":24.478},{"house":9,"name":"9","sign":"Tau","sign_id":"taurus","pos":24.832,"abs_pos":54.832},{"house":10,"name":"10","sign":"Gem","sign_id":"gemini","pos":27.861,"abs_pos":87.861},{"house":11,"name":"11","sign":"Leo","sign_id":"leo","pos":0.938,"abs_pos":120.938},{"house":12,"name":"12","sign":"Vir","sign_id":"virgo","pos":1.445,"abs_pos":151.445}],"angles":{"asc":178.101,"mc":87.861,"ic":267.861,"dc":358.101,"vertex":354.296},"angles_details":{"asc":{"sign":"Vir","sign_id":"virgo","pos":28.101,"abs_pos":178.101,"house":1},"mc":{"sign":"Gem","sign_id":"gemini","pos":27.861,"abs_pos":87.861,"house":10},"ic":{"sign":"Sag","sign_id":"sagittarius","pos":27.861,"abs_pos":267.861,"house":4},"dc":{"sign":"Pis","sign_id":"pisces","pos":28.101,"abs_pos":358.101,"house":7},"vertex":{"sign":"Pis","sign_id":"pisces","pos":24.296,"abs_pos":354.296,"house":6}},"aspects_summary":{"total":15,"major":15,"minor":0,"by_type":{"conjunction":3,"square":6,"trine":2,"sextile":4}}}
+```
 
-
-
+```json
 {
   "synastry": {
     "chartA": {
@@ -251,7 +258,7 @@ $ curl -X POST "https://api.freeastroapi.com/api/v1/natal/calculate" \
     }
   }
 }
-
+```
 ## Synastry prompt
 
 You are an expert astrologer.
@@ -333,6 +340,7 @@ STYLE:
 
 ---
 ## natal chart
+```json
 {
   "meta": {
     "date": "1981-01-01T21:30:00.000Z",
@@ -410,7 +418,7 @@ STYLE:
     "backbone": []
   }
 }
-
+```
 You are an expert astrologer. Analyze the following natal chart data and provide a structured, clear interpretation.
 
 IMPORTANT:
