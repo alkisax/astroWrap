@@ -66,6 +66,17 @@ export type PlanetKey = Lowercase<Planet>;
 export type Element = "Fire" | "Earth" | "Air" | "Water";
 export type Modality = "Cardinal" | "Fixed" | "Mutable";
 
+// 🌙 moon phase
+export type MoonPhaseType =
+  | 'New Moon'
+  | 'Waxing Crescent'
+  | 'First Quarter'
+  | 'Waxing Gibbous'
+  | 'Full Moon'
+  | 'Waning Gibbous'
+  | 'Last Quarter'
+  | 'Waning Crescent';
+
 // gia aspects σε ASC MC
 export type Point = {
   key: string;

@@ -1,5 +1,20 @@
-https://www.freeastroapi.com/dashboard
+λύση: gh-pages + build από subfolder
+1. install
+2. npm install gh-pages --save-dev
+frontend/package.json
+  "predeploy": "npm run build",
+  "deploy:gh": "gh-pages -d dist"
+3. vite.config.ts
+για gh-pages:
+export default defineConfig({
+  base: '/astro-wrap/',
+});
+4. npm run build
+5. 
 
+
+https://www.freeastroapi.com/dashboard
+ "homepage": "https://USERNAME.github.io/REPO_NAME"
 
 pong
 Administrator@WINDOWS-4ABEJ0B MINGW64 /d/coding/astro (main)
