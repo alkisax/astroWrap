@@ -43,7 +43,11 @@ export default defineConfig(({ mode }) => ({
 </html>
 ```
 7. deploy
+```bash
+npm run build
 npm run deploy:gh
+```
+
 8. GitHub settings
 Pages → Source: gh-pages branch
 ⚠️ βασικά προβλήματα που λύθηκαν
@@ -51,6 +55,10 @@ Pages → Source: gh-pages branch
 ❌ routes (/biwheel) → fixed με 404 redirect
 ❌ blank page → fixed με index restore script
 ❌ local mismatch → expected λόγω base
+
+
+https://alkisax.github.io/astroWrap/
+
 
 ```
 https://www.freeastroapi.com/dashboard

@@ -204,7 +204,7 @@ export const natalChartShakeJSONTreeHelper = (
     payload.analysis?.dynamics,
   );
 
-  console.log('RAW ASPECTS:', payload.analysis?.aspects)
+  // console.log('RAW ASPECTS:', payload.analysis?.aspects)
   return {
     meta: payload.meta,
     planets,

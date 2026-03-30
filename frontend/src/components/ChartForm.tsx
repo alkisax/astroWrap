@@ -43,7 +43,7 @@ export default function ChartForm({ onSubmit }: Props) {
     return isNaN(d.getTime()) ? null : d;
   }
 
-  console.log("chatform", date, lat, lng);
+  // console.log("chatform", date, lat, lng);
 
   return (
     <div style={{ display: "flex", justifyContent: "center", paddingTop: 5 }}>
