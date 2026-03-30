@@ -22,6 +22,15 @@ Branch: gh-pages
 
 VITE_DEPLOY_TARGET=gh npm run deploy:gh
 
+<BrowserRouter basename="/astroWrap/">
+
+  "build:gh": "cross-env VITE_DEPLOY_TARGET=gh tsc -b && vite build",
+  "deploy:gh": "gh-pages -d dist"
+
+ npm run build:gh
+npm run deploy:gh 
+
+
 
 https://www.freeastroapi.com/dashboard
  "homepage": "https://USERNAME.github.io/REPO_NAME"

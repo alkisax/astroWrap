@@ -9,8 +9,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy:gh": "gh-pages -d dist"
+    "build:gh": "cross-env VITE_DEPLOY_TARGET=gh tsc -b && vite build",
+    "deploy:gh": "gh-pages -d dist",
+    "predeploy": "npm run build"
   },
   "dependencies": {
     "@astrodraw/astrochart": "^3.0.2",
