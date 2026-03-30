@@ -10,5 +10,14 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- 🔥 redirect fix για gh-pages -->
+    <script>
+      const redirect = sessionStorage.redirect;
+      if (redirect) {
+        delete sessionStorage.redirect;
+        history.replaceState(null, null, "/astroWrap" + redirect);
+      }
+    </script>
   </body>
 </html>
