@@ -1,134 +1,34 @@
 // src/App.tsx
-import { useEffect, useMemo, useState } from "react";
-// import axios from "axios";
-// import { url } from '../constants/constants';
-// import ChartDataDebug from "../components/ChartDataDebug";
-
 import AstroChart from "../components/AstroChart";
 import { mapToChartData } from "../utils/mapToChart";
-import type { ChartSummary, CustomAspect, CustomBalance, CustomChartRuler, CustomDignity, CustomDispositor, CustomDynamics, CustomHouseRuler, CustomPlanetInfo } from "../types/types"
 import BasicControls from "../components/BasicControlls";
 import { useMediaQuery } from "@mui/material";
 import BasicChartInfo from "../components/BasicChartInfo";
-import { calculateChart } from '../services/astroService';
-import { useChartDataDebug } from "../hooks/componentHooks/useChartDataDebug";
-import { natalChartShakeJSONTreeHelper } from "../utils/natalChartShakeJSONTreeHelper";
+import { useHome } from "../hooks/componentHooks/useHome";
 
 const Home = () => {
-  const [data, setData] = useState<ChartSummary | null>(null);
-  const [visiblePlanets, setVisiblePlanets] = useState<string[]>([
-    "Sun",
-    "Moon",
-    "Mercury",
-    "Venus",
-    "Mars",
-    "Jupiter",
-    "Saturn",
-    "Uranus",
-    "Neptune",
-    "Pluto",
-  ]);
-  const [date, setDate] = useState<Date>(new Date());
-  const [coords, setCoords] = useState({
-    lat: 37.9838,
-    lng: 23.7275,
-  });
 
-  // για την δημιουργία του συγκεντρωτικού json πρέπει να περάσουμε όλους τους υπολογισμούς στον parent για αυτό φτιάχνουμε state
-  const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([])
-  const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null)
-  const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null)
-  const [customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([])
-  const [customAspects, setCustomAspects] = useState<CustomAspect[]>([])
-  const [customDignities, setCustomDignities] = useState<CustomDignity[]>([])
-  const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([])
-  const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(null)
-  // const [shaken, setShaken] = useState<unknown>(null)
-
-  const payload = useChartDataDebug({
+  const {
     data,
     visiblePlanets,
+    setVisiblePlanets,
     date,
+    setDate,
     coords,
-    customPlanetInfo,
-    customChartRuler,
-    customBalance,
-    customHouseRulers,
-    customAspects,
-    customDignities,
-    customDispositors,
-    customDynamics,
-  });
+    handleSubmit,
+    shaken,
 
-  const shaken = useMemo(() => {
-    if (!payload) return null;
-    return natalChartShakeJSONTreeHelper(payload);
-  }, [payload]);
-  console.log("shaken: ", shaken);
-  
+    setCustomPlanetInfo,
+    setCustomChartRuler,
+    setCustomBalance,
+    setCustomHouseRulers,
+    setCustomAspects,
+    setCustomDignities,
+    setCustomDispositors,
+    setCustomDynamics,
+  } = useHome();
 
-  const chart = useMemo(() => {
-    try {
-      return calculateChart({
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: date.getDate(),
-        hour: date.getHours(),
-        minute: date.getMinutes(),
-        latitude: coords.lat,
-        longitude: coords.lng,
-        houseSystem: 'placidus',
-        zodiac: 'tropical',
-      });
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-  }, [date, coords]);
-
-  // 🔥 sync → effect (allowed pattern)
-  useEffect(() => {
-    setData(chart);
-  }, [chart]);
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await axios.post(url, {
-  //         year: date.getFullYear(),
-  //         month: date.getMonth() + 1,
-  //         day: date.getDate(),
-  //         hour: date.getHours(),
-  //         minute: date.getMinutes(),
-  //         latitude: coords.lat,
-  //         longitude: coords.lng,
-  //         houseSystem: "placidus",
-  //         zodiac: "tropical",
-  //       });
-
-  //       setData(res.data);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [date, coords]);
-
-  const handleSubmit = (input: {
-    date: Date;
-    lat: number;
-    lng: number;
-  }) => {
-    setDate(input.date);
-
-    setCoords({
-      lat: input.lat,
-      lng: input.lng,
-    });
-  };
-
+  console.log("shaken", shaken);
   // console.log(data);
 
   const isMobile = useMediaQuery("(max-width:768px)");
