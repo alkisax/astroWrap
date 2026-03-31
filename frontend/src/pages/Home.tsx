@@ -114,22 +114,6 @@ const Home = () => {
             )}
           </div>
 
-          {/* <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-
-            <button onClick={handleLLMInterpretation} disabled={llmLoading}>
-              LLM interpretation
-            </button>
-
-            {llmLoading && <CircularProgress size={20} />}
-
-          </div>
-
-          {llmError && (
-            <div style={{ color: 'red', marginTop: '10px' }}>
-              {llmError}
-            </div>
-          )} */}
-
           {/* 🔽 BOTTOM PANEL (ALWAYS SAME WIDTH) */}
           <BasicChartInfo
             data={data}
