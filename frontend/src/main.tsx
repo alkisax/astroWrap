@@ -12,7 +12,8 @@ import '@mantine/dates/styles.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename="/astroWrap/">
+    {/* <BrowserRouter basename="/astroWrap/"> */}
+    <BrowserRouter>
       <MantineProvider>
         <ModalsProvider>
           <App />

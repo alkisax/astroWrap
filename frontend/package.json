@@ -7,11 +7,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "postbuild": "rm -rf ../backend/dist && cp -r dist ../backend/dist",
     "preview": "vite preview",
     "build:gh": "cross-env VITE_DEPLOY_TARGET=gh tsc -b && vite build",
     "deploy:gh": "gh-pages -d dist",
-    "predeploy": "npm run build"
+    "predeploy": "npm run build",
+    "format": "biome format . --write",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write"
   },
   "dependencies": {
     "@astrodraw/astrochart": "^3.0.2",
