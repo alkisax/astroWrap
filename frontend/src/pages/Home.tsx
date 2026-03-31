@@ -75,7 +75,6 @@ const Home = () => {
               width: "100%",
             }}
           >
-            τεστ
             {/* MOBILE: chart FIRST */}
             {isMobile && (
               <div style={{ width: "100%" }}>
