@@ -1,8 +1,8 @@
 import type { Planet, Element, Modality } from "../types/types";
 
 // frontend\src\constants\constants.ts
-export const interpretationUrl = 'http://localhost:3011';
-export const url = "http://localhost:3011/api/astro/calculate";
+export const interpretationUrl = 'http://localhost:3012';
+export const url = "http://localhost:3012/api/astro/calculate";
 
 export const colors = {
   bg: "#0f0f1a",
