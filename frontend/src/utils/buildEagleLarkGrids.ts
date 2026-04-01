@@ -1,29 +1,8 @@
 // utils/buildEagleLarkGrids.ts
 
 // import { planetToNaturalHouse } from "../constants/constants";
-import type { ChartSummary, Aspect, Planet } from "../types/types";
+import type { ChartSummary, Aspect, Planet, EagleGrid } from "../types/types";
 import { computeHouseRulers } from "./houseRulers";
-
-type EagleGrid = {
-  transitPlanet: string;
-  natalPlanet: string;
-  aspect: string;
-  orb?: number;
-
-  cause: {
-    transitNatalHouse: number | null;
-    natalHouse: number | null;
-  };
-
-  action: {
-    transitHouse: number | null;
-  };
-
-  effect: {
-    transitRules: number[];
-    natalRules: number[];
-  };
-};
 
 const planetMap = (data: ChartSummary) => ({
   Sun: data.sun,

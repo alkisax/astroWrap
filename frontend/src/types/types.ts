@@ -159,3 +159,24 @@ export type CustomDynamics = {
   loops: PlanetKey[]             // loop starters (unique)
   mutualReceptions: [PlanetKey, PlanetKey][]  // pairs
 }
+
+export type EagleGrid = {
+  transitPlanet: string;
+  natalPlanet: string;
+  aspect: string;
+  orb?: number;
+
+  cause: {
+    transitNatalHouse: number | null;
+    natalHouse: number | null;
+  };
+
+  action: {
+    transitHouse: number | null;
+  };
+
+  effect: {
+    transitRules: number[];
+    natalRules: number[];
+  };
+};

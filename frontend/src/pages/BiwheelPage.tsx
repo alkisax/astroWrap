@@ -21,10 +21,15 @@ import { useEffect, useRef, useState } from 'react'
 import { CircularProgress } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import CompatibilityViewer from '../components/biwheel/CompatibilityViewer'
+import { useEagleLarkLLm } from '../hooks/componentHooks/useEagleLarkLLm'
+import { QuestionModal } from './QuestionModal'
+
 
 const BiwheelPage = () => {
   const [llmResult, setLlmResult] = useState<string | null>(null);
   const [showLLM, setShowLLM] = useState(false);
+
+  const [showQuestionModal, setShowQuestionModal] = useState(false)
 
   // 🔥 όλη η λογική έρχεται από hook
   const {
@@ -48,6 +53,8 @@ const BiwheelPage = () => {
     setRadixCustomHouseRulers,
     setTransitCustomHouseRulers,
 
+    eagleGrids,
+
     // debug payloads (optional)
     // radixPayload,
     // transitPayload
@@ -58,6 +65,17 @@ const BiwheelPage = () => {
     llmError,
 
   } = useBiwheelPage()
+
+  const {
+    selectedTopics,
+    setSelectedTopics,
+    userQuestion,
+    setUserQuestion,
+    handleQuestionSubmit,
+    llmEagleLarkResult,
+  } = useEagleLarkLLm({
+    eagleGrids,
+  })
 
   const handleLLMClick = async () => {
     setShowLLM(true);
@@ -76,7 +94,7 @@ const BiwheelPage = () => {
       });
     }
   }, [showLLM, llmResult]);
-  
+
   // 🔥 GUARD → μέχρι να έχουμε data ΔΕΝ κάνουμε render charts
   if (!radixData || !transitData || !radixChart || !transitChart) {
     return (
@@ -233,7 +251,41 @@ const BiwheelPage = () => {
             </>
           )}
         </Button>
+
+        <Button
+          size='md'
+          onClick={() => setShowQuestionModal(true)}
+          style={{
+            display: 'block',
+            margin: '10px auto 0',
+            width: '280px',
+          }}
+        >
+          ask specific question
+        </Button>
+
+
+
+        <QuestionModal
+          opened={showQuestionModal}
+          onClose={() => setShowQuestionModal(false)}
+          selectedTopics={selectedTopics}
+          setSelectedTopics={setSelectedTopics}
+          userQuestion={userQuestion}
+          setUserQuestion={setUserQuestion}
+          onSubmit={() => {
+            handleQuestionSubmit()
+            setShowQuestionModal(false)
+          }}
+        />
+
       </div>
+
+      {llmEagleLarkResult && (
+        <Paper ref={resultRef}>
+          <ReactMarkdown>{llmEagleLarkResult}</ReactMarkdown>
+        </Paper>
+      )}
 
       {showLLM && llmResult && (
         <Paper
