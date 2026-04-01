@@ -77,6 +77,16 @@ const BasicChartInfo = ({
   } = useChartAnalysis(data)
 
   const firstRun = useRef(true)
+  const resultRef = useRef<HTMLDivElement | null>(null);
+  
+  useEffect(() => {
+    if (showLLM && llmResult && resultRef.current) {
+      resultRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [showLLM, llmResult]);
 
   useEffect(() => {
     if (!firstRun.current) return
@@ -191,6 +201,7 @@ const BasicChartInfo = ({
         {showTree && <DispositorTree data={data} />}
         {showLLM && llmResult && (
           <Paper
+            ref={resultRef}
             p="md"
             radius="md"
             style={{

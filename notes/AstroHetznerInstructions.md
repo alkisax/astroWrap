@@ -63,8 +63,12 @@ systemctl reload nginx
 
 curl https://astro.portfolio-projects.space/api/ping
 
+pm2 flush astro-backend
 pm2 logs astro-backend --lines 50
 
+
+ssh root@49.12.76.128
+```bash
 cd /var/www/astroWrap \
 && git pull origin main \
 && cd frontend && npm install --legacy-peer-deps && npm run build \
@@ -72,3 +76,4 @@ cd /var/www/astroWrap \
 && pm2 restart astro-backend --update-env \
 && nginx -t && systemctl reload nginx \
 && echo "✓ astro deploy OK"
+```

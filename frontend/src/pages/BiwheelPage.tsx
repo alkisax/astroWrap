@@ -17,7 +17,7 @@ import { Accordion, Button, Grid, Paper } from '@mantine/core'
 
 import { useBiwheelPage } from '../hooks/componentHooks/useBiwheelPage'
 import HouseOverlayBiwheel from '../components/biwheel/HouseOverlayBiwheel'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CircularProgress } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import CompatibilityViewer from '../components/biwheel/CompatibilityViewer'
@@ -66,7 +66,17 @@ const BiwheelPage = () => {
     setLlmResult(res);
   };
 
+  const resultRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (showLLM && llmResult && resultRef.current) {
+      resultRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [showLLM, llmResult]);
+  
   // 🔥 GUARD → μέχρι να έχουμε data ΔΕΝ κάνουμε render charts
   if (!radixData || !transitData || !radixChart || !transitChart) {
     return (
@@ -227,6 +237,7 @@ const BiwheelPage = () => {
 
       {showLLM && llmResult && (
         <Paper
+          ref={resultRef}
           p="md"
           radius="md"
           style={{
