@@ -47,6 +47,8 @@ const BiwheelPage = () => {
     selectedPlanets,
     setSelectedPlanets,
 
+    radixCustomPlanetInfo,
+    transitCustomPlanetInfo,
     // setters (για payload creation)
     setRadixCustomPlanetInfo,
     setTransitCustomPlanetInfo,
@@ -73,9 +75,15 @@ const BiwheelPage = () => {
     setUserQuestion,
     handleQuestionSubmit,
     llmEagleLarkResult,
+    // eagleLarkLlmPayloadJSON
   } = useEagleLarkLLm({
     eagleGrids,
+    radixCustomPlanetInfo,
+    transitCustomPlanetInfo,
   })
+
+  // console.log("eagleLarkLlmPayloadJSON: ", eagleLarkLlmPayloadJSON);
+
 
   const handleLLMClick = async () => {
     setShowLLM(true);
@@ -282,9 +290,18 @@ const BiwheelPage = () => {
       </div>
 
       {llmEagleLarkResult && (
-        <Paper ref={resultRef}>
-          <ReactMarkdown>{llmEagleLarkResult}</ReactMarkdown>
-        </Paper>
+        <pre
+          style={{
+            whiteSpace: 'pre-wrap',
+            background: '#111',
+            color: '#0f0',
+            padding: '12px',
+            borderRadius: '8px',
+            overflowX: 'auto',
+          }}
+        >
+          {llmEagleLarkResult}
+        </pre>
       )}
 
       {showLLM && llmResult && (

@@ -43,8 +43,10 @@ export const QuestionModal = ({
       <Stack>
         <Checkbox.Group
           value={selectedTopics}
-          onChange={v => setSelectedTopics(v as TopicKey[])}
-          label='Select topics (1–3)'
+          onChange={(v) => {
+            if (v.length <= 3) setSelectedTopics(v as TopicKey[])
+          }}
+          label='Select topic'
         >
           <Stack mt='sm'>
             {options.map(o => (

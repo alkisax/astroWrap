@@ -279,6 +279,9 @@ export const useBiwheelPage = () => {
     setRadixInput,
     setTransitInput,
 
+    radixCustomPlanetInfo,
+    transitCustomPlanetInfo,
+
     // ui
     selectedPlanets,
     setSelectedPlanets,
