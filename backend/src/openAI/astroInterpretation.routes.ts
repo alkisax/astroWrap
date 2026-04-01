@@ -3,6 +3,7 @@ import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { astroControllers } from './astroInterpretation.controller';
 import { biwheelControllers } from './biwheelInterpretation.controller';
+import { eagleLarkControllers } from './eagleLarkInterpretation.controller';
 
 const router = Router();
 
@@ -18,5 +19,11 @@ router.post(
   limiter,
   biwheelControllers.biwheelInterpretationController
 );
+
+router.post(
+  '/eagle-lark',
+  limiter,
+  eagleLarkControllers.eagleLarkInterpretationController
+)
 
 export default router;

@@ -1,4 +1,5 @@
 import { Modal, Checkbox, Stack, Textarea, Button } from '@mantine/core'
+import { CircularProgress } from '@mui/material'
 
 type TopicKey =
   | 'career'
@@ -16,6 +17,8 @@ type Props = {
   userQuestion: string
   setUserQuestion: (v: string) => void
   onSubmit: () => void
+  llmEagleLarkLoading: boolean
+  llmEagleLarkError: string | null
 }
 
 
@@ -27,6 +30,8 @@ export const QuestionModal = ({
   userQuestion,
   setUserQuestion,
   onSubmit,
+  llmEagleLarkLoading,
+  llmEagleLarkError,
 }: Props) => {
 
   const options = [
@@ -61,8 +66,14 @@ export const QuestionModal = ({
           onChange={e => setUserQuestion(e.currentTarget.value)}
         />
 
-        <Button onClick={onSubmit}>
-          analyze
+        <Button onClick={onSubmit} disabled={llmEagleLarkLoading}>
+          {llmEagleLarkLoading ? (
+            <CircularProgress size={18} />
+          ) : llmEagleLarkError ? (
+            'Error ❌'
+          ) : (
+            'analyze'
+          )}
         </Button>
       </Stack>
     </Modal>

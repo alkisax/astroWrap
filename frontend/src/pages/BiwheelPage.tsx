@@ -75,6 +75,8 @@ const BiwheelPage = () => {
     setUserQuestion,
     handleQuestionSubmit,
     llmEagleLarkResult,
+    llmEagleLarkLoading,
+    llmEagleLarkError,
     // eagleLarkLlmPayloadJSON
   } = useEagleLarkLLm({
     eagleGrids,
@@ -102,6 +104,15 @@ const BiwheelPage = () => {
       });
     }
   }, [showLLM, llmResult]);
+
+  useEffect(() => {
+    if (llmEagleLarkResult && resultRef.current) {
+      resultRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }, [llmEagleLarkResult])
 
   // 🔥 GUARD → μέχρι να έχουμε data ΔΕΝ κάνουμε render charts
   if (!radixData || !transitData || !radixChart || !transitChart) {
@@ -285,23 +296,31 @@ const BiwheelPage = () => {
             handleQuestionSubmit()
             setShowQuestionModal(false)
           }}
+          llmEagleLarkLoading={llmEagleLarkLoading}
+          llmEagleLarkError={llmEagleLarkError}
         />
 
       </div>
 
       {llmEagleLarkResult && (
-        <pre
+        <Paper
+          ref={resultRef}
+          p="md"
+          radius="md"
           style={{
-            whiteSpace: 'pre-wrap',
-            background: '#111',
-            color: '#0f0',
-            padding: '12px',
-            borderRadius: '8px',
-            overflowX: 'auto',
+            width: '100%',
+            maxWidth: '700px',
+            margin: '10px auto',
+            background: colors.panel,
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: colors.text,
           }}
         >
-          {llmEagleLarkResult}
-        </pre>
+          <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+            <ReactMarkdown>{llmEagleLarkResult}</ReactMarkdown>
+          </div>
+        </Paper>
       )}
 
       {showLLM && llmResult && (

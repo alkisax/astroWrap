@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { CustomPlanetInfo, EagleGrid } from "../../types/types";
+import { getEagleLarkInterpretation } from "../../services/llmService";
 
 // ελληνικά σχόλια: mapping topics → astro φίλτρα
 const topicMap = {
@@ -74,8 +75,8 @@ export const useEagleLarkLLm = ({
   const [llmEagleLarkResult, setLlmEagleLarkResult] = useState<string | null>(
     null,
   );
-  const [llmLoading, setLlmLoading] = useState(false);
-  const [llmError, setLlmError] = useState<string | null>(null);
+  const [llmEagleLarkLoading, setLlmEagleLarkLoading] = useState(false);
+  const [llmEagleLarkError, setLlmEagleLarkError] = useState<string | null>(null);
 
   // δημιουργεί compact payload για LLM
   const eagleLarkLlmPayloadJSON = () => {
@@ -114,30 +115,20 @@ export const useEagleLarkLLm = ({
   const handleQuestionSubmit = async () => {
     if (!eagleGrids?.length) return;
 
-    setLlmLoading(true);
-    setLlmError(null);
+    setLlmEagleLarkLoading(true);
+    setLlmEagleLarkError(null);
 
     try {
-      // const filtered = filterGrids(eagleGrids, selectedTopics);
-
-      // προσωρινό mock μέχρι να μπει API
-      //   const res = `
-      //     Question: ${userQuestion}
-      //     Selected topics: ${selectedTopics.join(", ")}
-      //     Filtered grids: ${filtered.length}
-      //     Top example:
-      //     ${filtered[0]?.transitPlanet} ${filtered[0]?.aspect} ${filtered[0]?.natalPlanet}
-      // `;
       const payload = eagleLarkLlmPayloadJSON();
 
-      const res = JSON.stringify(payload, null, 2);
+      const res = await getEagleLarkInterpretation(payload);
 
       setLlmEagleLarkResult(res);
     } catch (err) {
       console.log(err);
-      setLlmError("LLM request failed");
+      setLlmEagleLarkError("LLM request failed");
     } finally {
-      setLlmLoading(false);
+      setLlmEagleLarkLoading(false);
     }
   };
 
@@ -150,8 +141,8 @@ export const useEagleLarkLLm = ({
     handleQuestionSubmit,
 
     llmEagleLarkResult,
-    llmLoading,
-    llmError,
+    llmEagleLarkLoading,
+    llmEagleLarkError,
 
     eagleLarkLlmPayloadJSON,
   };

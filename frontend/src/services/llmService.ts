@@ -23,3 +23,16 @@ export const getBiwheelInterpretation = async (
 
   return res.data.interpretation;
 };
+
+export const getEagleLarkInterpretation = async (
+  payload: unknown
+): Promise<string> => {
+  const res = await axios.post(
+    `${interpretationUrl}/api/astro-interpretation/eagle-lark`,
+    {
+      payload,
+    }
+  )
+
+  return res.data.interpretation
+}
