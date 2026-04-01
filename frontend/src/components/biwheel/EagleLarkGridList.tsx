@@ -19,10 +19,22 @@ type Props = {
 const EagleLarkGridList = ({ radix, transit }: Props) => {
   const [selected, setSelected] = useState<string | null>(null);
 
-  const aspects = findTwoChartAspects(radix, transit)
-    .filter((a) => (a.orb ?? 999) <= 3);
+  const EXCLUDED_POINTS = ['Ascendant', 'Midheaven', 'IC', 'DC'];
+
+const aspects = findTwoChartAspects(radix, transit)
+  .filter((a) => (a.orb ?? 999) <= 3)
+  .filter((a) => {
+    const tName = a.point1Label.replace('T-', '');
+    const nName = a.point2Label.replace('N-', '');
+
+    return (
+      !EXCLUDED_POINTS.includes(tName) &&
+      !EXCLUDED_POINTS.includes(nName)
+    );
+  });
 
   const grids = buildEagleLarkGrids(radix, transit, aspects);
+  
 
   const handleClick = (value: string) => {
     setSelected(value);

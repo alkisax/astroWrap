@@ -7,8 +7,8 @@ export const interpretationUrl = import.meta.env.VITE_API_URL;
 export const colors = {
   bg: "#0f0f1a",
   panel: "rgba(20, 20, 30, 0.7)",
-  primary: "#f5a623",     // πορτοκαλοκίτρινο
-  secondary: "#6c63ff",   // μωβ/astro vibe
+  primary: "#f5a623", // πορτοκαλοκίτρινο
+  secondary: "#6c63ff", // μωβ/astro vibe
   text: "#ffffff",
   dim: "#aaaaaa",
 };
@@ -68,7 +68,7 @@ export const planetIcons: Record<string, string> = {
   Neptune: "♆",
   Pluto: "♇",
   ASC: "⬆️",
-  MC: "MC"
+  MC: "MC",
 };
 
 export const planetSymbolToName: Record<string, string> = {
@@ -84,6 +84,19 @@ export const planetSymbolToName: Record<string, string> = {
   "♇": "Pluto",
 };
 
+export const planetToNaturalHouse: Record<string, number[]> = {
+  Sun: [5],
+  Moon: [4],
+  Mercury: [3, 6],
+  Venus: [2, 7],
+  Mars: [1, 8],
+  Jupiter: [9, 12],
+  Saturn: [10, 11],
+  Uranus: [11],
+  Neptune: [12],
+  Pluto: [8],
+};
+
 export const signToPlanet: Record<string, Planet> = {
   Aries: "Mars",
   Taurus: "Venus",
@@ -92,11 +105,14 @@ export const signToPlanet: Record<string, Planet> = {
   Leo: "Sun",
   Virgo: "Mercury",
   Libra: "Venus",
-  Scorpio: "Mars",
+  // Scorpio: "Mars",
+  Scorpio: "Pluto",
   Sagittarius: "Jupiter",
   Capricorn: "Saturn",
-  Aquarius: "Saturn",
-  Pisces: "Jupiter",
+  // Aquarius: "Saturn",
+  // Pisces: "Jupiter",
+  Aquarius: "Uranus",
+  Pisces: "Neptune",
 };
 
 export const signToElement: Record<string, Element> = {

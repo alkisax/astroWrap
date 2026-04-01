@@ -1,5 +1,6 @@
 // utils/buildEagleLarkGrids.ts
 
+// import { planetToNaturalHouse } from "../constants/constants";
 import type { ChartSummary, Aspect, Planet } from "../types/types";
 import { computeHouseRulers } from "./houseRulers";
 
@@ -41,7 +42,7 @@ const getPlanet = (data: ChartSummary, key: string) => {
   const map = planetMap(data);
 
   const foundKey = Object.keys(map).find(
-    k => k.toLowerCase() === key.toLowerCase()
+    (k) => k.toLowerCase() === key.toLowerCase(),
   ) as Planet | undefined;
 
   return foundKey ? map[foundKey] : undefined;
@@ -58,10 +59,14 @@ const getRuledHouses = (
     .map((r) => r.house);
 };
 
+// const getRuledHouses = (planetName: string): number[] => {
+//   return planetToNaturalHouse[planetName] ?? [];
+// };
+
 export const buildEagleLarkGrids = (
   radix: ChartSummary,
   transit: ChartSummary,
-  aspects: Aspect[]
+  aspects: Aspect[],
 ): EagleGrid[] => {
   return aspects.map((a) => {
     const tName = a.point1Label.replace("T-", "");
@@ -92,6 +97,8 @@ export const buildEagleLarkGrids = (
       effect: {
         transitRules: getRuledHouses(radix, tName),
         natalRules: getRuledHouses(radix, nName),
+        // transitRules: getRuledHouses(tName),
+        // natalRules: getRuledHouses(nName),
       },
     };
   });
