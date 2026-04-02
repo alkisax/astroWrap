@@ -18,7 +18,7 @@ import { Accordion, Button, Grid, Paper } from '@mantine/core'
 import { useBiwheelPage } from '../hooks/componentHooks/useBiwheelPage'
 import HouseOverlayBiwheel from '../components/biwheel/HouseOverlayBiwheel'
 import { useEffect, useRef, useState } from 'react'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, useMediaQuery } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import CompatibilityViewer from '../components/biwheel/CompatibilityViewer'
 import { useEagleLarkLLm } from '../hooks/componentHooks/useEagleLarkLLm'
@@ -95,11 +95,12 @@ const BiwheelPage = () => {
   };
 
   const resultRef = useRef<HTMLDivElement | null>(null);
+  const isMobile = useMediaQuery("(max-width:768px)");
 
   useEffect(() => {
     if (showLLM && llmResult && resultRef.current) {
       resultRef.current.scrollIntoView({
-        behavior: 'smooth',
+        behavior: isMobile ? 'auto' : 'smooth',
         block: 'start',
       });
     }
