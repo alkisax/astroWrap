@@ -1,5 +1,5 @@
 import type { ChartSummary } from "../types/types";
-import { getZodiacSign, getHouse } from "./astroHelpers";
+import { getZodiacSign, getHouse } from "./angleToAstro";
 import { signToPlanet } from "../constants/constants";
 
 export const computeHouseRulers = (data: ChartSummary) => {

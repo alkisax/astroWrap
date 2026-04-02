@@ -1,6 +1,6 @@
 import type { ChartSummary } from "../types/types";
 import { planetSymbolToName, rulers } from "../constants/constants";
-import { getZodiacSign, getHouse } from "./astroHelpers";
+import { getZodiacSign, getHouse } from "./angleToAstro";
 
 export function computeChartRuler(data: ChartSummary) {
   const asc = data.ascendant;

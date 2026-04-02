@@ -18,7 +18,7 @@ import {
   calculateElementBalance,
   calculateModalityBalance,
 } from "../../utils/balanceCalculator";
-import { getZodiacSign } from "../../utils/astroHelpers";
+import { getZodiacSign } from "../../utils/angleToAstro";
 import { getAllDispositors } from "../../utils/dispositorCalculator";
 import {
   detriment,

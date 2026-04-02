@@ -1,6 +1,6 @@
 import { Paper, Text, Stack } from "@mantine/core";
 import type { ChartSummary } from "../types/types";
-import { getZodiacSign } from "../utils/astroHelpers";
+import { getZodiacSign } from "../utils/angleToAstro";
 import { planetIcons, signIcons, colors } from "../constants/constants";
 
 import { domicile, exaltation, detriment, fall } from "../constants/dignities";

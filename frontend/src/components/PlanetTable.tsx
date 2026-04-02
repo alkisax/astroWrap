@@ -1,10 +1,16 @@
-import { Table, Paper } from "@mantine/core";
-import type { ChartSummary, CustomPlanetInfo } from "../types/types";
-import { colors, planetIcons, signIcons } from "../constants/constants";
-import { getZodiacSign, getHouse } from "../utils/astroHelpers";
-import { Modal, Text, Stack } from "@mantine/core";
-import { useEffect, useState, useMemo } from "react";
-import { planetKeywords, signKeywords, houseKeywords } from "../constants/constants";
+// frontend\src\components\PlanetTable.tsx
+
+// υπολογίζει και κάνει render τον βασικό πίνακα με sign/house/planet
+// σημαντικό κομμάτι της λογικής του βρίσκετε μέσα στα util helpers getZodiacSign, getHouse μεσα στην AngleToAstro (βρίσκει γωνίες ζωδίων και υπολογίζει οίκους με βάση τα cusps)
+// in: data και setter για συγκεντρωτικό json στο useHome
+
+// In astrology, a planet–sign–house combination is interpreted by blending three layers: the planet shows what energy or function is expressed, the sign describes how that energy behaves (its style, tone, and motivation), and the house indicates where in life this expression unfolds. Together, they form a unified meaning: a specific drive (planet), expressed in a particular way (sign), within a defined life area (house).
+
+import { useEffect, useState, useMemo } from 'react'
+import { Table, Paper, Modal, Text, Stack } from '@mantine/core'
+import { getZodiacSign, getHouse } from '../utils/angleToAstro'
+import { colors, planetIcons, signIcons, planetKeywords, signKeywords, houseKeywords } from '../constants/constants'
+import type { ChartSummary, CustomPlanetInfo } from '../types/types'
 
 type Props = {
   data: ChartSummary;
@@ -12,18 +18,20 @@ type Props = {
 };
 
 const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(false); // δεν το χρησιμοποιούμε στα αλήθεια αλλα ας μείνει γιατί είναι reusable component
   const [selected, setSelected] = useState<{
     planet: string;
     sign: string;
     house: number | null;
-  } | null>(null);
+  } | null>(null); // ui info modal
 
+  // αποθηκεύει ένα [] με τις γωνίες των οίκων απο data
   const cusps = useMemo(
     () => data.houses.map(h => h.longitude ?? 0),
     [data.houses]
   )
 
+  // αποθηκεύει ένα [] με τα lng των πλανητών απο τα data. Το lng είναι οι γωνίες που χρησιμοποιουμε στην αστρολογία για το chart και εδώ για το svg και για να βρούμε σε ποιον οίκο και ζώδιο ανήκει ο κάθε πλανήτης
   const planets = useMemo(() => [
     { name: "Sun", value: data.sun?.longitude },
     { name: "ASC", value: data.ascendant?.longitude },
@@ -38,6 +46,7 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
     { name: "Pluto", value: data.pluto?.longitude },
   ], [data]);
 
+  // για το συγκεντρωτικό json
   const planetInfo = useMemo<CustomPlanetInfo[]>(() =>
     planets
       .filter(p => p.value != null)
@@ -52,21 +61,22 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
     setCustomPlanetInfo(planetInfo)
   }, [planetInfo, setCustomPlanetInfo])
 
+  // για ui info modal
   const handleClick = (planet: string, sign: string, house: number | null) => {
     setSelected({ planet, sign, house });
     setOpened(true);
   };
 
-  const rows = planets.map((p) => {
-    if (p.value == null) return null;
+  const rows = planets.map((planet) => {
+    if (planet.value == null) return null;
 
-    const sign = getZodiacSign(p.value);
+    const sign = getZodiacSign(planet.value);
 
     return (
       <tr
-        key={p.name}
+        key={planet.name}
         onClick={() =>
-          handleClick(p.name, sign, getHouse(p.value as number, cusps))
+          handleClick(planet.name, sign, getHouse(planet.value as number, cusps))
         }
         style={{
           cursor: "pointer",
@@ -81,7 +91,7 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
         }}
       >
         <td style={{ textAlign: "left", padding: "4px 12px" }}>
-          {planetIcons[p.name]} {p.name}
+          {planetIcons[planet.name]} {planet.name}
         </td>
 
         <td style={{ textAlign: "left", padding: "4px 12px" }}>
@@ -89,7 +99,7 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
         </td>
 
         <td style={{ textAlign: "left", padding: "4px 12px" }}>
-          {getHouse(p.value, cusps)}
+          {getHouse(planet.value, cusps)}
         </td>
       </tr>
     );
@@ -144,7 +154,6 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
         </Table>
       </Paper>
 
-
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
@@ -162,15 +171,20 @@ const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
           },
         }}
       >
+        {/* c= color */}
+        <Text size="sm" c="dimmed" mb={10} style={{ lineHeight: 1.4 }}>
+          A planet shows what energy is expressed, the sign how it behaves, and the house where it manifests in life.
+        </Text>
         {selected && (
           <Stack gap="xs">
             <div
               style={{
                 width: "220px",
-                margin: "0 auto", // 🔥 αυτό κάνει το centering
+                margin: "0 auto",
                 textAlign: "left",
               }}
             >
+              {/* fw font weight */}
               <Text fw={600}>🪐 {selected.planet}</Text>
               <Text size="sm">
                 {planetKeywords[selected.planet as keyof typeof planetKeywords]?.join(", ")}

@@ -2,7 +2,7 @@
 import { useMediaQuery } from '@mui/material'
 import { useHome } from '../hooks/componentHooks/useHome'
 import AstroChart from '../components/AstroChart'
-import BasicControls from '../components/controls/BasicControlls'
+import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '../components/BasicChartInfo'
 import { mapToChartData } from '../utils/mapToChart'
 
@@ -22,6 +22,7 @@ const Home = () => {
     llmLoading,
     llmError,
 
+    // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json, γινονται expose απο το hook για να περαστουν στα διαφορα αρχεία οι setters και να μπορώ να έχω ένα ενιαίο state useHome όπου και κατασκευάζεται το json
     setCustomPlanetInfo,
     setCustomChartRuler,
     setCustomBalance,
@@ -92,6 +93,15 @@ const Home = () => {
 
             {/* MOBILE: controls κάτω */}
             {isMobile && (
+              // in: ημερομηνια/συντεταγμένες (default "τώρα"/αθήνα)
+              // out: ημερομηνία/συντεταγμένες με +- ωρες/μερες/μηνες/χρονια 
+              // και render των αντίστοιχων btns 
+              // TimeControls
+              // in: λίστα διαλεγμένων πλανητών (στην αρχή όλοι) και setter
+              // κάνει toggle τους διαλεγμένους πλανήτες και render το ui 
+              // PlanetSelector
+              // in: παίρνει μια onSubmit με date/lat/lang τα οποία οταν αλλαχθούν εδώ προκαλούν trigger να δείξει το chart
+              // ChartForm
               <BasicControls
                 onSubmit={handleSubmit}
                 visiblePlanets={visiblePlanets}
@@ -123,6 +133,7 @@ const Home = () => {
           </div>
 
           {/* 🔽 BOTTOM PANEL (ALWAYS SAME WIDTH) */}
+          {/* το data change προκαλεί rerender του chart και επανυπολογισμό των διάφορων reports  */}
           <BasicChartInfo
             data={data}
             handleLLMInterpretation={handleLLMInterpretation}
@@ -140,6 +151,7 @@ const Home = () => {
         </div>
       </div>
 
+      {/* προέβαλε το json προς το llm. μόνο για dev */}
       {/* <ChartDataDebug
         data={data}
         visiblePlanets={visiblePlanets}

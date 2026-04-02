@@ -1,4 +1,24 @@
-// components/BasicChartInfo.tsx
+// frontend\src\components\BasicChartInfo.tsx
+
+// το component που συγκεντρώνει όλα τα report για το single chart. Το βασικό του input είναι τα data τα οποια τα κάνει process στα διαφορα sub-components και render
+import { useEffect, useRef, useState } from 'react'
+import { useMediaQuery } from '@mantine/hooks'
+
+import { Paper, Button, Group } from '@mantine/core'
+import { CircularProgress } from '@mui/material'
+import ReactMarkdown from 'react-markdown'
+
+import { useChartAnalysis } from '../hooks/componentHooks/useChartAnalysis'
+
+import PlanetTable from './PlanetTable'
+import ChartRuler from './ChartRuler'
+import BalanceSummary from './BalanceSummary'
+import MostImportantAspects from './MostImportantAspects'
+import HouseRulers from './HouseRulers'
+import EssentialDignities from './EssentialDignities'
+import DispositorTree from './DispositorTree'
+
+import { colors } from '../constants/constants'
 
 import type {
   ChartSummary,
@@ -12,28 +32,12 @@ import type {
   CustomPlanetInfo,
 } from '../types/types'
 
-import { Paper, Button, Group } from '@mantine/core'
-import ReactMarkdown from 'react-markdown';
-import { colors } from '../constants/constants'
-
-import PlanetTable from './PlanetTable'
-import ChartRuler from './ChartRuler'
-import BalanceSummary from './BalanceSummary'
-import MostImportantAspects from './MostImportantAspects'
-import HouseRulers from './HouseRulers'
-import EssentialDignities from './EssentialDignities'
-import DispositorTree from './DispositorTree'
-
-import { useEffect, useRef, useState } from 'react'
-import { useMediaQuery } from '@mantine/hooks'
-import { useChartAnalysis } from '../hooks/componentHooks/useChartAnalysis'
-import { CircularProgress } from '@mui/material'
-
 type Props = {
   data: ChartSummary
   handleLLMInterpretation: () => void
   llmLoading: boolean
   llmError: string | null
+  // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json, γινονται expose απο το hook για να περαστουν στα διαφορα αρχεία οι setters και να μπορώ να έχω ένα ενιαίο state useHome όπου και κατασκευάζεται το json
   setCustomPlanetInfo: (info: CustomPlanetInfo[]) => void
   setCustomChartRuler: (ruler: CustomChartRuler | null) => void
   setCustomBalance: (balance: CustomBalance) => void
@@ -76,9 +80,10 @@ const BasicChartInfo = ({
     dynamics
   } = useChartAnalysis(data)
 
+  // τα χρησιμοποιούμε για να κάνουμε scroll οταν ολοκληρωθεί η openai αναφορα 
   const firstRun = useRef(true)
   const resultRef = useRef<HTMLDivElement | null>(null);
-  
+
   useEffect(() => {
     if (showLLM && llmResult && resultRef.current) {
       resultRef.current.scrollIntoView({
@@ -88,26 +93,29 @@ const BasicChartInfo = ({
     }
   }, [showLLM, llmResult]);
 
+  // φέρνουμε απο όλα τα sub-components τα state για την δημιουργία του json 
   useEffect(() => {
-    if (!firstRun.current) return
-    firstRun.current = false
+    // TODO (πιθανο bug / γινετε καλύτερα) επιτρέπει το useEffect να τρέξει μόνο 1 φορά μπήκε για να κόψει bug με συνεχή rerender
+    if (!firstRun.current) return 
+    firstRun.current = false 
 
     setCustomHouseRulers(houseRulers)
-    if (balance) {
-      setCustomBalance(balance)
-    }
     setCustomAspects(aspects)
     setCustomDignities(dignities)
     setCustomDispositors(dispositors)
     setCustomDynamics(dynamics)
+    if (balance) { //type guard για null - To πρόβλημα είναι τοι περνάμε και setCustomBalance στο <BalanceSummary setCustomBalance={setCustomBalance} /> αλλα δεν θα το διορθώσουμε τώρα
+      setCustomBalance(balance)
+    }
 
-  }, [aspects, balance, dignities, dispositors, dynamics, houseRulers, setCustomAspects, setCustomBalance, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomHouseRulers])
+  }, [aspects, balance, dignities, dispositors, dynamics, houseRulers, setCustomAspects, setCustomBalance, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomHouseRulers]) // τα set δεν χρειάζονται αλλα μπήκαν για το lint
 
   const handleLLMClick = async () => {
     setShowLLM(true);
 
     try {
-      const res = await (handleLLMInterpretation as () => Promise<string | null>)(); setLlmResult(res); // 👈 θα το φτιάξουμε στο hook
+      const res = await (handleLLMInterpretation as () => Promise<string | null>)(); 
+      setLlmResult(res); //δες Hook useChartAnalysis
     } catch {
       setLlmResult(null);
     }
@@ -131,12 +139,15 @@ const BasicChartInfo = ({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', // responsive για μία ή δύο στήλες αν mobile/desktop
             gap: '10px',
             alignItems: 'stretch'
           }}
         >
           <div>
+            {/* υπολογίζει και κάνει render τον βασικό πίνακα με sign/house/planet
+            σημαντικό κομμάτι της λογικής του βρίσκετε μέσα στα util helpers getZodiacSign, getHouse μεσα στην AngleToAstro (βρίσκει γωνίες ζωδίων και υπολογίζει οίκους με βάση τα cusps)
+            in: data και setter για συγκεντρωτικό json στο useHome */}
             <PlanetTable
               data={data}
               setCustomPlanetInfo={setCustomPlanetInfo}
@@ -215,6 +226,7 @@ const BasicChartInfo = ({
             }}
           >
             <div style={{ lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+              {/* το chatGPT συχνα μου επιστρέφει markdown */}
               <ReactMarkdown>
                 {llmResult || ''}
               </ReactMarkdown>
