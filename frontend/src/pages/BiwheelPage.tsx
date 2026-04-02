@@ -3,7 +3,7 @@
 import { colors } from '../constants/constants'
 
 import ChartFormBiwheel from '../components/biwheel/ChartFormBiwheel'
-import PlanetSelector from '../components/PlanetSelector'
+import PlanetSelector from '../components/controlls/PlanetSelector'
 import PlanetTable from '../components/PlanetTable'
 import InnerChart from '../components/biwheel/InnerChart'
 import OuterChart from '../components/biwheel/OuterChart'

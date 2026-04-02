@@ -1,7 +1,10 @@
+// frontend\src\hooks\componentHooks\useHome.ts
 import { useEffect, useMemo, useState } from "react";
 import { calculateChart } from "../../services/astroService";
+import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
+
 import type {
   ChartSummary,
   CustomAspect,
@@ -13,7 +16,6 @@ import type {
   CustomHouseRuler,
   CustomPlanetInfo,
 } from "../../types/types";
-import { getSingleChartInterpretation } from "../../services/llmService";
 
 export const useHome = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -31,9 +33,9 @@ export const useHome = () => {
     "Pluto",
   ]);
 
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date()); // δηλαδή default ωρα και μερα "Τωρα"
   const [coords, setCoords] = useState({
-    lat: 37.9838,
+    lat: 37.9838, //  default αθήνα
     lng: 23.7275,
   });
 
@@ -57,9 +59,11 @@ export const useHome = () => {
   const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(
     null,
   );
+
   const [llmLoading, setLlmLoading] = useState(false);
   const [llmError, setLlmError] = useState<string | null>(null);
 
+  // αυτό καλουσα με το endpoint του backend, μετα έφερα τον υπολογισμό στο front για να μην έχω περιττά calls
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -84,7 +88,9 @@ export const useHome = () => {
   //   fetchData();
   // }, [date, coords]);
 
-  // 🔥 chart calc
+  // 1/2 calculateChart →
+  // input: ημερομηνια και συντεταγμένες (+ house system + zodiac)
+  // out: καθαρό ChartSummary (normalized astro data για το app, ανεξάρτητο από τη lib)
   const chart = useMemo(() => {
     try {
       return calculateChart({
@@ -104,10 +110,16 @@ export const useHome = () => {
     }
   }, [date, coords]);
 
-  // 🔥 sync
+  // 2/2 sync data
   useEffect(() => {
     setData(chart);
   }, [chart]);
+
+  // 🔥 submit (κάνει απλως set τα διάφορα input στο σωστο format και οι αλλαγες επιβάλλονται απο ένα "[]")
+  const handleSubmit = (input: { date: Date; lat: number; lng: number }) => {
+    setDate(input.date);
+    setCoords({ lat: input.lat, lng: input.lng });
+  };
 
   // 🔥 payload
   const payload = useChartDataDebug({
@@ -124,12 +136,6 @@ export const useHome = () => {
     customDispositors,
     customDynamics,
   });
-
-  // 🔥 submit
-  const handleSubmit = (input: { date: Date; lat: number; lng: number }) => {
-    setDate(input.date);
-    setCoords({ lat: input.lat, lng: input.lng });
-  };
 
   // 🔥 shaken
   const shaken = useMemo(() => {

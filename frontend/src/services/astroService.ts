@@ -1,4 +1,4 @@
-// src/services/astroService.ts
+// frontend\src\services\astroService.ts
 
 import { Horoscope, Origin } from 'circular-natal-horoscope-js';
 import type {
@@ -7,7 +7,7 @@ import type {
   BasicPlacement,
 } from '../types/types';
 
-// 🔥 input type (κρατάς αυτό αν δεν υπάρχει αλλού)
+// input type 
 export type CalculateChartInput = {
   year: number;
   month: number;
@@ -21,6 +21,8 @@ export type CalculateChartInput = {
 };
 
 // 🔥 MAIN
+// input: ημερομηνια και συντεταγμένες (+ house system + zodiac)
+// out: καθαρό ChartSummary (normalized astro data για το app, ανεξάρτητο από τη lib)
 export const calculateChart = (
   input: CalculateChartInput
 ): ChartSummary => {

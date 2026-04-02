@@ -1,5 +1,11 @@
+// frontend\src\components\TimeControls.tsx
+
+// in: ημερομηνια/συντεταγμένες (default "τώρα"/αθήνα)
+// out: ημερομηνία/συντεταγμένες με +- ωρες/μερες/μηνες/χρονια 
+// και render των αντίστοιχων btns
+
 import { Paper, Text, Group, Button } from "@mantine/core";
-import { colors } from "../constants/constants";
+import { colors } from "../../constants/constants"; // custom χρώμα
 
 type Props = {
   date: Date;
@@ -7,32 +13,34 @@ type Props = {
   coords: { lat: number; lng: number };
 };
 
-function addDays(date: Date, days: number): Date {
-  const d = new Date(date);
-  d.setDate(d.getDate() + days);
-  return d;
-}
-
-function addHours(date: Date, hours: number): Date {
-  const d = new Date(date);
-  d.setHours(d.getHours() + hours);
-  return d;
-}
-
-function addMonths(date: Date, months: number): Date {
-  const d = new Date(date);
-  d.setMonth(d.getMonth() + months);
-  return d;
-}
-
-function addYears(date: Date, years: number): Date {
-  const d = new Date(date);
-  d.setFullYear(d.getFullYear() + years);
-  return d;
-}
-
 const TimeControls = ({ date, setDate, coords }: Props) => {
 
+  // Helper funcs που προσθέτουν/αφαιρούν ωρες/μερες/μηνες/χρονια στο date που χρησιμοποιεί το chart
+  const addDays = (date: Date, days: number): Date => {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+  }
+
+  const addHours = (date: Date, hours: number): Date => {
+    const d = new Date(date);
+    d.setHours(d.getHours() + hours);
+    return d;
+  }
+
+  const addMonths = (date: Date, months: number): Date => {
+    const d = new Date(date);
+    d.setMonth(d.getMonth() + months);
+    return d;
+  }
+
+  const addYears = (date: Date, years: number): Date => {
+    const d = new Date(date);
+    d.setFullYear(d.getFullYear() + years);
+    return d;
+  }
+
+  // style consts
   const formattedDate = date.toLocaleString("el-GR", {
     day: "2-digit",
     month: "2-digit",

@@ -1,13 +1,14 @@
 // src/App.tsx
-import AstroChart from "../components/AstroChart";
-import { mapToChartData } from "../utils/mapToChart";
-import BasicControls from "../components/BasicControlls";
-import { useMediaQuery } from "@mui/material";
-import BasicChartInfo from "../components/BasicChartInfo";
-import { useHome } from "../hooks/componentHooks/useHome";
+import { useMediaQuery } from '@mui/material'
+import { useHome } from '../hooks/componentHooks/useHome'
+import AstroChart from '../components/AstroChart'
+import BasicControls from '../components/controlls/BasicControlls'
+import BasicChartInfo from '../components/BasicChartInfo'
+import { mapToChartData } from '../utils/mapToChart'
 
 const Home = () => {
 
+  // ολη η λογική του component έχει μεταφερθεί σε hook
   const {
     data,
     visiblePlanets,
@@ -31,13 +32,16 @@ const Home = () => {
     setCustomDynamics,
   } = useHome();
 
+  // shaken → ενα απλοποιημένο json για να στέλνετε σε gpt για αναλυση
   console.log("shaken", shaken);
   // console.log(data);
 
+  // του MUI boolean υπολογίζει αν είμαι σε mobile
   const isMobile = useMediaQuery("(max-width:768px)");
 
   if (!data) return <div>Loading...</div>;
 
+  // Μετατρέπει ChartSummary → format που θέλει το AstroChart, φιλτράροντας και τους πλανήτες.
   const chartData = mapToChartData(data, visiblePlanets);
 
   return (
@@ -54,13 +58,14 @@ const Home = () => {
         <div
           style={{
             display: "flex",
-            flexDirection: "column", // 🔥 σημαντικό
+            flexDirection: "column",
             gap: "20px",
             width: "100%",
-            maxWidth: "1000px", // 🔥 1 source of truth
+            maxWidth: "1000px",
           }}
         >
           {/* 🔝 TOP PANEL */}
+          {/* θέλουμε αν mobile το ένα κάτω απο το άλλο controls απο κάτω. Και αν desktop το ένα δίπλα στο άλλο controls αριστερα. το πετυχαινουμε με το `flexDirection: isMobile ? 'column' : 'row'` και την σειρά που τα βάζουμε */}
           <div
             style={{
               display: "flex",
@@ -82,25 +87,6 @@ const Home = () => {
               </div>
             )}
 
-            {/* DESKTOP: controls */}
-            {!isMobile && (
-              <BasicControls
-                onSubmit={handleSubmit}
-                visiblePlanets={visiblePlanets}
-                setVisiblePlanets={setVisiblePlanets}
-                date={date}
-                setDate={setDate}
-                coords={coords}
-              />
-            )}
-
-            {/* DESKTOP: chart */}
-            {!isMobile && (
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <AstroChart {...chartData} />
-              </div>
-            )}
-
             {/* MOBILE: controls κάτω */}
             {isMobile && (
               <BasicControls
@@ -111,6 +97,25 @@ const Home = () => {
                 setDate={setDate}
                 coords={coords}
               />
+            )}
+
+            {/* DESKTOP: controls αριστερά */}
+            {!isMobile && (
+              <BasicControls
+                onSubmit={handleSubmit}
+                visiblePlanets={visiblePlanets}
+                setVisiblePlanets={setVisiblePlanets}
+                date={date}
+                setDate={setDate}
+                coords={coords}
+              />
+            )}
+
+            {/* DESKTOP: chart  δεξια */}
+            {!isMobile && (
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <AstroChart {...chartData} />
+              </div>
             )}
           </div>
 

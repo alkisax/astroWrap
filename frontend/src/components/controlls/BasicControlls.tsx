@@ -1,8 +1,10 @@
-import type { Dispatch, SetStateAction } from "react";
-import ChartForm from "./ChartForm";
-import PlanetSelector from "./PlanetSelector";
-import TimeControls from "./TimeControls";
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery } from '@mui/material'
+
+import ChartForm from './ChartForm'
+import PlanetSelector from './PlanetSelector'
+import TimeControls from './TimeControls'
+
+import type { Dispatch, SetStateAction } from 'react'
 
 type Props = {
   onSubmit: (input: {
@@ -49,8 +51,17 @@ const BasicControls = ({
         gap: "5px",
       }}
     >
+      {/* 
+      in: ημερομηνια/συντεταγμένες (default "τώρα"/αθήνα)
+      out: ημερομηνία/συντεταγμένες με +- ωρες/μερες/μηνες/χρονια 
+      και render των αντίστοιχων btns 
+      */}
       <TimeControls date={date} setDate={setDate} coords={coords} />
 
+      {/* 
+      in: λίστα διαλεγμένων πλανητών (στην αρχή όλοι) και setter
+      κάνει toggle τους διαλεγμένους πλανήτες και render το ui  
+      */}
       <PlanetSelector
         selected={visiblePlanets}
         setSelected={setVisiblePlanets}

@@ -8,7 +8,7 @@ import {
   Title,
   Group,
 } from "@mantine/core";
-import { colors } from "../constants/constants";
+import { colors } from "../../constants/constants";
 import { DateTimePicker } from "@mantine/dates";
 
 type Props = {
