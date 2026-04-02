@@ -67,6 +67,9 @@ const BasicControls = ({
         setSelected={setVisiblePlanets}
       />
 
+      {/* 
+      in: παίρνει μια onSubmit με date/lat/lang τα οποία οταν αλλαχθούν εδώ προκαλούν trigger να δείξει το chart
+      */}
       <ChartForm onSubmit={onSubmit} />
     </div>
   );

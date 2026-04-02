@@ -2,7 +2,7 @@
 import { useMediaQuery } from '@mui/material'
 import { useHome } from '../hooks/componentHooks/useHome'
 import AstroChart from '../components/AstroChart'
-import BasicControls from '../components/controlls/BasicControlls'
+import BasicControls from '../components/controls/BasicControlls'
 import BasicChartInfo from '../components/BasicChartInfo'
 import { mapToChartData } from '../utils/mapToChart'
 
@@ -83,6 +83,9 @@ const Home = () => {
             {/* MOBILE: chart FIRST */}
             {isMobile && (
               <div style={{ width: "100%" }}>
+                {/* 
+                αυτό είναι ένα hook που συνεργάζεται με το AstroChart.tsx και κάνουν render το chart σε svg. Περα απο την βιβλιοθήκη έχουμε προσθεσει στο svg και δικά μας render
+                */}
                 <AstroChart {...chartData} />
               </div>
             )}
