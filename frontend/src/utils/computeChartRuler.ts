@@ -10,7 +10,7 @@ export const computeChartRuler = (data: ChartSummary) => {
   const asc = data.ascendant;
 
   // asc lgn → η γωνία του asc
-  if (!asc?.longitude) return null; 
+  if (asc?.longitude == null) return null; 
 
   // 1. βρίσκουμε ASC sign
   const ascSign = getZodiacSign(asc.longitude);
@@ -42,7 +42,7 @@ export const computeChartRuler = (data: ChartSummary) => {
 
   const planetData = planetMap[rulerPlanet as keyof typeof planetMap];
 
-  if (!planetData?.longitude) return null;
+  if (planetData?.longitude == null) return null;
 
   // 5. compute sign + house
   const sign = getZodiacSign(planetData.longitude);
