@@ -10,8 +10,8 @@ import ReactMarkdown from 'react-markdown'
 
 import { useChartAnalysis } from '../hooks/componentHooks/useChartAnalysis'
 
-import PlanetTable from './PlanetTable'
-import ChartRuler from './ChartRuler'
+import PlanetTable from './singleChartReports/PlanetTable'
+import ChartRuler from './singleChartReports/ChartRuler'
 import BalanceSummary from './BalanceSummary'
 import MostImportantAspects from './MostImportantAspects'
 import HouseRulers from './HouseRulers'

@@ -1,5 +1,7 @@
+// modal με keywords για πλανήτη/ζωδιο/οικο το description το στέλνει ως string ο parent
+
 import { Modal, Text, Stack } from "@mantine/core";
-import { colors, planetKeywords, signKeywords, houseKeywords } from "../constants/constants";
+import { colors, planetKeywords, signKeywords, houseKeywords } from "../../constants/constants";
 
 type Props = {
   opened: boolean;
@@ -9,9 +11,10 @@ type Props = {
     sign: string;
     house: number | null;
   } | null;
+  description?: string
 };
 
-export default function AstroDetailsModal({ opened, onClose, data }: Props) {
+export default function AstroDetailsModal({ opened, onClose, data, description }: Props) {
   if (!data) return null;
 
   return (
@@ -68,6 +71,11 @@ export default function AstroDetailsModal({ opened, onClose, data }: Props) {
             {houseKeywords[data.house as keyof typeof houseKeywords]?.join(", ")}
           </Text>
         </div>
+        {description && (
+          <Text size="sm" c={colors.dim} mt="sm" style={{ lineHeight: 1.4 }}>
+            {description}
+          </Text>
+        )}
       </Stack>
     </Modal>
   );

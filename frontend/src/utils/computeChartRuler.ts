@@ -1,11 +1,16 @@
+// frontend\src\utils\computeChartRuler.ts
 import type { ChartSummary } from "../types/types";
 import { planetSymbolToName, rulers } from "../constants/constants";
+// παιρνει τις γωνίες των πλανητών και μου λεει σε ποιο ζώδιο είναι 
+// και δημιουργεί απο cusps ranges γωνιών για τον κάθε οίκο (και άρα μπορω να δώ και σε ποιον οικο είναι και το κάθε ζωδιο)
 import { getZodiacSign, getHouse } from "./angleToAstro";
 
-export function computeChartRuler(data: ChartSummary) {
+export const computeChartRuler = (data: ChartSummary) => {
+
   const asc = data.ascendant;
 
-  if (!asc?.longitude) return null;
+  // asc lgn → η γωνία του asc
+  if (!asc?.longitude) return null; 
 
   // 1. βρίσκουμε ASC sign
   const ascSign = getZodiacSign(asc.longitude);
@@ -16,6 +21,7 @@ export function computeChartRuler(data: ChartSummary) {
   if (!rulerSymbol) return null;
 
   // 3. symbol → planet name
+  // είναι λιγο cumbersome αλλα στα constants εχω μια [] με key sign και data planet symbol. οπότε πρέπει να κανουμε μια περιττή μετατροπή του symbol σε name. TODO το [] των πλανητών εκτός απο όνομα να έχει και symbol. Όπως και το [] των ζωδίων να έχει symbol 
   const rulerPlanet = planetSymbolToName[rulerSymbol];
 
   if (!rulerPlanet) return null;

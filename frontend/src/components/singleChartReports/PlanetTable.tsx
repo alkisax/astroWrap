@@ -1,4 +1,4 @@
-// frontend\src\components\PlanetTable.tsx
+// frontend\src\components\singleChartReports\PlanetTable.tsx
 
 // υπολογίζει και κάνει render τον βασικό πίνακα με sign/house/planet
 // σημαντικό κομμάτι της λογικής του βρίσκετε μέσα στα util helpers getZodiacSign, getHouse μεσα στην AngleToAstro (βρίσκει γωνίες ζωδίων και υπολογίζει οίκους με βάση τα cusps)
@@ -8,9 +8,9 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import { Table, Paper, Modal, Text, Stack } from '@mantine/core'
-import { getZodiacSign, getHouse } from '../utils/angleToAstro'
-import { colors, planetIcons, signIcons, planetKeywords, signKeywords, houseKeywords } from '../constants/constants'
-import type { ChartSummary, CustomPlanetInfo } from '../types/types'
+import { getZodiacSign, getHouse } from '../../utils/angleToAstro'
+import { colors, planetIcons, signIcons, planetKeywords, signKeywords, houseKeywords } from '../../constants/constants'
+import type { ChartSummary, CustomPlanetInfo } from '../../types/types'
 
 type Props = {
   data: ChartSummary;

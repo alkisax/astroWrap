@@ -4,7 +4,7 @@ import { colors } from '../constants/constants'
 
 import ChartFormBiwheel from '../components/biwheel/ChartFormBiwheel'
 import PlanetSelector from '../components/controls/PlanetSelector'
-import PlanetTable from '../components/PlanetTable'
+import PlanetTable from '../components/singleChartReports/PlanetTable'
 import InnerChart from '../components/biwheel/InnerChart'
 import OuterChart from '../components/biwheel/OuterChart'
 import TwoChartsAspectsTable from '../components/biwheel/TwoChartsAspectsTable'
