@@ -14,6 +14,8 @@ export interface House {
   longitude?: number | null;
 }
 
+// label το ονομα του πλανήτη (key είναι το ιδιο αλλα για index)
+// πχ sun - moon - square - orb:2
 export interface Aspect {
   point1Key: string;
   point1Label: string;

@@ -35,7 +35,7 @@ const Home = () => {
 
   // shaken → ενα απλοποιημένο json για να στέλνετε σε gpt για αναλυση
   console.log("shaken", shaken);
-  // console.log(data);
+  console.log(data);
 
   // του MUI boolean υπολογίζει αν είμαι σε mobile
   const isMobile = useMediaQuery("(max-width:768px)");

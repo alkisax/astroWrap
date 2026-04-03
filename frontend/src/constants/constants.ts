@@ -41,6 +41,12 @@ export const planets: Planet[] = [
   "Pluto",
 ];
 
+export const mainPoints: string[] = [
+  ...planets,
+  'ASC',
+  'MC'
+]
+
 export const signToModality: Record<string, Modality> = {
   Aries: "Cardinal",
   Cancer: "Cardinal",

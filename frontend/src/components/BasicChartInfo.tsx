@@ -10,10 +10,10 @@ import ReactMarkdown from 'react-markdown'
 
 import { useChartAnalysis } from '../hooks/componentHooks/useChartAnalysis'
 
-import PlanetTable from './singleChartReports/PlanetTable'
+import PlanetTable from './usedInAllChartsReports/PlanetTable'
 import ChartRuler from './singleChartReports/ChartRuler'
 import BalanceSummary from './singleChartReports/BalanceSummary'
-import MostImportantAspects from './MostImportantAspects'
+import MostImportantAspects from './usedInAllChartsReports/MostImportantAspects'
 import HouseRulers from './HouseRulers'
 import EssentialDignities from './EssentialDignities'
 import DispositorTree from './DispositorTree'
@@ -165,6 +165,10 @@ const BasicChartInfo = ({
               setCustomChartRuler={setCustomChartRuler}
             />
 
+            {/* 
+            // in: data απο home και setter για συγκεντρωτικο json απο useHome
+            // σημαντικά είναι τα utils calculateElementBalance, calculateModalityBalance (και τα δύο in: data)
+            */}
             <BalanceSummary
               data={data}
               setCustomBalance={setCustomBalance}

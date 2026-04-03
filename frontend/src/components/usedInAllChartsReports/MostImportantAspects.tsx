@@ -1,7 +1,11 @@
+// frontend\src\components\usedInAllChartsReports\MostImportantAspects.tsx
+// in: data απο home (δεν φτιαχνει συγκεντρωτικό json)
+// συνεργάζεται με το getAngleAspects
+
 import { Paper, Text, Stack } from "@mantine/core";
-import type { ChartSummary } from "../types/types";
-import { aspectIcons, planetIcons, colors } from "../constants/constants";
-import { getAngleAspects } from "../utils/getAngleAspects";
+import type { ChartSummary } from "../../types/types";
+import { aspectIcons, planetIcons, colors, planets } from "../../constants/constants";
+import { getAngleAspects } from "../../utils/getAngleAspects";
 
 type Props = {
   data: ChartSummary;
@@ -9,30 +13,23 @@ type Props = {
 
 const MostImportantAspects = ({ data }: Props) => {
 
-  const allowedPoints = [
-    "Sun",
-    "Moon",
-    "Mercury",
-    "Venus",
-    "Mars",
-    "Jupiter",
-    "Saturn",
-    "Uranus",
-    "Neptune",
-    "Pluto",
-    // "ASC", // optional
-  ];
+  // έρχεται απο constants. κάναμε as string γιατί εκεί είναι type planets
+  const allowedPoints = planets as string[]
 
+  // το circular-natal-horoscope-js μου τα επιστρέφει
   const aspects = data.aspects ?? [];
   if (!aspects.length) return null;
 
   const allAspects = [
-    ...aspects,
+    // ...aspects,
     ...getAngleAspects(data),
   ].filter(a =>
     allowedPoints.includes(a.point1Label) &&
     allowedPoints.includes(a.point2Label)
   );
+
+  console.log('LIB', data.aspects)
+  console.log("getangleaspects",getAngleAspects(data))
 
   return (
     <Paper

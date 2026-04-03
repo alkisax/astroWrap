@@ -1,4 +1,4 @@
-// frontend\src\components\singleChartReports\PlanetTable.tsx
+// frontend\src\components\usedInAllChartsReports\PlanetTable.tsx
 
 // υπολογίζει και κάνει render τον βασικό πίνακα με sign/house/planet
 // σημαντικό κομμάτι της λογικής του βρίσκετε μέσα στα util helpers getZodiacSign, getHouse μεσα στην AngleToAstro (βρίσκει γωνίες ζωδίων και υπολογίζει οίκους με βάση τα cusps)
