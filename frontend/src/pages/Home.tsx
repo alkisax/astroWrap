@@ -89,7 +89,11 @@ const Home = () => {
                 {/* 
                 αυτό είναι ένα hook που συνεργάζεται με το AstroChart.tsx και κάνουν render το chart σε svg. Περα απο την βιβλιοθήκη έχουμε προσθεσει στο svg και δικά μας render
                 */}
-                <AstroChart {...chartData} />
+                <AstroChart
+                  {...chartData}
+                  data={data}
+                  userOrb={userOrb}
+                />
               </div>
             )}
 
@@ -133,7 +137,11 @@ const Home = () => {
             {/* DESKTOP: chart  δεξια */}
             {!isMobile && (
               <div style={{ flex: 1, minWidth: 0 }}>
-                <AstroChart {...chartData} />
+                <AstroChart
+                  {...chartData}
+                  data={data}
+                  userOrb={userOrb}
+                />
               </div>
             )}
           </div>
