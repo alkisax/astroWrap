@@ -1,7 +1,11 @@
+// frontend\src\utils\balanceCalculator.ts
+
+// εχω εναν πίνακα με τι modal/element είναι κάθε ζωδιο στο constants και απλως μετράει πόσα απο τι έχω
+
 import { signToElement, signToModality } from "../constants/constants";
 import type { ChartSummary, Modality, Element } from "../types/types";
 
-
+// απο τα data
 const getPlanetSigns = (data: ChartSummary) => [
   data.sun?.sign,
   data.moon?.sign,

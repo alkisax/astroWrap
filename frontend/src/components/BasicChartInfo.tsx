@@ -12,7 +12,7 @@ import { useChartAnalysis } from '../hooks/componentHooks/useChartAnalysis'
 
 import PlanetTable from './singleChartReports/PlanetTable'
 import ChartRuler from './singleChartReports/ChartRuler'
-import BalanceSummary from './BalanceSummary'
+import BalanceSummary from './singleChartReports/BalanceSummary'
 import MostImportantAspects from './MostImportantAspects'
 import HouseRulers from './HouseRulers'
 import EssentialDignities from './EssentialDignities'
@@ -96,8 +96,8 @@ const BasicChartInfo = ({
   // φέρνουμε απο όλα τα sub-components τα state για την δημιουργία του json 
   useEffect(() => {
     // TODO (πιθανο bug / γινετε καλύτερα) επιτρέπει το useEffect να τρέξει μόνο 1 φορά μπήκε για να κόψει bug με συνεχή rerender
-    if (!firstRun.current) return 
-    firstRun.current = false 
+    if (!firstRun.current) return
+    firstRun.current = false
 
     setCustomHouseRulers(houseRulers)
     setCustomAspects(aspects)
@@ -114,7 +114,7 @@ const BasicChartInfo = ({
     setShowLLM(true);
 
     try {
-      const res = await (handleLLMInterpretation as () => Promise<string | null>)(); 
+      const res = await (handleLLMInterpretation as () => Promise<string | null>)();
       setLlmResult(res); //δες Hook useChartAnalysis
     } catch {
       setLlmResult(null);
@@ -155,6 +155,11 @@ const BasicChartInfo = ({
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* 
+            // μου υπολογίζει και render τον chartRuler σημαντικό κομματι της λογικής είναι στην helperFunction computeChartRuler
+            // in: data απο home και setter για συγκεντρωτικο json απο useHome
+            // Ο chart ruler είναι ο πλανήτης που κυβερνά το ζώδιο του Ascendant (ωροσκόπου), άρα θεωρείται ο βασικός “κυβερνήτης” όλου του χάρτη. Υπολογίζεται απλά: βρίσκεις το ζώδιο του ASC και μετά τον πλανήτη που το κυβερνά (π.χ. Aries → Mars, Libra → Venus).Είναι σαν “κεντρικός άξονας προσωπικότητας” .
+            */}
             <ChartRuler
               data={data}
               setCustomChartRuler={setCustomChartRuler}

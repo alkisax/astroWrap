@@ -18,7 +18,7 @@ type Props = {
 };
 
 const PlanetTable = ({ data, setCustomPlanetInfo }: Props) => {
-  const [opened, setOpened] = useState(false); // δεν το χρησιμοποιούμε στα αλήθεια αλλα ας μείνει γιατί είναι reusable component
+  const [opened, setOpened] = useState(false); 
   const [selected, setSelected] = useState<{
     planet: string;
     sign: string;
