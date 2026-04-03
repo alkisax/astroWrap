@@ -5,6 +5,7 @@ import PlanetSelector from './PlanetSelector'
 import TimeControls from './TimeControls'
 
 import type { Dispatch, SetStateAction } from 'react'
+import UserOrbPicker from './userOrbPicker'
 
 type Props = {
   onSubmit: (input: {
@@ -12,17 +13,16 @@ type Props = {
     lat: number;
     lng: number;
   }) => void;
-
   visiblePlanets: string[];
   setVisiblePlanets: Dispatch<SetStateAction<string[]>>;
-
   date: Date;
   setDate: Dispatch<SetStateAction<Date>>;
-
   coords: {
     lat: number;
     lng: number;
   };
+  userOrb: number;
+  setUserOrb: (v: number) => void;
 };
 
 const BasicControls = ({
@@ -32,6 +32,8 @@ const BasicControls = ({
   date,
   setDate,
   coords,
+  userOrb,
+  setUserOrb
 }: Props) => {
 
   const isMobile = useMediaQuery("(max-width:768px)");
@@ -66,6 +68,9 @@ const BasicControls = ({
         selected={visiblePlanets}
         setSelected={setVisiblePlanets}
       />
+
+      {/* απο εδω ξεκινάει το userOrb που καταλήγει στο getAngleAspects.ts. Το state του είναι στο useHome */}
+      <UserOrbPicker userOrb={userOrb} setUserOrb={setUserOrb} />
 
       {/* 
       in: παίρνει μια onSubmit με date/lat/lang τα οποία οταν αλλαχθούν εδώ προκαλούν trigger να δείξει το chart

@@ -38,6 +38,7 @@ export const useHome = () => {
     lat: 37.9838, //  default αθήνα
     lng: 23.7275,
   });
+  const [userOrb, setUserOrb] = useState<number>(1);
 
   // 🔹 custom state
   const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>(
@@ -169,6 +170,8 @@ export const useHome = () => {
     date,
     setDate,
     coords,
+    userOrb,
+    setUserOrb,
 
     // setters
     setCustomPlanetInfo,

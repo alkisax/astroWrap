@@ -9,9 +9,10 @@ import { getAngleAspects } from "../../utils/getAngleAspects";
 
 type Props = {
   data: ChartSummary;
+  userOrb: number;
 };
 
-const MostImportantAspects = ({ data }: Props) => {
+const MostImportantAspects = ({ data, userOrb }: Props) => {
 
   // έρχεται απο constants. κάναμε as string γιατί εκεί είναι type planets
   const allowedPoints = planets as string[]
@@ -22,7 +23,7 @@ const MostImportantAspects = ({ data }: Props) => {
 
   const allAspects = [
     // ...aspects,
-    ...getAngleAspects(data),
+    ...getAngleAspects(data, userOrb),
   ].filter(a =>
     allowedPoints.includes(a.point1Label) &&
     allowedPoints.includes(a.point2Label)

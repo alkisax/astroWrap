@@ -45,7 +45,7 @@ type RawPoint = {
 };
 
 // η κύρια συνάρτησή μου, παίρνει απο το home τα data του circular-natal-horoscope-js. Moy επιστρέφει κάτι σαν πχ Sun(sun) - Moon(moon) - square - orb:2
-export const getAngleAspects = (data: ChartSummary): Aspect[] => {
+export const getAngleAspects = (data: ChartSummary, userWeight = 1): Aspect[] => {
   const result: Aspect[] = [];
 
   const asc = data.ascendant;
@@ -101,7 +101,7 @@ export const getAngleAspects = (data: ChartSummary): Aspect[] => {
       // definitions των aspects (dynamic ανάλογα angle ή όχι)
       const defs = applyOrbWeight(
         baseDefs(isAngle),
-        1, // προσωρινά default, μετά βάζεις userWeight
+        userWeight
       );
 
       // defs = λίστα πιθανών aspects (conjunction, square κλπ)

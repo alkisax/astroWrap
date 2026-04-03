@@ -34,6 +34,7 @@ import type {
 
 type Props = {
   data: ChartSummary
+  userOrb: number
   handleLLMInterpretation: () => void
   llmLoading: boolean
   llmError: string | null
@@ -50,6 +51,7 @@ type Props = {
 
 const BasicChartInfo = ({
   data,
+  userOrb,
   handleLLMInterpretation,
   llmLoading,
   llmError,
@@ -215,7 +217,7 @@ const BasicChartInfo = ({
       </Paper>
 
       <div style={{ width: '100%', maxWidth: '700px', margin: '10px auto' }}>
-        {showAspects && <MostImportantAspects data={data} />}
+        {showAspects && <MostImportantAspects data={data} userOrb={userOrb} />}
         {showHouses && <HouseRulers data={data} setCustomHouseRulers={setCustomHouseRulers} />}
         {showDignities && <EssentialDignities data={data} />}
         {showTree && <DispositorTree data={data} />}

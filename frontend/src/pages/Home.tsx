@@ -16,6 +16,8 @@ const Home = () => {
     date,
     setDate,
     coords,
+    userOrb,
+    setUserOrb,
     handleSubmit,
     shaken,
     handleLLMInterpretation,
@@ -109,6 +111,8 @@ const Home = () => {
                 date={date}
                 setDate={setDate}
                 coords={coords}
+                userOrb={userOrb}
+                setUserOrb={setUserOrb}
               />
             )}
 
@@ -121,6 +125,8 @@ const Home = () => {
                 date={date}
                 setDate={setDate}
                 coords={coords}
+                userOrb={userOrb}
+                setUserOrb={setUserOrb}
               />
             )}
 
@@ -136,6 +142,7 @@ const Home = () => {
           {/* το data change προκαλεί rerender του chart και επανυπολογισμό των διάφορων reports  */}
           <BasicChartInfo
             data={data}
+            userOrb={userOrb}
             handleLLMInterpretation={handleLLMInterpretation}
             llmLoading={llmLoading}
             llmError={llmError}
