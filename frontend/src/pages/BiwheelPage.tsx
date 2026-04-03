@@ -104,7 +104,7 @@ const BiwheelPage = () => {
         block: 'start',
       });
     }
-  }, [showLLM, llmResult]);
+  }, [showLLM, llmResult, isMobile]);
 
   useEffect(() => {
     if (llmEagleLarkResult && resultRef.current) {
@@ -377,7 +377,7 @@ const BiwheelPage = () => {
                   data={radixData}
                   setCustomHouseRulers={setRadixCustomHouseRulers}
                 />
-                <MostImportantAspects data={radixData} />
+                <MostImportantAspects data={radixData}  userOrb={1} />
               </Grid.Col>
 
               <Grid.Col span={6}>
@@ -385,7 +385,7 @@ const BiwheelPage = () => {
                   data={transitData}
                   setCustomHouseRulers={setTransitCustomHouseRulers}
                 />
-                <MostImportantAspects data={transitData} />
+                <MostImportantAspects data={transitData}  userOrb={1} />
               </Grid.Col>
             </Grid>
           </Accordion.Panel>
