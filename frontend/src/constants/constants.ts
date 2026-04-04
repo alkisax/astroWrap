@@ -170,6 +170,22 @@ export const signIcons: Record<string, string> = {
   Pisces: "♓",
 };
 
+export const rulers: Record<string, { traditional: string; modern?: string }> =
+  {
+    Aries: { traditional: "♂" },
+    Taurus: { traditional: "♀" },
+    Gemini: { traditional: "☿" },
+    Cancer: { traditional: "☾" },
+    Leo: { traditional: "☉" },
+    Virgo: { traditional: "☿" },
+    Libra: { traditional: "♀" },
+    Scorpio: { traditional: "♂", modern: "♇" },
+    Sagittarius: { traditional: "♃" },
+    Capricorn: { traditional: "♄" },
+    Aquarius: { traditional: "♄", modern: "♅" },
+    Pisces: { traditional: "♃", modern: "♆" },
+  };
+
 export const planetKeywords = {
   Sun: ["ego", "identity", "will", "vitality"],
   Moon: ["emotions", "instinct", "needs", "home"],
@@ -214,18 +230,12 @@ export const houseKeywords = {
   12: ["subconscious", "isolation", "hidden"],
 };
 
-export const rulers: Record<string, { traditional: string; modern?: string }> =
-  {
-    Aries: { traditional: "♂" },
-    Taurus: { traditional: "♀" },
-    Gemini: { traditional: "☿" },
-    Cancer: { traditional: "☾" },
-    Leo: { traditional: "☉" },
-    Virgo: { traditional: "☿" },
-    Libra: { traditional: "♀" },
-    Scorpio: { traditional: "♂", modern: "♇" },
-    Sagittarius: { traditional: "♃" },
-    Capricorn: { traditional: "♄" },
-    Aquarius: { traditional: "♄", modern: "♅" },
-    Pisces: { traditional: "♃", modern: "♆" },
-  };
+export const aspectKeywords = {
+  conjunction: ['fusion', 'intensity', 'focus'],
+  sextile: ['opportunity', 'flow', 'support'],
+  square: ['tension', 'challenge', 'conflict'],
+  trine: ['harmony', 'ease', 'talent'],
+  opposition: ['polarity', 'projection', 'balance'],
+}
+
+

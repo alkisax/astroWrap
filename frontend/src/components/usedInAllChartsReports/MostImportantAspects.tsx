@@ -2,9 +2,10 @@
 // in: data απο home (δεν φτιαχνει συγκεντρωτικό json)
 // συνεργάζεται με το getAngleAspects
 
-import { Paper, Text, Stack } from "@mantine/core";
+import { useState } from "react";
+import { Paper, Text, Stack, Modal } from "@mantine/core";
 import type { ChartSummary } from "../../types/types";
-import { aspectIcons, planetIcons, colors, planets } from "../../constants/constants";
+import { aspectIcons, planetIcons, colors, planets, aspectKeywords, planetKeywords } from "../../constants/constants";
 import { getAngleAspects } from "../../utils/getAngleAspects";
 
 type Props = {
@@ -13,6 +14,12 @@ type Props = {
 };
 
 const MostImportantAspects = ({ data, userOrb }: Props) => {
+  // state για info modal
+  const [selected, setSelected] = useState<{
+    p1: string
+    p2: string
+    type: string
+  } | null>(null)
 
   // έρχεται απο constants. κάναμε as string γιατί εκεί είναι type planets
   const allowedPoints = planets as string[]
@@ -29,66 +36,121 @@ const MostImportantAspects = ({ data, userOrb }: Props) => {
     allowedPoints.includes(a.point2Label)
   );
 
-  console.log('LIB', data.aspects)
-  console.log("getangleaspects",getAngleAspects(data))
+  // console.log('LIB', data.aspects)
+  // console.log("getangleaspects", getAngleAspects(data))
 
   return (
-    <Paper
-      p="md"
-      radius="md"
-      style={{
-        width: "100%",
-        maxWidth: "700px",
-        margin: "10px auto",
-        background: colors.panel,
-        backdropFilter: "blur(10px)",
-        border: "1px solid rgba(255,255,255,0.1)",
-        color: colors.text,
-      }}
-    >
-      <Text fw={600} size="sm" ta="center" c={colors.dim}>
-        🔗 Aspects
-      </Text>
+    <>
+      <Paper
+        p="md"
+        radius="md"
+        style={{
+          width: "100%",
+          maxWidth: "700px",
+          margin: "10px auto",
+          background: colors.panel,
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          color: colors.text,
+        }}
+      >
+        <Text fw={600} size="sm" ta="center" c={colors.dim}>
+          🔗 Aspects
+        </Text>
 
-      <Stack mt="sm" gap="xs">
-        {allAspects.map((a, i) => {
-          const orb = a.orb != null ? a.orb.toFixed(2) : "?";
+        <Stack mt="sm" gap="xs">
+          {allAspects.map((a, i) => {
+            const orb = a.orb != null ? a.orb.toFixed(2) : "?";
 
-          const p1 = a.point1Label;
-          const p2 = a.point2Label;
+            const p1 = a.point1Label;
+            const p2 = a.point2Label;
 
-          return (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                fontSize: "12px",
-                padding: "4px 6px",
-                borderRadius: "4px",
-                background: "rgba(255,255,255,0.02)",
-              }}
-            >
-              <span>
-                {planetIcons[p1]} {p1}
-              </span>
+            return (
+              <div
+                key={i}
+                // onclick για info modal
+                onClick={() => setSelected({
+                  p1,
+                  p2,
+                  type: a.type
+                })}
+                style={{
+                  cursor: 'pointer',
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "12px",
+                  padding: "4px 6px",
+                  borderRadius: "4px",
+                  background: "rgba(255,255,255,0.02)",
+                }}
+              >
+                <span>
+                  {planetIcons[p1]} {p1}
+                </span>
 
-              <span>
-                {aspectIcons[a.type]}
-              </span>
+                <span>
+                  {aspectIcons[a.type]}
+                </span>
 
-              <span>
-                {planetIcons[p2]} {p2}
-              </span>
+                <span>
+                  {planetIcons[p2]} {p2}
+                </span>
 
-              <span style={{ color: colors.dim }}>
-                {a.type} ({orb}°)
-              </span>
+                <span style={{ color: colors.dim }}>
+                  {a.type} ({orb}°)
+                </span>
+              </div>
+            );
+          })}
+        </Stack>
+      </Paper>
+
+      <Modal
+        opened={!!selected}
+        onClose={() => setSelected(null)}
+        title="Aspect Details"
+        centered
+        styles={{
+          content: {
+            background: colors.panel,
+            color: colors.text,
+            backdropFilter: 'blur(10px)',
+          },
+          header: {
+            background: 'transparent',
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
+          },
+        }}
+      >
+        {selected && (
+          <Stack gap="xs">
+            <Text size="sm" c="dimmed">
+              Aspects show how planets interact — harmony, tension, or flow.
+            </Text>
+
+            <div style={{ width: 220, margin: '0 auto' }}>
+              <Text fw={600}>🪐 {selected.p1}</Text>
+              <Text size="sm">
+                {planetKeywords[selected.p1 as keyof typeof planetKeywords]?.join(', ')}
+              </Text>
+
+              <Text fw={600} mt="xs">
+                {aspectIcons[selected.type]} {selected.type}
+              </Text>
+              <Text size="sm">
+                {aspectKeywords[selected.type as keyof typeof aspectKeywords]?.join(', ')}
+              </Text>
+
+              <Text fw={600} mt="xs">🪐 {selected.p2}</Text>
+              <Text size="sm">
+                {planetKeywords[selected.p2 as keyof typeof planetKeywords]?.join(', ')}
+              </Text>
             </div>
-          );
-        })}
-      </Stack>
-    </Paper>
+          </Stack>
+        )}
+      </Modal>
+    </>
+
   );
 };
 

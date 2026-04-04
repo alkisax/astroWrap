@@ -1,12 +1,16 @@
-import type { ChartSummary } from "../types/types";
-import { planets, signToPlanet } from "../constants/constants";
+import type { ChartSummary } from '../types/types'
+import { planets, signToPlanet } from '../constants/constants'
 
+//  αποτέλεσμα για κάθε chain
+// chain = η αλυσίδα των rulers
+// type = αν καταλήγει σε final ή loop
 type Result = {
-  chain: string[];
-  type: "final" | "loop";
-  loopStart?: string;
-};
+  chain: string[]
+  type: 'final' | 'loop'
+  loopStart?: string
+}
 
+//  helper: φτιάχνει ένα map planet → data (για εύκολη πρόσβαση)
 const planetMap = (data: ChartSummary) => ({
   Sun: data.sun,
   Moon: data.moon,
@@ -18,69 +22,74 @@ const planetMap = (data: ChartSummary) => ({
   Uranus: data.uranus,
   Neptune: data.neptune,
   Pluto: data.pluto,
-});
+})
 
+//  βρίσκει την αλυσίδα dispositor για έναν πλανήτη
 export function getDispositorChain(
   startPlanet: string,
   data: ChartSummary
 ): Result {
-  const visited: string[] = [];
-  const chain: string[] = [];
+  const visited: string[] = [] // για loop detection
+  const chain: string[] = []   // η τελική αλυσίδα
 
-  const planets = planetMap(data);
+  const planets = planetMap(data)
 
-  let current = startPlanet;
+  let current = startPlanet
 
   while (true) {
-    // loop detection
+    //  αν έχουμε ξαναδεί τον πλανήτη → loop
     if (visited.includes(current)) {
       return {
         chain,
-        type: "loop",
+        type: 'loop',
         loopStart: current,
-      };
+      }
     }
 
-    visited.push(current);
+    visited.push(current)
 
-    const placement = planets[current as keyof typeof planets];
+    //  βρίσκουμε που βρίσκεται ο current πλανήτης
+    const placement = planets[current as keyof typeof planets]
 
+    //  αν δεν έχουμε sign → σταματάμε (invalid data)
     if (!placement?.sign) {
       return {
         chain,
-        type: "loop",
-      };
+        type: 'loop',
+      }
     }
 
-    const ruler = signToPlanet[placement.sign];
+    //  βρίσκουμε τον ruler του ζωδίου
+    const ruler = signToPlanet[placement.sign]
 
-    // safety (αν κάτι πάει στραβά)
+    //  safety fallback
     if (!ruler) {
       return {
         chain,
-        type: "loop",
-      };
+        type: 'loop',
+      }
     }
 
-    chain.push(ruler);
+    //  προσθέτουμε τον επόμενο κρίκο στην αλυσίδα
+    chain.push(ruler)
 
-    // final dispositor
+    //  αν ο πλανήτης κυβερνά τον εαυτό του → final dispositor
     if (ruler === current) {
       return {
         chain,
-        type: "final",
-      };
+        type: 'final',
+      }
     }
 
-    current = ruler;
+    //  συνεχίζουμε την αλυσίδα
+    current = ruler
   }
 }
 
+//  υπολογίζει dispositor chains για ΟΛΟΥΣ τους πλανήτες
 export function getAllDispositors(data: ChartSummary) {
-
-
   return planets.map((p) => ({
     planet: p,
     result: getDispositorChain(p, data),
-  }));
+  }))
 }

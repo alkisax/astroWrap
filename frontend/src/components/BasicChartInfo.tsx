@@ -14,9 +14,9 @@ import PlanetTable from './usedInAllChartsReports/PlanetTable'
 import ChartRuler from './singleChartReports/ChartRuler'
 import BalanceSummary from './singleChartReports/BalanceSummary'
 import MostImportantAspects from './usedInAllChartsReports/MostImportantAspects'
-import HouseRulers from './HouseRulers'
-import EssentialDignities from './EssentialDignities'
-import DispositorTree from './DispositorTree'
+import HouseRulers from './usedInAllChartsReports/HouseRulers'
+import EssentialDignities from './singleChartReports/EssentialDignities'
+import DispositorTree from './singleChartReports/DispositorTree'
 
 import { colors } from '../constants/constants'
 
