@@ -91,64 +91,69 @@ const isDignityArray = (arr: unknown): arr is Dignity[] =>
   Array.isArray(arr);
 
 // 🔥 normalize
-const normalize = (v?: string): string => (v ?? '').toLowerCase();
+// const normalize = (v?: string): string => (v ?? '').toLowerCase();
 
 // 🔥 dedupe aspects
-const dedupeAspects = (arr: Aspect[]): Aspect[] => {
-  const seen = new Set<string>();
+// const dedupeAspects = (arr: Aspect[]): Aspect[] => {
+//   const seen = new Set<string>();
 
-  return arr.filter((a) => {
-    const p1 = normalize(a.point1);
-    const p2 = normalize(a.point2);
+//   return arr.filter((a) => {
+//     const p1 = normalize(a.point1);
+//     const p2 = normalize(a.point2);
 
-    if (!p1 || !p2 || p1 === p2) return false;
+//     if (!p1 || !p2 || p1 === p2) return false;
 
-    const key = [p1, p2].sort().join('|') + `|${a.type}`;
+//     const key = [p1, p2].sort().join('|') + `|${a.type}`;
 
-    if (seen.has(key)) return false;
+//     if (seen.has(key)) return false;
 
-    seen.add(key);
-    return true;
-  });
-};
+//     seen.add(key);
+//     return true;
+//   });
+// };
 
 // 🔥 relevance filter
-const isRelevantAspect = (a: Aspect): boolean => {
-const allowed = [
-  'sun',
-  'moon',
-  'mercury',
-  'venus',
-  'mars',
-  'jupiter',
-  'saturn',
-  'uranus',
-  'neptune',
-  'pluto',
-  'ascendant',
-  'midheaven',
-]
+// const isRelevantAspect = (a: Aspect): boolean => {
+// const allowed = [
+//   'sun',
+//   'moon',
+//   'mercury',
+//   'venus',
+//   'mars',
+//   'jupiter',
+//   'saturn',
+//   'uranus',
+//   'neptune',
+//   'pluto',
+//   'ascendant',
+//   'midheaven',
+// ]
 
-  return (
-    allowed.includes(normalize(a.point1)) &&
-    allowed.includes(normalize(a.point2))
-  );
-};
+//   return (
+//     allowed.includes(normalize(a.point1)) &&
+//     allowed.includes(normalize(a.point2))
+//   );
+// };
 
 // 🔥 scoring για sorting
-const getAspectScore = (a: Aspect): number => {
-  const orb = a.orb ?? 10;
+// Μετατρέπει το orb σε score
+// μικρό orb → μεγάλο score → πιο σημαντικό
+// μεγάλο orb → μικρό score
+// παράδειγμα: orb 0.5 → score 9.5
+// const getAspectScore = (a: Aspect): number => {
+//   const orb = a.orb ?? 10;
 
-  // όσο μικρότερο orb → πιο σημαντικό
-  return 10 - orb;
-};
+//   // όσο μικρότερο orb → πιο σημαντικό
+//   return 10 - orb;
+// };
 
 // 🔥 top aspects
-const selectTopAspects = (arr: Aspect[], limit = 5): Aspect[] => {
-  return [...arr]
-    .sort((a, b) => getAspectScore(b) - getAspectScore(a))
-    .slice(0, limit);
-};
+// sort by importance (orb) → κρατάει μόνο τα top 5
+// const selectTopAspects = (arr: Aspect[], limit = 5): Aspect[] => {
+//   return [...arr]
+//     .sort((a, b) => getAspectScore(b) - getAspectScore(a))
+//     .slice(0, limit);
+// };
 
 // 🔥 filter planets
 const filterPlanets = (planets: PlanetItem[]): PlanetItem[] => {
@@ -190,11 +195,9 @@ export const natalChartShakeJSONTreeHelper = (
     ? filterPlanets(payload.analysis.planets)
     : [];
 
-  const aspects = isAspectArray(payload.analysis?.aspects)
-    ? selectTopAspects(
-        dedupeAspects(payload.analysis.aspects).filter(isRelevantAspect),
-      )
-    : [];
+const aspects = isAspectArray(payload.analysis?.aspects)
+  ? payload.analysis.aspects
+  : [];
 
   const dignities = isDignityArray(payload.analysis?.dignities)
     ? simplifyDignities(payload.analysis.dignities)

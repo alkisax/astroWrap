@@ -1,6 +1,7 @@
 // frontend\src\components\BasicChartInfo.tsx
 
 // το component που συγκεντρώνει όλα τα report για το single chart. Το βασικό του input είναι τα data τα οποια τα κάνει process στα διαφορα sub-components και render
+// μεγάλο μέρος της λογικής του component είναι το useChartAnalysis
 import { useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from '@mantine/hooks'
 
@@ -79,8 +80,8 @@ const BasicChartInfo = ({
     balance,
     dignities,
     dispositors,
-    dynamics
-  } = useChartAnalysis(data)
+    dynamics,
+  } = useChartAnalysis(data, userOrb)
 
   // τα χρησιμοποιούμε για να κάνουμε scroll οταν ολοκληρωθεί η openai αναφορα 
   const firstRun = useRef(true)
@@ -102,7 +103,9 @@ const BasicChartInfo = ({
     firstRun.current = false
 
     setCustomHouseRulers(houseRulers)
+    console.log('UI aspects:', aspects)
     setCustomAspects(aspects)
+    console.log('Payload aspects AFTER set:', aspects)
     setCustomDignities(dignities)
     setCustomDispositors(dispositors)
     setCustomDynamics(dynamics)
@@ -217,7 +220,7 @@ const BasicChartInfo = ({
       </Paper>
 
       <div style={{ width: '100%', maxWidth: '700px', margin: '10px auto' }}>
-        {showAspects && <MostImportantAspects data={data} userOrb={userOrb} />}
+        {showAspects && <MostImportantAspects data={data} aspects={aspects} />}
         {showHouses && <HouseRulers data={data} setCustomHouseRulers={setCustomHouseRulers} />}
         {showDignities && <EssentialDignities data={data} />}
         {showTree && <DispositorTree data={data} />}

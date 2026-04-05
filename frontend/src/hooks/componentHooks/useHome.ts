@@ -38,9 +38,10 @@ export const useHome = () => {
     lat: 37.9838, //  default αθήνα
     lng: 23.7275,
   });
+  // για το orb των aspects καταλήγει στο userOrbPicker
   const [userOrb, setUserOrb] = useState<number>(1);
 
-  // 🔹 custom state
+  // ολα αυτά τα state είναι για να συγκεντρώσουμε εδω όλους τους υπολογισμούς για να φτιαχτεί ένα απλοποιημένο json που θα σταλθεί στο gpt
   const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>(
     [],
   );
@@ -116,13 +117,13 @@ export const useHome = () => {
     setData(chart);
   }, [chart]);
 
-  // 🔥 submit (κάνει απλως set τα διάφορα input στο σωστο format και οι αλλαγες επιβάλλονται απο ένα "[]")
+  // submit (κάνει απλως set τα διάφορα input στο σωστο format και οι αλλαγες επιβάλλονται απο ένα "[]")
   const handleSubmit = (input: { date: Date; lat: number; lng: number }) => {
     setDate(input.date);
     setCoords({ lat: input.lat, lng: input.lng });
   };
 
-  // 🔥 payload
+  // εδώ είναι το κέντρο της δημιουργίας του json payload
   const payload = useChartDataDebug({
     data,
     visiblePlanets,
@@ -143,6 +144,7 @@ export const useHome = () => {
     if (!payload) return null;
     return natalChartShakeJSONTreeHelper(payload);
   }, [payload]);
+  // console.log('SHAKEN aspects:', shaken?.aspects)
 
   const handleLLMInterpretation = async (): Promise<string | null> => {
     if (!shaken) return null;
@@ -153,7 +155,7 @@ export const useHome = () => {
     try {
       const result = await getSingleChartInterpretation(shaken);
       console.log("LLM RESULT:", result);
-      return result; // 👈 σημαντικό
+      return result;
     } catch (err) {
       console.log(err);
       setLlmError("LLM request failed");

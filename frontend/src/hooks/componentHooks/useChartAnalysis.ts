@@ -1,3 +1,5 @@
+// frontend\src\hooks\componentHooks\useChartAnalysis.ts
+
 import { useMemo } from "react";
 import type {
   ChartSummary,
@@ -30,7 +32,11 @@ import { getMutualReceptions } from "../../utils/mutualReception";
 import { planets } from "../../constants/constants";
 import { computeChartRuler } from "../../utils/computeChartRuler";
 
-export const useChartAnalysis = (data: ChartSummary | null) => {
+export const useChartAnalysis = (
+  data: ChartSummary | null,
+  userOrb: number,
+  
+) => {
   const toPlanetKey = (p: Planet): PlanetKey => p.toLowerCase() as PlanetKey;
 
   // 🔥 HOUSE RULERS
@@ -60,17 +66,19 @@ export const useChartAnalysis = (data: ChartSummary | null) => {
       "pluto",
     ];
 
-    return [...(data.aspects ?? []), ...getAngleAspects(data)]
+    return getAngleAspects(data, userOrb)
       .filter(
         (a) => allowed.includes(a.point1Key) && allowed.includes(a.point2Key),
       )
+      .sort((a, b) => (a.orb ?? 10) - (b.orb ?? 10)) // 🔥 σημαντικό
+      .slice(0, 10) // ή 3 ή 5
       .map((a) => ({
         point1: a.point1Key,
         point2: a.point2Key,
         type: a.type,
         orb: a.orb ?? null,
       }));
-  }, [data]);
+  }, [data, userOrb]);
 
   // 🔥 BALANCE
   const elements = useMemo(() => {
@@ -179,6 +187,6 @@ export const useChartAnalysis = (data: ChartSummary | null) => {
     dignities,
     dispositors,
     dynamics,
-    chartRuler
+    chartRuler,
   };
 };

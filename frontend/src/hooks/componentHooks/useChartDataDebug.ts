@@ -1,3 +1,4 @@
+// frontend\src\hooks\componentHooks\useChartDataDebug.ts
 import { useMemo } from 'react'
 import type {
   ChartSummary,

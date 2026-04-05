@@ -40,7 +40,7 @@ export const useAstroChart = ({
       planets,
       cusps,
     });
-    console.log(radix);
+    // console.log(radix);
 
     // σχεδιάζουμε aspects → @astrodraw/astrochart
     radix.aspects();

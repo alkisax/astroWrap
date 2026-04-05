@@ -4,16 +4,16 @@
 
 import { useState } from "react";
 import { Paper, Text, Stack, Modal } from "@mantine/core";
-import type { ChartSummary } from "../../types/types";
-import { aspectIcons, planetIcons, colors, planets, aspectKeywords, planetKeywords } from "../../constants/constants";
-import { getAngleAspects } from "../../utils/getAngleAspects";
+import type { ChartSummary, CustomAspect } from "../../types/types";
+import { aspectIcons, planetIcons, colors, aspectKeywords, planetKeywords } from "../../constants/constants";
 
 type Props = {
   data: ChartSummary;
-  userOrb: number;
+  // userOrb: number;
+  aspects: CustomAspect[]
 };
 
-const MostImportantAspects = ({ data, userOrb }: Props) => {
+const MostImportantAspects = ({ aspects }: Props) => {
   // state για info modal
   const [selected, setSelected] = useState<{
     p1: string
@@ -21,20 +21,23 @@ const MostImportantAspects = ({ data, userOrb }: Props) => {
     type: string
   } | null>(null)
 
-  // έρχεται απο constants. κάναμε as string γιατί εκεί είναι type planets
-  const allowedPoints = planets as string[]
+  if (!aspects.length) return null
 
-  // το circular-natal-horoscope-js μου τα επιστρέφει
-  const aspects = data.aspects ?? [];
-  if (!aspects.length) return null;
 
-  const allAspects = [
-    // ...aspects,
-    ...getAngleAspects(data, userOrb),
-  ].filter(a =>
-    allowedPoints.includes(a.point1Label) &&
-    allowedPoints.includes(a.point2Label)
-  );
+  // // έρχεται απο constants. κάναμε as string γιατί εκεί είναι type planets
+  // const allowedPoints = planets as string[]
+
+  // // το circular-natal-horoscope-js μου τα επιστρέφει
+  // const aspects = data.aspects ?? [];
+  // if (!aspects.length) return null;
+
+  // const allAspects = [
+  //   // ...aspects,
+  //   ...getAngleAspects(data, userOrb),
+  // ].filter(a =>
+  //   allowedPoints.includes(a.point1Label) &&
+  //   allowedPoints.includes(a.point2Label)
+  // );
 
   // console.log('LIB', data.aspects)
   // console.log("getangleaspects", getAngleAspects(data))
@@ -59,11 +62,11 @@ const MostImportantAspects = ({ data, userOrb }: Props) => {
         </Text>
 
         <Stack mt="sm" gap="xs">
-          {allAspects.map((a, i) => {
+          {aspects.map((a, i) => {
             const orb = a.orb != null ? a.orb.toFixed(2) : "?";
 
-            const p1 = a.point1Label;
-            const p2 = a.point2Label;
+            const p1 = a.point1;
+            const p2 = a.point2;
 
             return (
               <div
