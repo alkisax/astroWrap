@@ -4,7 +4,6 @@
 
 import { useEffect } from "react";
 import { Chart } from "@astrodraw/astrochart"; //⚠️⚠️
-// import { getAngleAspects } from "../../utils/getAngleAspects";
 import type { ChartSummary } from "../../types/types";
 import { getAngleAspects } from "../../utils/getAngleAspects";
 

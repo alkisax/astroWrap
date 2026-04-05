@@ -35,7 +35,6 @@ import { computeChartRuler } from "../../utils/computeChartRuler";
 export const useChartAnalysis = (
   data: ChartSummary | null,
   userOrb: number,
-  
 ) => {
   const toPlanetKey = (p: Planet): PlanetKey => p.toLowerCase() as PlanetKey;
 
@@ -66,7 +65,8 @@ export const useChartAnalysis = (
       "pluto",
     ];
 
-    return getAngleAspects(data, userOrb)
+    // ⚠️ SOURCE OF TROUTH για όλα τα aspects. Είτε στο ui είτε στο shaken json
+    const finalAspects = getAngleAspects(data, userOrb)
       .filter(
         (a) => allowed.includes(a.point1Key) && allowed.includes(a.point2Key),
       )
@@ -78,6 +78,8 @@ export const useChartAnalysis = (
         type: a.type,
         orb: a.orb ?? null,
       }));
+
+      return finalAspects
   }, [data, userOrb]);
 
   // 🔥 BALANCE

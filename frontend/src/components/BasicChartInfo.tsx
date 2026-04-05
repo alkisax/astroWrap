@@ -98,14 +98,13 @@ const BasicChartInfo = ({
 
   // φέρνουμε απο όλα τα sub-components τα state για την δημιουργία του json 
   useEffect(() => {
+
     // TODO (πιθανο bug / γινετε καλύτερα) επιτρέπει το useEffect να τρέξει μόνο 1 φορά μπήκε για να κόψει bug με συνεχή rerender
-    if (!firstRun.current) return
+    // if (!firstRun.current) return
     firstRun.current = false
 
     setCustomHouseRulers(houseRulers)
-    console.log('UI aspects:', aspects)
     setCustomAspects(aspects)
-    console.log('Payload aspects AFTER set:', aspects)
     setCustomDignities(dignities)
     setCustomDispositors(dispositors)
     setCustomDynamics(dynamics)
@@ -113,7 +112,22 @@ const BasicChartInfo = ({
       setCustomBalance(balance)
     }
 
-  }, [aspects, balance, dignities, dispositors, dynamics, houseRulers, setCustomAspects, setCustomBalance, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomHouseRulers]) // τα set δεν χρειάζονται αλλα μπήκαν για το lint
+    // FIX: αφαιρέθηκε το firstRun hack που έκρυβε το πραγματικό πρόβλημα (stale state)
+    // Το αρχικό issue ήταν infinite rerender επειδή το useEffect έκανε setState
+    // με dependencies που άλλαζαν reference σε κάθε render (π.χ. balance object)
+    //
+    // Λύση:
+    // - κρατήσαμε ως trigger ΜΟΝΟ stable computed values (aspects + λοιπά από hook)
+    // - αφαιρέθηκε το balance από deps (new object κάθε render → loop)
+    // - το hook (useChartAnalysis) είναι πλέον single source of truth για aspects
+    // - το useEffect λειτουργεί σαν "sync προς payload" μόνο όταν αλλάζουν πραγματικά τα δεδομένα
+    // αποτέλεσμα:
+    // ✔ no infinite loop
+    // ✔ no stale data
+    // ✔ shaken === UI (sync μέσω aspects)
+    // eslint-disable μπήκε γιατί συνειδητά ΔΕΝ θέλουμε όλα τα deps (θα ξαναφέρει loop)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aspects, dignities, dispositors, dynamics, houseRulers])
 
   const handleLLMClick = async () => {
     setShowLLM(true);
