@@ -1,4 +1,4 @@
-// frontend\src\components\biwheel\HouseOverlayBiwheel.tsximport { Paper, Text, Stack } from '@mantine/core';
+// frontend\src\components\biwheel\HouseOverlayBiwheel.tsx
 import { Paper, Stack, Text } from '@mantine/core';
 import { colors, planetIcons } from '../../constants/constants';
 

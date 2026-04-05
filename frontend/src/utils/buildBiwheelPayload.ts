@@ -1,6 +1,6 @@
 import type { ChartSummary } from '../types/types';
 import { findTwoChartAspects } from './TwoChartsAspectFinder';
-import { buildHouseOverlay } from './houseOverlayBiwheelHeler';
+import { buildHouseOverlay } from './houseOverlayBiwheelHelper';
 import { buildTransitAspectsGrid } from './buildTransitAspectsGrid';
 import { buildEagleLarkGrids } from './buildEagleLarkGrids';
 

@@ -180,6 +180,7 @@ export const useHome = () => {
     setCustomChartRuler,
     setCustomBalance,
     setCustomHouseRulers,
+    customAspects,
     setCustomAspects,
     setCustomDignities,
     setCustomDispositors,

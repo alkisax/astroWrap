@@ -29,6 +29,7 @@ const Home = () => {
     setCustomChartRuler,
     setCustomBalance,
     setCustomHouseRulers,
+    customAspects,
     setCustomAspects,
     setCustomDignities,
     setCustomDispositors,
@@ -93,6 +94,7 @@ const Home = () => {
                   {...chartData}
                   data={data}
                   userOrb={userOrb}
+                  customAspects={customAspects}
                 />
               </div>
             )}
@@ -141,6 +143,7 @@ const Home = () => {
                   {...chartData}
                   data={data}
                   userOrb={userOrb}
+                  customAspects={customAspects}
                 />
               </div>
             )}

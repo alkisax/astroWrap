@@ -1,17 +1,16 @@
 // frontend\src\hooks\componentHooks\useBiwheelPage.ts
 import { useEffect, useState, useMemo } from "react";
-// import axios from "axios";
-// import { url } from "../../constants/constants";
 import type {
   ChartInput,
   ChartSummary,
+  CustomAspect,
   CustomHouseRuler,
   CustomPlanetInfo,
 } from "../../types/types";
 import { mapToChartData } from "../../utils/mapToChart";
 import { useChartAnalysis } from "./useChartAnalysis";
 import { useChartDataDebug } from "./useChartDataDebug";
-import { buildHouseOverlay } from "../../utils/houseOverlayBiwheelHeler";
+import { buildHouseOverlay } from "../../utils/houseOverlayBiwheelHelper";
 import { buildBiwheelPayload } from "../../utils/buildBiwheelPayload";
 import { synastryShakeJSONtreeHelper } from "../../utils/synastryShakeJSONtreeHelper";
 import { computeCompatibility } from "../../utils/synastryCompatibilityHelper";
@@ -56,6 +55,12 @@ export const useBiwheelPage = () => {
   >([]);
   const [transitCustomHouseRulers, setTransitCustomHouseRulers] = useState<
     CustomHouseRuler[]
+  >([]);
+  const [radixCustomAspects, setRadixCustomAspects] = useState<CustomAspect[]>(
+    [],
+  );
+  const [transitCustomAspects, setTransitCustomAspects] = useState<
+    CustomAspect[]
   >([]);
 
   const [llmLoading, setLlmLoading] = useState(false);
@@ -102,10 +107,6 @@ export const useBiwheelPage = () => {
     }
   }, [radixInput]);
 
-  useEffect(() => {
-    setRadixData(radixChartMemo);
-  }, [radixChartMemo]);
-
   // // 🔥 fetch TRANSIT
   // useEffect(() => {
   //   if (!transitInput) return;
@@ -151,9 +152,10 @@ export const useBiwheelPage = () => {
     setTransitData(transitChartMemo);
   }, [transitChartMemo]);
 
+  const defaultUserOrb = 1;
   // 🔥 analysis
-  const radixAnalysis = useChartAnalysis(radixData);
-  const transitAnalysis = useChartAnalysis(transitData);
+  const radixAnalysis = useChartAnalysis(radixData, defaultUserOrb);
+  const transitAnalysis = useChartAnalysis(transitData, defaultUserOrb);
 
   // 🔥 payloads
   const radixPayload = useChartDataDebug({
@@ -189,6 +191,18 @@ export const useBiwheelPage = () => {
     customDispositors: transitAnalysis.dispositors,
     customDynamics: transitAnalysis.dynamics,
   });
+
+  useEffect(() => {
+    setRadixData(radixChartMemo);
+
+    if (radixAnalysis.aspects) {
+      setRadixCustomAspects(radixAnalysis.aspects);
+    }
+
+    if (transitAnalysis.aspects) {
+      setTransitCustomAspects(transitAnalysis.aspects);
+    }
+  }, [radixAnalysis.aspects, radixChartMemo, transitAnalysis.aspects]);
 
   // 🔥 charts
   const radixChart = radixData
@@ -294,6 +308,9 @@ export const useBiwheelPage = () => {
 
     // eagle
     eagleGrids,
+
+    radixCustomAspects,
+    transitCustomAspects,
 
     // payloads
     radixPayload,

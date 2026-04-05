@@ -49,6 +49,9 @@ const BiwheelPage = () => {
 
     radixCustomPlanetInfo,
     transitCustomPlanetInfo,
+
+    radixCustomAspects,
+    transitCustomAspects,
     // setters (για payload creation)
     setRadixCustomPlanetInfo,
     setTransitCustomPlanetInfo,
@@ -377,7 +380,8 @@ const BiwheelPage = () => {
                   data={radixData}
                   setCustomHouseRulers={setRadixCustomHouseRulers}
                 />
-                <MostImportantAspects data={radixData}  userOrb={1} />
+                
+                <MostImportantAspects data={radixData} aspects={radixCustomAspects} />
               </Grid.Col>
 
               <Grid.Col span={6}>
@@ -385,7 +389,7 @@ const BiwheelPage = () => {
                   data={transitData}
                   setCustomHouseRulers={setTransitCustomHouseRulers}
                 />
-                <MostImportantAspects data={transitData}  userOrb={1} />
+                <MostImportantAspects data={transitData} aspects={transitCustomAspects} />
               </Grid.Col>
             </Grid>
           </Accordion.Panel>

@@ -4,8 +4,8 @@
 
 import { useEffect } from "react";
 import { Chart } from "@astrodraw/astrochart"; //⚠️⚠️
-import type { ChartSummary } from "../../types/types";
-import { getAngleAspects } from "../../utils/getAngleAspects";
+import type { ChartSummary, CustomAspect } from "../../types/types";
+// import { getAngleAspects } from "../../utils/getAngleAspects";
 
 type Props = {
   containerId: string; // html Λογική, η βιβλιοθήκη δεν είναι react και σε κάθε rerender αναζητά και αλλάζει το <div id="paper">
@@ -13,6 +13,7 @@ type Props = {
   cusps: number[];
   data: ChartSummary;
   userOrb: number;
+  customAspects: CustomAspect[]; 
 };
 
 export const useAstroChart = ({
@@ -21,6 +22,7 @@ export const useAstroChart = ({
   cusps,
   data,
   userOrb,
+  customAspects,
 }: Props) => {
   useEffect(() => {
     const el = document.getElementById(containerId);
@@ -95,8 +97,8 @@ export const useAstroChart = ({
       // μετατρέπουμε τα SVG lines σε JS objects για εύκολο matching
       const libAspectMap = Array.from(libLines).map((line) => ({
         // ποια 2 σημεία συνδέει (πχ Sun - Mars)
-        p1: line.getAttribute("data-point"),
-        p2: line.getAttribute("data-toPoint"),
+        p1: line.getAttribute("data-point")?.toLowerCase(),
+        p2: line.getAttribute("data-toPoint")?.toLowerCase(),
 
         // οι ΠΡΑΓΜΑΤΙΚΕΣ συντεταγμένες που υπολόγισε η lib
         // (εδώ είναι όλο το ζουμί — ΔΕΝ τις υπολογίζουμε εμείς)
@@ -107,7 +109,8 @@ export const useAstroChart = ({
       }));
 
       // δικά σου aspects (με custom orb logic κλπ)
-      const aspects = getAngleAspects(data, userOrb);
+      // const aspects = getAngleAspects(data, userOrb);
+      const aspects = customAspects;
 
       // για κάθε δικό σου aspect
       aspects.forEach((a) => {
@@ -116,8 +119,10 @@ export const useAstroChart = ({
         const match = libAspectMap.find(
           (l) =>
             // γιατί μπορεί να είναι reversed (Sun-Mars ή Mars-Sun)
-            (l.p1 === a.point1Label && l.p2 === a.point2Label) ||
-            (l.p1 === a.point2Label && l.p2 === a.point1Label),
+            (l.p1 === a.point1 &&
+              l.p2 === a.point2) ||
+            (l.p1 === a.point2 &&
+              l.p2 === a.point1),
         );
 
         // αν η βιβλιοθήκη ΔΕΝ έχει αυτό το aspect → δεν μπορούμε να το ζωγραφίσουμε
@@ -160,7 +165,7 @@ export const useAstroChart = ({
         // 🧠 TOOLTIP
         line.setAttribute(
           "data-tooltip",
-          `${a.point1Label} ${a.type} ${a.point2Label} (orb: ${orb.toFixed(2)})`,
+          `${a.point1.toLowerCase()} ${a.type} ${a.point2.toLowerCase()} (orb: ${orb.toFixed(2)})`,
         );
 
         // native tooltip
@@ -168,7 +173,7 @@ export const useAstroChart = ({
           "http://www.w3.org/2000/svg",
           "title",
         );
-        title.textContent = `${a.point1Label} ${a.type} ${a.point2Label} (${orb.toFixed(2)}°)`;
+        title.textContent = `${a.point1.toLowerCase()} ${a.type} ${a.point2.toLowerCase()} (${orb.toFixed(2)}°)`;
         line.appendChild(title);
 
         // το προσθέτουμε ΠΑΝΩ από το chart
@@ -182,5 +187,5 @@ export const useAstroChart = ({
     return () => {
       el.innerHTML = "";
     };
-  }, [containerId, planets, cusps, data, userOrb]);
+  }, [containerId, planets, cusps, data, userOrb, customAspects]);
 };

@@ -4,16 +4,17 @@
 // in: planets[], house cusps[]
 import { useEffect, useRef, useState } from "react";
 import { useAstroChart } from "../hooks/componentHooks/useAstroChart";
-import type { ChartSummary } from "../types/types";
+import type { ChartSummary, CustomAspect } from "../types/types";
 
 type Props = {
   planets: Record<string, number[]>;
   cusps: number[];
   data: ChartSummary;
   userOrb: number;
+  customAspects: CustomAspect[]
 };
 
-const AstroChart = ({ planets, cusps, data, userOrb }: Props) => {
+const AstroChart = ({ planets, cusps, data, userOrb, customAspects }: Props) => {
 
   // εδώ μεταφέρθηκε ολη η λογική του αρχείου 
   // ⚠️ Αυτό είναι το render trigger, κάθε φορά που αλλάζουν planets, cusps το hook: βρίσκει <div id="paper"> / καθαρίζει / ξαναζωγραφίζει SVG
@@ -23,6 +24,7 @@ const AstroChart = ({ planets, cusps, data, userOrb }: Props) => {
     cusps,
     data, 
     userOrb,
+    customAspects
   })
 
   // containerRef → δείχνει στο outer div
