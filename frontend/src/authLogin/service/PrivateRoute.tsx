@@ -4,7 +4,11 @@ import { Outlet, Navigate } from "react-router-dom";
 import { UserAuthContext } from "../context/UserAuthContext";
 
 const PrivateRoute = () => {
-  const { user } = useContext(UserAuthContext);
+  const { user, isLoading } = useContext(UserAuthContext);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return user ? <Outlet /> : <Navigate to={"/"} />;
 };

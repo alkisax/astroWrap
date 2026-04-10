@@ -53,7 +53,7 @@ const LoginBackend = ({ url }: Props) => {
         provider: "backend",
       });
 
-      navigate("/user");
+      setTimeout(() => navigate("/user"), 1000);
     } catch (error) {
       console.error("Error:", error);
     } finally {
