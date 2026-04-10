@@ -1,67 +1,57 @@
 // backend\src\login\routes\user.routes.sql.ts
 
-import { Router } from 'express'
-import { userController } from '../controllers/user.controller.sql'
-import { middleware } from '../middleware/verification.middleware.sql'
-import { limiter } from '../../utils/limiter'
+import { Router } from "express";
+import { userController } from "../controllers/user.controller.sql";
+import { middleware } from "../middleware/verification.middleware.sql";
+import { limiter } from "../../utils/limiter";
 
-const router = Router()
+const router = Router();
 
-/* =========================
-   CREATE (ADMIN ONLY)
-========================= */
+//  CREATE (ADMIN ONLY)
 router.post(
-  '/',
+  "/",
   // middleware.verifyToken,
   // middleware.checkRole('ADMIN'),
   // limiter(15, 5),
   userController.create,
-)
+);
 
-/* =========================
-   READ (ADMIN)
-========================= */
+//  READ (ADMIN)
 router.get(
-  '/',
+  "/",
   // middleware.verifyToken,
   // middleware.checkRole('ADMIN'),
   userController.findAll,
-)
+);
 
 router.get(
-  '/:id',
+  "/:id",
   // middleware.verifyToken,
   // middleware.checkRole('ADMIN'),
   userController.findById,
-)
+);
 
-/* =========================
-   UPDATE BASIC
-========================= */
+//  UPDATE BASIC
 router.put(
-  '/:id',
+  "/:id",
   // middleware.verifyToken,
   userController.updateById,
-)
+);
 
-/* =========================
-   UPDATE ROLE (ADMIN)
-========================= */
+//  UPDATE ROLE (ADMIN)
 router.put(
-  '/:id/role',
+  "/:id/role",
   middleware.verifyToken,
-  middleware.checkRole('ADMIN'),
+  middleware.checkRole("ADMIN"),
   userController.updateRole,
-)
+);
 
-/* =========================
-   DELETE (ADMIN)
-========================= */
+//  DELETE (ADMIN)
 router.delete(
-  '/:id',
+  "/:id",
   // middleware.verifyToken,
   // middleware.checkRole('ADMIN'),
   userController.remove,
-)
+);
 
-export default router
+export default router;

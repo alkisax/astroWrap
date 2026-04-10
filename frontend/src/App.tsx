@@ -4,6 +4,10 @@ import Home from "./pages/Home";
 import bgImage from "./assets/bubblePRNGrayInvertLong.jpg";
 import BiwheelPage from "./pages/BiwheelPage";
 import LandingPage from "./pages/LandingPage";
+import { backendUrl } from "./constants/constants";
+import Login from "./authLogin/Login";
+import PrivateRoute from "./authLogin/service/PrivateRoute";
+import UserOnlyPage from "./pages/UserOnlyPage";
 
 
 function App() {
@@ -18,6 +22,12 @@ function App() {
       }}
     >
       <Routes>
+        <Route path="/login" element={<Login url={backendUrl} />} />
+
+        <Route element={<PrivateRoute />}>
+          <Route path="/user" element={<UserOnlyPage />} />
+        </Route>
+        
         <Route path='/' element={<LandingPage />} />
         <Route path='/single' element={<Home />} />
         <Route path='/biwheel' element={<BiwheelPage />} />

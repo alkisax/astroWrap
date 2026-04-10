@@ -5,7 +5,7 @@ import AstroChart from '../components/AstroChart'
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '../components/BasicChartInfo'
 import { mapToChartData } from '../utils/mapToChart'
-import TestInputNatalChart from '../components/dev/TestInputNatalchart'
+import TestInputNatalChart from '../components/dev/TestInputNatalChart'
 
 const Home = () => {
 

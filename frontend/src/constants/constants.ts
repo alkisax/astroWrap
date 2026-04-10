@@ -3,6 +3,7 @@ import type { Planet, Element, Modality } from "../types/types";
 // frontend\src\constants\constants.ts
 export const url = `${import.meta.env.VITE_API_URL}/api/astro/calculate`;
 export const interpretationUrl = import.meta.env.VITE_API_URL;
+export const backendUrl = import.meta.env.VITE_API_URL;
 
 export const colors = {
   bg: "#0f0f1a",
