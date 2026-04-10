@@ -16,6 +16,7 @@ import {
 } from "../../utils/error/errors.types";
 
 // 🔄 mapper DB → app
+// παίρνει sql γραμμές και μου τις κάνει ένα αντικείμενο που μπορεί να το διαχειριστεί το Node
 const mapRowToUser = (row: DBUserRow): IUser => ({
   id: row.id,
   username: row.username,
@@ -30,6 +31,7 @@ const mapRowToUser = (row: DBUserRow): IUser => ({
 });
 
 // SAFE VIEW
+// απλώς μου το επιστρέφει χωρίς pass
 export const toUserDAO = (user: IUser): UserView => ({
   id: user.id,
   username: user.username,
@@ -42,9 +44,7 @@ export const toUserDAO = (user: IUser): UserView => ({
   updatedAt: user.updatedAt,
 });
 
-/* =========================
-   CREATE
-========================= */
+//  CREATE
 const create = (userData: CreateUserHash): Promise<UserView> => {
   return new Promise((resolve, reject) => {
     const sql = `
@@ -53,9 +53,12 @@ const create = (userData: CreateUserHash): Promise<UserView> => {
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
+    // DB.run → write (INSERT / UPDATE / DELETE)
     DB.run(
+      // η DB.run παίρνει 3 params (sql,[],callback())
       sql,
       [
+        // εδω μπαίνουν οι τιμές που αντιστοιχούν στο VALUES (?, ?, ?, ?, ?, ?, ?)
         userData.username,
         userData.name ?? null,
         userData.email ?? null,
@@ -65,10 +68,11 @@ const create = (userData: CreateUserHash): Promise<UserView> => {
         userData.natalDelineation ?? null,
       ],
       function (err) {
+        // η callback κανει fire με το τέλος της sql. Αν err -> handle else παίρνω full row με select
         if (err) {
           console.log("SQL ERROR:", err.message);
 
-          if ((err as any).message?.includes("UNIQUE")) {
+          if (err.message?.includes("UNIQUE")) {
             return reject(
               new ValidationError("Username or email already exists"),
             );
@@ -76,7 +80,9 @@ const create = (userData: CreateUserHash): Promise<UserView> => {
           return reject(new DatabaseError("Error creating user"));
         }
 
+        //DB.get → ένα αποτέλεσμα (single row)
         DB.get(
+          // αν δεν έχω err
           `SELECT * FROM users WHERE id = ?`,
           [this.lastID],
           (err2, row: DBUserRow) => {
@@ -89,18 +95,21 @@ const create = (userData: CreateUserHash): Promise<UserView> => {
   });
 };
 
-/* =========================
-   READ
-========================= */
-
+//  READ
 const readAll = (): Promise<UserView[]> => {
   return new Promise((resolve, reject) => {
+    // DB.all → πολλά αποτελέσματα (array)
     DB.all(
       `SELECT * FROM users ORDER BY id DESC`,
       [],
       (err, rows: DBUserRow[]) => {
+        // reject(...) = αποτυγχάνει το Promise και πετάει error προς τον caller (π.χ. θα πιαστεί σε try/catch στο await)
+        // εδώ αν η sqlite επιστρέψει error, το μετατρέπουμε σε DatabaseError και το προωθούμε
         if (err) return reject(new DatabaseError("Error reading users"));
 
+        // αν οχι err
+        // resolve(...) = ολοκληρώνει το Promise επιτυχώς και επιστρέφει τα δεδομένα στον caller (π.χ. await userDAO.readAll())
+        // εδώ μετατρέπουμε τα raw DB rows → σε καθαρά UserView objects και τα επιστρέφουμε
         resolve(rows.map((r) => toUserDAO(mapRowToUser(r))));
       },
     );
@@ -109,6 +118,7 @@ const readAll = (): Promise<UserView[]> => {
 
 const readById = (userId: number): Promise<UserView> => {
   return new Promise((resolve, reject) => {
+    //DB.get → ένα αποτέλεσμα (single row)
     DB.get(
       `SELECT * FROM users WHERE id = ?`,
       [userId],
@@ -152,12 +162,11 @@ const readByEmail = (email: string): Promise<IUser | null> => {
   });
 };
 
-/* =========================
-   UPDATE
-========================= */
-
+//  UPDATE
 const update = (userId: number, userData: UpdateUser): Promise<UserView> => {
   return new Promise((resolve, reject) => {
+    // username = COALESCE(?, username)
+    // σημαίνει: - αν δώσεις νέο username → θα γίνει update - αν δώσεις null/undefined → θα μείνει το παλιό
     const sql = `
       UPDATE users SET
         username = COALESCE(?, username),
@@ -169,6 +178,7 @@ const update = (userId: number, userData: UpdateUser): Promise<UserView> => {
       WHERE id = ?
     `;
 
+    // DB.run → write (INSERT / UPDATE / DELETE)
     DB.run(
       sql,
       [
@@ -198,18 +208,13 @@ const update = (userId: number, userData: UpdateUser): Promise<UserView> => {
   });
 };
 
-/* =========================
-   UPDATE ROLE
-========================= */
-
+//  UPDATE ROLE
+// den γράψαμε ιδικό dao αλλα το επαναχρησιμοποιήσαμε
 const updateRoleById = (userId: number, role: Roles): Promise<UserView> => {
   return update(userId, { role });
 };
 
-/* =========================
-   DELETE
-========================= */
-
+//  DELETE
 const deleteById = (userId: number): Promise<UserView> => {
   return new Promise((resolve, reject) => {
     DB.get(
@@ -219,6 +224,7 @@ const deleteById = (userId: number): Promise<UserView> => {
         if (err) return reject(new DatabaseError("Error finding user"));
         if (!row) return reject(new NotFoundError("User not found"));
 
+        // DB.run → write (INSERT / UPDATE / DELETE)
         DB.run(`DELETE FROM users WHERE id = ?`, [userId], (err2) => {
           if (err2) return reject(new DatabaseError("Error deleting user"));
           resolve(toUserDAO(mapRowToUser(row)));
