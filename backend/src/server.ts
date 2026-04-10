@@ -6,6 +6,7 @@ import { consts } from "./config/constants";
 import { connectMongo } from "./config/mongo";
 import http from "http";
 import { initSocket } from "./socket/socket";
+import { initSqlite } from './config/sqlite'
 // import { connectPostgres } from "./config/postgres";
 
 const main = async () => {
@@ -18,6 +19,7 @@ const main = async () => {
   initSocket(server);
 
   await connectMongo(consts.env.MONGO_URI);
+  initSqlite()
   // await connectPostgres();
 
   server.listen(consts.env.PORT, () => {

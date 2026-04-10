@@ -82,7 +82,7 @@ const AstroChart = ({ planets, cusps, data, userOrb, customAspects }: Props) => 
             left: 0,
           }}
         >
-          // αυτο είναι το div που αλλαζει και φιλοξενεί το svg. Το id="paper" είναι το σημαντικό
+          {/* // αυτο είναι το div που αλλαζει και φιλοξενεί το svg. Το id="paper" είναι το σημαντικό */}
           <div
             id="paper"
             style={{
