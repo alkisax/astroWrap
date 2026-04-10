@@ -1,4 +1,16 @@
 // backend\src\login\dao\user.dao.sql.ts
+
+/**
+ * NOTE:
+ * Τα inline σχόλια σε αυτό το αρχείο είναι σκόπιμα και αποτελούν μέρος documentation/εκμάθησης.
+ * Εξηγούν το flow της sqlite, τα Promises και το mapping DB → app.
+ * Οποιαδήποτε μελλοντική τροποποίηση (refactor / auto-edit / AI tools)
+ * θα πρέπει να διατηρεί αυτά τα σχόλια εκτός αν υπάρχει σαφής λόγος αλλαγής.
+ * Μην αφαιρείς ή απλοποιείς τα σχόλια χωρίς να διατηρείς την επεξηγηματική τους αξία.
+ */
+
+// σε ολα κάνουμε κατι σαν db.all(sql(select),[],()) για να βρούμε τις σχετικές τιμές και μετά μέσα στο callback τις αλλάζουμε με νεο DB.all/get/run.
+
 import { DB } from "../../config/sqlite";
 import type {
   IUser,

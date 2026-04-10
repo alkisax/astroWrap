@@ -17,9 +17,7 @@ const validateId = (id: string): number | null => {
   return parsed;
 };
 
-/* =========================
-   CREATE USER
-========================= */
+//  CREATE USER
 const create = async (req: Request, res: Response) => {
   try {
     const parsed = createUserSchema.parse(req.body);
@@ -33,6 +31,7 @@ const create = async (req: Request, res: Response) => {
       });
     }
 
+    // πρέπει να αποθηκεύσουμε το pass σαν hash και οχι σαν string
     const hashedPassword = await bcrypt.hash(parsed.password, 10);
 
     const newUser = await userDAO.create({
@@ -54,9 +53,7 @@ const create = async (req: Request, res: Response) => {
   }
 };
 
-/* =========================
-   READ
-========================= */
+//  READ
 const findAll = async (_req: Request, res: Response) => {
   try {
     const users = await userDAO.readAll();
@@ -88,9 +85,7 @@ const findById = async (req: Request<{ id: string }>, res: Response) => {
   }
 };
 
-/* =========================
-   UPDATE
-========================= */
+//  UPDATE
 const updateById = async (
   req: AuthRequest & { params: { id: string } },
   res: Response,
@@ -140,10 +135,11 @@ const updateById = async (
   }
 };
 
-/* =========================
-   UPDATE ROLE
-========================= */
-const updateRole = async (req: AuthRequest & { params: { id: string }}, res: Response) => {
+//  UPDATE ROLE
+const updateRole = async (
+  req: AuthRequest & { params: { id: string } },
+  res: Response,
+) => {
   try {
     if (!req.params.id) throw new Error();
 
@@ -177,10 +173,11 @@ const updateRole = async (req: AuthRequest & { params: { id: string }}, res: Res
   }
 };
 
-/* =========================
-   DELETE
-========================= */
-const remove = async (req: AuthRequest & { params: { id: string }}, res: Response) => {
+//  DELETE
+const remove = async (
+  req: AuthRequest & { params: { id: string } },
+  res: Response,
+) => {
   try {
     if (!req.params.id) throw new Error();
     const id = validateId(req.params.id);
