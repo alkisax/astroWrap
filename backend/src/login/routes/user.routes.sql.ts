@@ -12,9 +12,9 @@ const router = Router()
 ========================= */
 router.post(
   '/',
-  middleware.verifyToken,
-  middleware.checkRole('ADMIN'),
-  limiter(15, 5),
+  // middleware.verifyToken,
+  // middleware.checkRole('ADMIN'),
+  // limiter(15, 5),
   userController.create,
 )
 
@@ -23,15 +23,15 @@ router.post(
 ========================= */
 router.get(
   '/',
-  middleware.verifyToken,
-  middleware.checkRole('ADMIN'),
+  // middleware.verifyToken,
+  // middleware.checkRole('ADMIN'),
   userController.findAll,
 )
 
 router.get(
   '/:id',
-  middleware.verifyToken,
-  middleware.checkRole('ADMIN'),
+  // middleware.verifyToken,
+  // middleware.checkRole('ADMIN'),
   userController.findById,
 )
 
@@ -40,7 +40,7 @@ router.get(
 ========================= */
 router.put(
   '/:id',
-  middleware.verifyToken,
+  // middleware.verifyToken,
   userController.updateById,
 )
 
@@ -59,8 +59,8 @@ router.put(
 ========================= */
 router.delete(
   '/:id',
-  middleware.verifyToken,
-  middleware.checkRole('ADMIN'),
+  // middleware.verifyToken,
+  // middleware.checkRole('ADMIN'),
   userController.remove,
 )
 

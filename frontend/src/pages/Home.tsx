@@ -5,6 +5,7 @@ import AstroChart from '../components/AstroChart'
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '../components/BasicChartInfo'
 import { mapToChartData } from '../utils/mapToChart'
+// import TestInputNatalChart from '../components/dev/TestInputNatalchart'
 
 const Home = () => {
 
@@ -68,6 +69,7 @@ const Home = () => {
             maxWidth: "1000px",
           }}
         >
+          {/* <TestInputNatalChart shaken={shaken} /> */}
           {/* 🔝 TOP PANEL */}
           {/* θέλουμε αν mobile το ένα κάτω απο το άλλο controls απο κάτω. Και αν desktop το ένα δίπλα στο άλλο controls αριστερα. το πετυχαινουμε με το `flexDirection: isMobile ? 'column' : 'row'` και την σειρά που τα βάζουμε */}
           <div
