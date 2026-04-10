@@ -4,6 +4,8 @@ import type { Request, Response } from "express";
 import path from "path";
 import astroRoutes from "./astro/astro.routes";
 import astroInterpretationRoutes from "./openAI/astroInterpretation.routes"
+import authSqliteRoutes from './login/routes/auth.routes.sql'
+import userSqliteRoutes from './login/routes/user.routes.sql'
 
 
 export const app = express();
@@ -26,6 +28,8 @@ app.get("/health", (_req, res) => {
   res.send("ok");
 });
 
+app.use('/api/sqlite/auth', authSqliteRoutes)
+app.use('/api/sqlite/users', userSqliteRoutes)
 app.use("/api/astro", astroRoutes);
 app.use('/api/astro-interpretation', astroInterpretationRoutes);
 console.log("Registered /api/astro routes");
