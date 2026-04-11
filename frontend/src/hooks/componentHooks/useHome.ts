@@ -61,6 +61,8 @@ export const useHome = () => {
   const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(
     null,
   );
+  const [showLLM, setShowLLM] = useState(false);
+  const [llmResult, setLlmResult] = useState<string | null>(null);
 
   const [llmLoading, setLlmLoading] = useState(false);
   const [llmError, setLlmError] = useState<string | null>(null);
@@ -165,6 +167,19 @@ export const useHome = () => {
     }
   };
 
+  const handleLLMClick = async () => {
+    setShowLLM(true);
+
+    try {
+      const res = await (
+        handleLLMInterpretation as () => Promise<string | null>
+      )();
+      setLlmResult(res); //δες Hook useChartAnalysis
+    } catch {
+      setLlmResult(null);
+    }
+  };
+
   return {
     data,
     visiblePlanets,
@@ -194,5 +209,8 @@ export const useHome = () => {
     handleLLMInterpretation,
     llmLoading,
     llmError,
+    handleLLMClick,
+    showLLM,
+    llmResult,
   };
 };

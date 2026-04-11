@@ -39,6 +39,9 @@ type Props = {
   handleLLMInterpretation: () => void
   llmLoading: boolean
   llmError: string | null
+  handleLLMClick: () => Promise<void>
+  showLLM: boolean
+  llmResult: string | null
   // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json, γινονται expose απο το hook για να περαστουν στα διαφορα αρχεία οι setters και να μπορώ να έχω ένα ενιαίο state useHome όπου και κατασκευάζεται το json
   setCustomPlanetInfo: (info: CustomPlanetInfo[]) => void
   setCustomChartRuler: (ruler: CustomChartRuler | null) => void
@@ -53,9 +56,11 @@ type Props = {
 const BasicChartInfo = ({
   data,
   userOrb,
-  handleLLMInterpretation,
   llmLoading,
   llmError,
+  handleLLMClick,
+  showLLM,
+  llmResult,
   setCustomPlanetInfo,
   setCustomChartRuler,
   setCustomBalance,
@@ -69,8 +74,8 @@ const BasicChartInfo = ({
   const [showHouses, setShowHouses] = useState(false)
   const [showDignities, setShowDignities] = useState(false)
   const [showTree, setShowTree] = useState(false)
-  const [showLLM, setShowLLM] = useState(false);
-  const [llmResult, setLlmResult] = useState<string | null>(null);
+  // const [showLLM, setShowLLM] = useState(false);
+  // const [llmResult, setLlmResult] = useState<string | null>(null);
 
   const isMobile = useMediaQuery('(max-width:768px)')
 
@@ -129,16 +134,16 @@ const BasicChartInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aspects, dignities, dispositors, dynamics, houseRulers])
 
-  const handleLLMClick = async () => {
-    setShowLLM(true);
+  // const handleLLMClick = async () => {
+  //   setShowLLM(true);
 
-    try {
-      const res = await (handleLLMInterpretation as () => Promise<string | null>)();
-      setLlmResult(res); //δες Hook useChartAnalysis
-    } catch {
-      setLlmResult(null);
-    }
-  };
+  //   try {
+  //     const res = await (handleLLMInterpretation as () => Promise<string | null>)();
+  //     setLlmResult(res); //δες Hook useChartAnalysis
+  //   } catch {
+  //     setLlmResult(null);
+  //   }
+  // };
 
   return (
     <>

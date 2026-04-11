@@ -22,6 +22,9 @@ const Home = () => {
     handleSubmit,
     shaken,
     handleLLMInterpretation,
+    handleLLMClick,
+    showLLM,
+    llmResult,
     llmLoading,
     llmError,
 
@@ -161,6 +164,9 @@ const Home = () => {
             handleLLMInterpretation={handleLLMInterpretation}
             llmLoading={llmLoading}
             llmError={llmError}
+            handleLLMClick={handleLLMClick}
+            showLLM={showLLM}
+            llmResult={llmResult}
             setCustomPlanetInfo={setCustomPlanetInfo}
             setCustomChartRuler={setCustomChartRuler}
             setCustomBalance={setCustomBalance}
