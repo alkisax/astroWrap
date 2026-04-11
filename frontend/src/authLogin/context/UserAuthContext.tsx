@@ -29,6 +29,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   }, [user]);
 
   const fetchUser = async () => {
+    console.log("FETCH USER START");
     let provider: "backend" | "none" =
       "none";
     let decodedToken:
@@ -38,6 +39,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     const token = localStorage.getItem("token");
     // αν έχει token παίρνουμε απο εκεί τον Provider
     if (token) {
+      console.log("TOKEN:", token);
       try {
         decodedToken = jwtDecode<BackendJwtPayload>(token);
         provider = "backend";
@@ -57,6 +59,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         localStorage.removeItem("token");
         provider = "none";
         setUser(null);
+        setIsLoading(false)
+      } finally {
+        setIsLoading(false);
       }
     } else {
       console.log("did not found token");
@@ -68,6 +73,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
       case "backend": {
         const backendUser = decodedToken as BackendJwtPayload;
+        console.log("SETTING USER");
         setUser({
           _id: backendUser.id,
           username: backendUser.username,
@@ -85,6 +91,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         break;
     }
     setIsLoading(false);
+    console.log("FETCH USER END");
   };
 
   const refreshUser = async () => {
@@ -117,6 +124,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   };
 
   useEffect(() => {
+    console.log("INIT AUTH");
     fetchUser();
   }, []);
 

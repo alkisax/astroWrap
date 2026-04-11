@@ -8,17 +8,20 @@ import { MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import { UserProvider } from './authLogin/context/UserAuthContext.tsx';
 
 
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>
-    // {/* <BrowserRouter basename="/astroWrap/"> */}
-    <BrowserRouter>
-      <MantineProvider>
-        <ModalsProvider>
+  // {/* <BrowserRouter basename="/astroWrap/"> */}
+  <BrowserRouter>
+    <MantineProvider>
+      <ModalsProvider>
+        <UserProvider>
           <App />
-        </ModalsProvider>
-      </MantineProvider>
-    </BrowserRouter>
+        </UserProvider>
+      </ModalsProvider>
+    </MantineProvider>
+  </BrowserRouter>
   // </StrictMode>,
 )

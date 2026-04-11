@@ -7,9 +7,9 @@ const PrivateRoute = () => {
   const { user, isLoading } = useContext(UserAuthContext);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div style={{ color: 'white' }}>Loading auth...</div>
   }
-
+  
   return user ? <Outlet /> : <Navigate to={"/"} />;
 };
 
