@@ -16,6 +16,8 @@ import type {
   CustomHouseRuler,
   CustomPlanetInfo,
 } from "../../types/types";
+import axios from "axios";
+import { backendUrl } from "../../constants/constants";
 
 export const useHome = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -180,6 +182,20 @@ export const useHome = () => {
     }
   };
 
+  const saveLLMToDb = async () => {
+    if (!llmResult) return;
+
+    try {
+      await axios.put(`${backendUrl}/api/sqlite/users/1`, {
+        natalDelineation: llmResult,
+      });
+
+      console.log("✅ LLM saved to DB");
+    } catch (err) {
+      console.error("❌ save failed", err);
+    }
+  };
+
   return {
     data,
     visiblePlanets,
@@ -212,5 +228,6 @@ export const useHome = () => {
     handleLLMClick,
     showLLM,
     llmResult,
+    saveLLMToDb,
   };
 };

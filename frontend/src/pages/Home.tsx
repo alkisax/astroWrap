@@ -27,6 +27,7 @@ const Home = () => {
     llmResult,
     llmLoading,
     llmError,
+    saveLLMToDb,
 
     // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json, γινονται expose απο το hook για να περαστουν στα διαφορα αρχεία οι setters και να μπορώ να έχω ένα ενιαίο state useHome όπου και κατασκευάζεται το json
     setCustomPlanetInfo,
@@ -43,6 +44,8 @@ const Home = () => {
   // shaken → ενα απλοποιημένο json για να στέλνετε σε gpt για αναλυση
   console.log("shaken", shaken);
   console.log(data);
+  console.log("llm result", llmResult);
+  
 
   // του MUI boolean υπολογίζει αν είμαι σε mobile
   const isMobile = useMediaQuery("(max-width:768px)");
@@ -73,7 +76,9 @@ const Home = () => {
           }}
         >
           {/* 👇👇👇 */}
-          <TestInputNatalChart shaken={shaken} />
+          <TestInputNatalChart 
+            shaken={shaken}
+          />
 
           {/* 🔝 TOP PANEL */}
           {/* θέλουμε αν mobile το ένα κάτω απο το άλλο controls απο κάτω. Και αν desktop το ένα δίπλα στο άλλο controls αριστερα. το πετυχαινουμε με το `flexDirection: isMobile ? 'column' : 'row'` και την σειρά που τα βάζουμε */}
@@ -167,6 +172,7 @@ const Home = () => {
             handleLLMClick={handleLLMClick}
             showLLM={showLLM}
             llmResult={llmResult}
+            saveLLMToDb={saveLLMToDb}
             setCustomPlanetInfo={setCustomPlanetInfo}
             setCustomChartRuler={setCustomChartRuler}
             setCustomBalance={setCustomBalance}

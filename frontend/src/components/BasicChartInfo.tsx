@@ -42,6 +42,7 @@ type Props = {
   handleLLMClick: () => Promise<void>
   showLLM: boolean
   llmResult: string | null
+  saveLLMToDb: () => void
   // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json, γινονται expose απο το hook για να περαστουν στα διαφορα αρχεία οι setters και να μπορώ να έχω ένα ενιαίο state useHome όπου και κατασκευάζεται το json
   setCustomPlanetInfo: (info: CustomPlanetInfo[]) => void
   setCustomChartRuler: (ruler: CustomChartRuler | null) => void
@@ -61,6 +62,7 @@ const BasicChartInfo = ({
   handleLLMClick,
   showLLM,
   llmResult,
+  saveLLMToDb,
   setCustomPlanetInfo,
   setCustomChartRuler,
   setCustomBalance,
@@ -244,27 +246,35 @@ const BasicChartInfo = ({
         {showDignities && <EssentialDignities data={data} />}
         {showTree && <DispositorTree data={data} />}
         {showLLM && llmResult && (
-          <Paper
-            ref={resultRef}
-            p="md"
-            radius="md"
-            style={{
-              width: '100%',
-              maxWidth: '700px',
-              margin: '10px auto',
-              background: colors.panel,
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: colors.text,
-            }}
-          >
-            <div style={{ lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
-              {/* το chatGPT συχνα μου επιστρέφει markdown */}
-              <ReactMarkdown>
-                {llmResult || ''}
-              </ReactMarkdown>
+          <>
+            <Paper
+              ref={resultRef}
+              p="md"
+              radius="md"
+              style={{
+                width: '100%',
+                maxWidth: '700px',
+                margin: '10px auto',
+                background: colors.panel,
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                color: colors.text,
+              }}
+            >
+              <div style={{ lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+                {/* το chatGPT συχνα μου επιστρέφει markdown */}
+                <ReactMarkdown>
+                  {llmResult || ''}
+                </ReactMarkdown>
+              </div>
+            </Paper>
+
+            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+              <Button onClick={saveLLMToDb}>
+                Save interpretation
+              </Button>
             </div>
-          </Paper>
+          </>
         )}
       </div>
     </>
