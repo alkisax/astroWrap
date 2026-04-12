@@ -64,7 +64,7 @@ const RegisterPageBackend = ({ url }: Props) => {
     }
 
     try {
-      const res = await axios.post(`${url}/api/auth/register`, {
+      const res = await axios.post(`${url}/api/sqlite/users`, {
         username,
         name,
         email,

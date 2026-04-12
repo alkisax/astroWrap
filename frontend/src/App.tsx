@@ -8,12 +8,14 @@ import Login from './authLogin/Login'
 import PrivateRoute from './authLogin/service/PrivateRoute'
 import UserOnlyPage from './pages/UserOnlyPage'
 import { backendUrl } from './constants/constants'
+import RegisterPageBackend from './authLogin/loginBackend/RegisterPageBackend'
 
 function App() {
   return (
     <Routes>
       {/* ❌ χωρίς layout (login page) */}
       <Route path="/login" element={<Login url={backendUrl} />} />
+      <Route path="/register-backend" element={<RegisterPageBackend url={backendUrl} />} />
 
       {/* ✅ με layout */}
       <Route element={<Layout />}>

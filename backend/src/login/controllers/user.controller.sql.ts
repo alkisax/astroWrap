@@ -191,9 +191,9 @@ const remove = async (
 
     const requester = req.user;
 
-    if (!requester || requester.role !== "ADMIN") {
-      return res.status(403).json({ status: false });
-    }
+    // if (!requester || requester.role !== "ADMIN") {
+    //   return res.status(403).json({ status: false });
+    // }
 
     const deleted = await userDAO.deleteById(id);
 
