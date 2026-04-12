@@ -5,7 +5,7 @@ import AstroChart from '../components/AstroChart'
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '../components/BasicChartInfo'
 import { mapToChartData } from '../utils/mapToChart'
-import TestInputNatalChart from '../components/dev/TestInputNatalChart'
+// import TestInputNatalChart from '../components/dev/TestInputNatalChart'
 
 const Home = () => {
 
@@ -44,7 +44,7 @@ const Home = () => {
   // shaken → ενα απλοποιημένο json για να στέλνετε σε gpt για αναλυση
   console.log("shaken", shaken);
   console.log(data);
-  console.log("llm result", llmResult);
+  // console.log("llm result", llmResult);
   
 
   // του MUI boolean υπολογίζει αν είμαι σε mobile
@@ -76,9 +76,9 @@ const Home = () => {
           }}
         >
           {/* 👇👇👇 */}
-          <TestInputNatalChart 
+          {/* <TestInputNatalChart 
             shaken={shaken}
-          />
+          /> */}
 
           {/* 🔝 TOP PANEL */}
           {/* θέλουμε αν mobile το ένα κάτω απο το άλλο controls απο κάτω. Και αν desktop το ένα δίπλα στο άλλο controls αριστερα. το πετυχαινουμε με το `flexDirection: isMobile ? 'column' : 'row'` και την σειρά που τα βάζουμε */}

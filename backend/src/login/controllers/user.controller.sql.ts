@@ -92,6 +92,9 @@ const updateById = async (
 ) => {
   try {
     const id = validateId(req.params.id);
+    console.log("--- UPDATE USER HIT ---");
+    console.log("PARAM ID:", req.params.id);
+    console.log("BODY:", req.body);
     if (!id) {
       return res.status(400).json({ status: false, message: "Invalid ID" });
     }
@@ -110,6 +113,7 @@ const updateById = async (
     const parsed = updateUserSchema.safeParse(req.body);
 
     if (!parsed.success) {
+      console.log('❌ VALIDATION FAILED:', parsed.error.issues)
       return res.status(400).json({
         status: false,
         details: parsed.error.issues.map((i) => i.message),

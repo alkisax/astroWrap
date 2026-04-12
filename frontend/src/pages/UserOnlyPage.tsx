@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import { backendUrl, colors } from '../constants/constants'
+import { UserAuthContext } from '../authLogin/context/UserAuthContext'
 import ReactMarkdown from 'react-markdown'
 import { Paper } from '@mantine/core'
 
@@ -16,15 +17,18 @@ type UserData = {
 const UserOnlyPage = () => {
 
   const [user, setUser] = useState<UserData | null>(null)
+  const { user: authUser } = useContext(UserAuthContext)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
 
         const token = localStorage.getItem('token')
+        // normalize
+        const userId = authUser?.id || authUser?._id
 
         const res = await axios.get(
-          `${backendUrl}/api/sqlite/users/1`,
+          `${backendUrl}/api/sqlite/users/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -39,7 +43,7 @@ const UserOnlyPage = () => {
     }
 
     fetchUser()
-  }, [])
+  }, [authUser?.id])
 
   if (!user) return <div style={{ color: 'white' }}>Loading...</div>
 

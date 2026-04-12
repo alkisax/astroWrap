@@ -1,9 +1,11 @@
 // frontend\src\hooks\componentHooks\useHome.ts
 import { useEffect, useMemo, useState } from "react";
+import { useContext } from "react";
 import { calculateChart } from "../../services/astroService";
 import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
+import { UserAuthContext } from "../../authLogin/context/UserAuthContext";
 
 import type {
   ChartSummary,
@@ -68,6 +70,8 @@ export const useHome = () => {
 
   const [llmLoading, setLlmLoading] = useState(false);
   const [llmError, setLlmError] = useState<string | null>(null);
+
+  const { user } = useContext(UserAuthContext);
 
   // αυτό καλουσα με το endpoint του backend, μετα έφερα τον υπολογισμό στο front για να μην έχω περιττά calls
   // useEffect(() => {
@@ -158,7 +162,7 @@ export const useHome = () => {
 
     try {
       const result = await getSingleChartInterpretation(shaken);
-      console.log("LLM RESULT:", result);
+      // console.log("LLM RESULT:", result);
       return result;
     } catch (err) {
       console.log(err);
@@ -183,14 +187,43 @@ export const useHome = () => {
   };
 
   const saveLLMToDb = async () => {
-    if (!llmResult) return;
+    console.log("enter save LLM to DB");
+    console.log("user:", user);
+    console.log("user.id:", user?.id);
+    console.log("llmResult:", llmResult?.slice(0, 50));
+    console.log("shaken exists:", !!shaken);
+
+    const userId = user?.id || user?._id;
+    console.log("🚀 SENDING REQUEST FOR USER:", userId);
+
+    if (!llmResult || !shaken || !userId) {
+      console.log("❌ GUARD BLOCKED:", { llmResult, shaken, user });
+      return;
+    }
 
     try {
-      await axios.put(`${backendUrl}/api/sqlite/users/1`, {
-        natalDelineation: llmResult,
-      });
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token");
+        return;
+      }
 
-      console.log("✅ LLM saved to DB");
+      console.log("CALLING API:", `${backendUrl}/api/sqlite/users/${userId}`);
+      const res = await axios.put(
+        `${backendUrl}/api/sqlite/users/${userId}`,
+        {
+          natalChart: JSON.stringify(shaken),
+          natalDelineation: llmResult,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      console.log("RESPONSE:", res.data);
+
+      console.log("✅ chart + LLM saved to DB");
     } catch (err) {
       console.error("❌ save failed", err);
     }

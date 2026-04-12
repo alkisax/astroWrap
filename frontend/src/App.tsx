@@ -1,39 +1,33 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-// import TransitPage from "./pages/TransitPage";
-import bgImage from "./assets/bubblePRNGrayInvertLong.jpg";
-import BiwheelPage from "./pages/BiwheelPage";
-import LandingPage from "./pages/LandingPage";
-import { backendUrl } from "./constants/constants";
-import Login from "./authLogin/Login";
-import PrivateRoute from "./authLogin/service/PrivateRoute";
-import UserOnlyPage from "./pages/UserOnlyPage";
+import { Routes, Route } from 'react-router-dom'
+import Layout from './layout/layout'
 
+import Home from './pages/Home'
+import BiwheelPage from './pages/BiwheelPage'
+import LandingPage from './pages/LandingPage'
+import Login from './authLogin/Login'
+import PrivateRoute from './authLogin/service/PrivateRoute'
+import UserOnlyPage from './pages/UserOnlyPage'
+import { backendUrl } from './constants/constants'
 
 function App() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `url(${bgImage})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100% auto",
-        backgroundColor: "black",
-      }}
-    >
-      <Routes>
-        <Route path="/login" element={<Login url={backendUrl} />} />
+    <Routes>
+      {/* ❌ χωρίς layout (login page) */}
+      <Route path="/login" element={<Login url={backendUrl} />} />
 
+      {/* ✅ με layout */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/single" element={<Home />} />
+        <Route path="/biwheel" element={<BiwheelPage />} />
+
+        {/* protected μέσα στο layout */}
         <Route element={<PrivateRoute />}>
           <Route path="/user" element={<UserOnlyPage />} />
         </Route>
-        
-        <Route path='/' element={<LandingPage />} />
-        <Route path='/single' element={<Home />} />
-        <Route path='/biwheel' element={<BiwheelPage />} />
-      </Routes>
-    </div>
-  );
+      </Route>
+    </Routes>
+  )
 }
 
-export default App;
+export default App
