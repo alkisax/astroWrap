@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/layoutComponents/Navbar'
-import bgImage from '../assets/bubblePRNGrayInvertLong.jpg'
+import bgImage from '../assets/bubblePRNGrayInvertLongColor.jpg'
 
 const Layout = () => {
   return (

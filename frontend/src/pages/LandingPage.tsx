@@ -20,86 +20,86 @@ const LandingPage = () => {
 
   return (
     <>
-    <Container maxWidth='md'>
-      <Box
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 4,
-        }}
-      >
-        {/* 🔝 actions */}
-<Paper
-  sx={{
-    width: 235,
-    p: 2,
-    borderRadius: '12px',
-    background: 'rgba(20,20,30,0.6)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    color: 'white',
-  }}
->
-  <Stack spacing={1.5} alignItems='stretch'>
-    <Typography
-      variant='h6'
-      sx={{
-        textAlign: 'center',
-        fontSize: '1rem',
-        fontWeight: 600,
-      }}
-    >
-      Start
-    </Typography>
-
-    <Button
-      variant='contained'
-      fullWidth
-      onClick={() => navigate('/login')}
-      sx={{
-        textTransform: 'none',
-        backgroundColor: colors.primary,
-      }}
-    >
-      Login
-    </Button>
-
-    <Button
-      variant='outlined'
-      fullWidth
-      onClick={() =>
-        navigate('/single', {
-          state: {
-            date: new Date(),
-            lat: 37.9838,
-            lng: 23.7275,
-          },
-        })
-      }
-      sx={{
-        textTransform: 'none',
-        color: 'white',
-        borderColor: 'rgba(255,255,255,0.2)',
-      }}
-    >
-      Continue as guest
-    </Button>
-  </Stack>
-</Paper>
-
-        {/* 🔽 form */}
-        <ChartForm
-          onSubmit={({ date, lat, lng }) => {
-            navigate('/single', {
-              state: { date, lat, lng },
-            })
+      <Container maxWidth='md'>
+        <Box
+          sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 4,
           }}
-        />
-      </Box>
-    </Container>
+        >
+          {/* 🔝 actions */}
+          <Paper
+            sx={{
+              width: 235,
+              p: 2,
+              borderRadius: '12px',
+              background: 'rgba(20,20,30,0.6)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: 'white',
+            }}
+          >
+            <Stack spacing={1.5} alignItems='stretch'>
+              <Typography
+                variant='h6'
+                sx={{
+                  textAlign: 'center',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                }}
+              >
+                Start
+              </Typography>
+
+              <Button
+                variant='contained'
+                fullWidth
+                onClick={() => navigate('/login')}
+                sx={{
+                  textTransform: 'none',
+                  backgroundColor: colors.primary,
+                }}
+              >
+                Login
+              </Button>
+
+              <Button
+                variant='outlined'
+                fullWidth
+                onClick={() =>
+                  navigate('/single', {
+                    state: {
+                      date: new Date(),
+                      lat: 37.9838,
+                      lng: 23.7275,
+                    },
+                  })
+                }
+                sx={{
+                  textTransform: 'none',
+                  color: 'white',
+                  borderColor: 'rgba(255,255,255,0.2)',
+                }}
+              >
+                Continue as guest
+              </Button>
+            </Stack>
+          </Paper>
+
+          {/* 🔽 form */}
+          <ChartForm
+            onSubmit={({ date, lat, lng }) => {
+              navigate('/single', {
+                state: { date, lat, lng },
+              })
+            }}
+          />
+        </Box>
+      </Container>
 
 
       {/* <Container maxWidth='md'>
