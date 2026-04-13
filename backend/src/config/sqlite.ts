@@ -71,7 +71,7 @@ export const initSqlite = (): void => {
       console.log("❌ error creating users table", err.message);
       return;
     }
-    console.log("✅ users table ready");
+    // console.log("✅ users table ready");
   });
 
   DB.run(synastryTable, [], (err) => {
@@ -79,7 +79,7 @@ export const initSqlite = (): void => {
       console.log("❌ error creating synastry table", err.message);
       return;
     }
-    console.log("✅ synastry table ready");
+    // console.log("✅ synastry table ready");
   });
 
   DB.run(questionTable, [], (err) => {
@@ -88,7 +88,7 @@ export const initSqlite = (): void => {
       return;
     }
 
-    console.log("✅ questions table ready");
+    // console.log("✅ questions table ready");
   });
 
   // 4️⃣ αυτό τρέχει sync (δεν περιμένει τα callbacks)
