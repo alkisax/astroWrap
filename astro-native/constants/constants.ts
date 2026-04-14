@@ -1,9 +1,10 @@
+// astro-native\constants\constants.ts
+
 import type { Planet, Element, Modality } from "../types/types";
 
-// frontend\src\constants\constants.ts
-export const url = `${import.meta.env.VITE_API_URL}/api/astro/calculate`;
-export const interpretationUrl = import.meta.env.VITE_API_URL;
-export const backendUrl = import.meta.env.VITE_API_URL;
+export const backendUrl = "https://astro.portfolio-projects.space";
+export const interpretationUrl = backendUrl;
+export const url = `${backendUrl}/api/astro/calculate`;
 
 export const colors = {
   bg: "#0f0f1a",
@@ -42,11 +43,7 @@ export const planets: Planet[] = [
   "Pluto",
 ];
 
-export const mainPoints: string[] = [
-  ...planets,
-  'ASC',
-  'MC'
-]
+export const mainPoints: string[] = [...planets, "ASC", "MC"];
 
 export const signToModality: Record<string, Modality> = {
   Aries: "Cardinal",
@@ -232,11 +229,9 @@ export const houseKeywords = {
 };
 
 export const aspectKeywords = {
-  conjunction: ['fusion', 'intensity', 'focus'],
-  sextile: ['opportunity', 'flow', 'support'],
-  square: ['tension', 'challenge', 'conflict'],
-  trine: ['harmony', 'ease', 'talent'],
-  opposition: ['polarity', 'projection', 'balance'],
-}
-
-
+  conjunction: ["fusion", "intensity", "focus"],
+  sextile: ["opportunity", "flow", "support"],
+  square: ["tension", "challenge", "conflict"],
+  trine: ["harmony", "ease", "talent"],
+  opposition: ["polarity", "projection", "balance"],
+};

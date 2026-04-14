@@ -73,7 +73,6 @@ const Home = () => {
   const chartData = mapToChartData(data, visiblePlanets);
 
   return (
-
     <>
       <div
         style={{

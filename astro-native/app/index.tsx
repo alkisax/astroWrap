@@ -1,3 +1,4 @@
+// astro-native\app\index.tsx
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 
@@ -11,7 +12,13 @@ export default function Index() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      
+
+      <Pressable
+        onPress={() => router.push('/login')}
+      >
+        <Text>Go to Login</Text>
+      </Pressable>
+
       {/* 🔝 buttons */}
       <View style={styles.buttonRow}>
         <Pressable
