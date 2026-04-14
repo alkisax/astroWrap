@@ -9,6 +9,7 @@ import PrivateRoute from './authLogin/service/PrivateRoute'
 import UserOnlyPage from './pages/UserOnlyPage'
 import { backendUrl } from './constants/constants'
 import RegisterPageBackend from './authLogin/loginBackend/RegisterPageBackend'
+import MobileNativeChartPage from './pages/MobileNativeChartPage'
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
       {/* ❌ χωρίς layout (login page) */}
       <Route path="/login" element={<Login url={backendUrl} />} />
       <Route path="/register-backend" element={<RegisterPageBackend url={backendUrl} />} />
+
+
+      <Route path="/chart-mobile" element={<MobileNativeChartPage />} />
 
       {/* ✅ με layout */}
       <Route element={<Layout />}>

@@ -1,6 +1,6 @@
 // app/single.tsx
 
-import { View, Text, Button, ScrollView } from 'react-native'
+import { View, Text, Button, ScrollView, StyleSheet } from 'react-native'
 import { useHome } from '../hooks/componentHooks/useHome'
 
 const Single = () => {
@@ -20,30 +20,74 @@ const Single = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20 }}>
-      
-      <Text style={{ fontSize: 20, marginBottom: 20 }}>
-        Single Chart
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Single Chart</Text>
+
+      <Text style={styles.meta}>
+        Date: {date.toLocaleString()}
       </Text>
 
-      <Button title='Run Chart' onPress={handleRun} />
+      <Text style={styles.meta}>
+        Coords: {coords.lat}, {coords.lng}
+      </Text>
+
+      <View style={styles.buttonWrap}>
+        <Button title='Run Chart' onPress={handleRun} />
+      </View>
 
       {!data && (
-        <Text style={{ marginTop: 20 }}>
-          No data yet...
+        <Text style={styles.loading}>
+          Loading chart...
         </Text>
       )}
 
       {data && (
-        <View style={{ marginTop: 20 }}>
-          <Text>ASC: {data.ascendant?.sign}</Text>
-          <Text>Sun: {data.sun?.sign}</Text>
-          <Text>Moon: {data.moon?.sign}</Text>
+        <View style={styles.card}>
+          <Text style={styles.row}>ASC: {data.ascendant?.sign ?? '-'}</Text>
+          <Text style={styles.row}>Sun: {data.sun?.sign ?? '-'}</Text>
+          <Text style={styles.row}>Moon: {data.moon?.sign ?? '-'}</Text>
+          <Text style={styles.row}>Mercury: {data.mercury?.sign ?? '-'}</Text>
+          <Text style={styles.row}>Venus: {data.venus?.sign ?? '-'}</Text>
+          <Text style={styles.row}>Mars: {data.mars?.sign ?? '-'}</Text>
         </View>
       )}
-
     </ScrollView>
   )
 }
 
 export default Single
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  title: {
+    fontSize: 22,
+    marginBottom: 12,
+    fontWeight: '600',
+  },
+  meta: {
+    fontSize: 14,
+    marginBottom: 6,
+  },
+  buttonWrap: {
+    marginTop: 12,
+    marginBottom: 20,
+  },
+  loading: {
+    marginTop: 20,
+    fontSize: 16,
+  },
+  card: {
+    marginTop: 10,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+  },
+  row: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+})
