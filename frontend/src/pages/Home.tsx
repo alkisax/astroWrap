@@ -1,13 +1,16 @@
-// src/App.tsx
+// frontend\src\pages\Home.tsx
+// import { useEffect } from 'react'
 import { useMediaQuery } from '@mui/material'
 import { useHome } from '../hooks/componentHooks/useHome'
 import AstroChart from '../components/AstroChart'
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '../components/BasicChartInfo'
 import { mapToChartData } from '../utils/mapToChart'
+// import { useLocation } from 'react-router-dom'
 // import TestInputNatalChart from '../components/dev/TestInputNatalChart'
 
 const Home = () => {
+  // const location = useLocation() 
 
   // ολη η λογική του component έχει μεταφερθεί σε hook
   const {
@@ -41,11 +44,25 @@ const Home = () => {
     setCustomDynamics,
   } = useHome();
 
+// useEffect(() => {
+//   const state = location.state as
+//     | { date: Date; lat: number; lng: number }
+//     | undefined
+
+//   if (!state) return
+
+//   handleSubmit({
+//     date: new Date(state.date),
+//     lat: state.lat,
+//     lng: state.lng,
+//   })
+// }, [handleSubmit, location.state])
+
   // shaken → ενα απλοποιημένο json για να στέλνετε σε gpt για αναλυση
   console.log("shaken", shaken);
   console.log(data);
   // console.log("llm result", llmResult);
-  
+
 
   // του MUI boolean υπολογίζει αν είμαι σε mobile
   const isMobile = useMediaQuery("(max-width:768px)");

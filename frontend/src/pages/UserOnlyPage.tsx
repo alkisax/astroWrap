@@ -3,7 +3,15 @@ import axios from 'axios'
 import { backendUrl, colors } from '../constants/constants'
 import { UserAuthContext } from '../authLogin/context/UserAuthContext'
 import ReactMarkdown from 'react-markdown'
-import { Paper } from '@mantine/core'
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Box,
+  Paper,
+} from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 type UserData = {
   id: number
@@ -14,17 +22,37 @@ type UserData = {
   natalDelineation?: string
 }
 
-const UserOnlyPage = () => {
+// 🔹 typed chart (basic, όχι full strict για να μην μπλέξεις τώρα)
+type Chart = {
+  meta: {
+    date: string
+    location: { lat: number; lng: number }
+    zodiac: string
+    houseSystem: string
+  }
+  planets: { planet: string; sign: string; house: number }[]
+  houses: { house: number; sign: string; longitude: number }[]
+  chartRuler: { planet: string; sign: string; house: number }
+  balance: {
+    elements: Record<string, number>
+    modalities: Record<string, number>
+  }
+  aspects: {
+    point1: string
+    point2: string
+    type: string
+    orb: number
+  }[]
+}
 
+const UserOnlyPage = () => {
   const [user, setUser] = useState<UserData | null>(null)
   const { user: authUser } = useContext(UserAuthContext)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-
         const token = localStorage.getItem('token')
-        // normalize
         const userId = authUser?.id || authUser?._id
 
         const res = await axios.get(
@@ -43,47 +71,148 @@ const UserOnlyPage = () => {
     }
 
     fetchUser()
-  }, [authUser?.id])
+  }, [authUser?._id, authUser?.id])
 
   if (!user) return <div style={{ color: 'white' }}>Loading...</div>
 
+  // 🔹 safe parse
+  let chart: Chart | null = null
+  try {
+    chart = user.natalChart ? (JSON.parse(user.natalChart) as Chart) : null
+  } catch {
+    console.error('Invalid natalChart JSON')
+  }
+
   return (
     <Paper
-      p='md'
-      radius='md'
-      style={{
+      sx={{
         width: '100%',
-        maxWidth: '1700px',
+        maxWidth: '1200px',
         margin: '20px auto',
+        p: 3,
+        borderRadius: 3,
         background: colors.panel,
-        backdropFilter: 'blur(1px)',
+        backdropFilter: 'blur(4px)',
         border: '1px solid rgba(255,255,255,0.1)',
-        color: colors.text
+        color: colors.text,
       }}
     >
-      <div style={{ color: 'white', padding: '20px' }}>
-        <h1>👤 User Dashboard</h1>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        👤 User Dashboard
+      </Typography>
 
-        <p><b>ID:</b> {user.id}</p>
-        <p><b>Username:</b> {user.username}</p>
-        <p><b>Email:</b> {user.email}</p>
-        <p><b>Role:</b> {user.role}</p>
+      {/* USER INFO */}
+      <Box sx={{ mb: 4 }}>
+        <Typography>ID: {user.id}</Typography>
+        <Typography>Username: {user.username}</Typography>
+        <Typography>Email: {user.email}</Typography>
+        <Typography>Role: {user.role}</Typography>
+      </Box>
 
-        <h3>📊 Natal Chart (raw)</h3>
-        <pre style={{ whiteSpace: 'pre-wrap' }}>
-          {user.natalChart}
-        </pre>
-        <h3>🧠 LLM Interpretation</h3>
-        <pre style={{ whiteSpace: 'pre-wrap' }}>
-          <ReactMarkdown>
-            {user.natalDelineation}
-          </ReactMarkdown>
+      {/* CHART */}
+      {chart && (
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          color: colors.secondary,
+        }}>
+          {/* META */}
+          <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.05)', color: colors.text, }}>
+            <Typography variant="h6">📅 Meta</Typography>
+            <Typography>
+              Date: {new Date(chart.meta.date).toLocaleString()}
+            </Typography>
+            <Typography>
+              Location: {chart.meta.location.lat},{' '}
+              {chart.meta.location.lng}
+            </Typography>
+            <Typography>Zodiac: {chart.meta.zodiac}</Typography>
+            <Typography>System: {chart.meta.houseSystem}</Typography>
+          </Paper>
 
-        </pre>
-      </div>
+          {/* PLANETS */}
+          <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.05)', color: colors.text, }}>
+            <Typography variant="h6">🪐 Planets</Typography>
+            {chart.planets.map((p) => (
+              <Typography key={p.planet}>
+                {p.planet} - {p.sign} (House {p.house})
+              </Typography>
+            ))}
+          </Paper>
+
+          {/* HOUSES */}
+          <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.05)', color: colors.text, }}>
+            <Typography variant="h6">🏠 Houses</Typography>
+            {chart.houses.map((h) => (
+              <Typography key={h.house}>
+                House {h.house} - {h.sign}
+              </Typography>
+            ))}
+          </Paper>
+
+          {/* CHART RULER */}
+          <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.05)', color: colors.text, }}>
+            <Typography variant="h6">👑 Chart Ruler</Typography>
+            <Typography>
+              {chart.chartRuler.planet} - {chart.chartRuler.sign} (House{' '}
+              {chart.chartRuler.house})
+            </Typography>
+          </Paper>
+
+          {/* BALANCE */}
+          <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.05)', color: colors.text, }}>
+            <Typography variant="h6">⚖️ Balance</Typography>
+
+            <Typography sx={{ mt: 1 }}>Elements:</Typography>
+            {Object.entries(chart.balance.elements).map(([k, v]) => (
+              <Typography key={k}>
+                {k}: {v}
+              </Typography>
+            ))}
+
+            <Typography sx={{ mt: 1 }}>Modalities:</Typography>
+            {Object.entries(chart.balance.modalities).map(([k, v]) => (
+              <Typography key={k}>
+                {k}: {v}
+              </Typography>
+            ))}
+          </Paper>
+
+          {/* ASPECTS */}
+          <Paper sx={{ p: 2, background: 'rgba(255,255,255,0.05)', color: colors.text, }}>
+            <Typography variant="h6">🔗 Aspects</Typography>
+            {chart.aspects.map((a, i) => (
+              <Typography key={i}>
+                {a.point1} - {a.point2} ({a.type}, orb{' '}
+                {a.orb.toFixed(2)})
+              </Typography>
+            ))}
+          </Paper>
+        </Box>
+      )}
+
+      {/* LLM */}
+      <Accordion
+        sx={{
+          mt: 4,
+          background: 'rgba(255,255,255,0.05)',
+          color: 'white',
+          border: '1px solid rgba(255,255,255,0.1)',
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+        >
+          <Typography>🧠 LLM Interpretation</Typography>
+        </AccordionSummary>
+
+        <AccordionDetails>
+          <ReactMarkdown>{user.natalDelineation || ''}</ReactMarkdown>
+        </AccordionDetails>
+      </Accordion>
     </Paper>
   )
 }
-
 
 export default UserOnlyPage
