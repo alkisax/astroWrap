@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { WebView } from 'react-native-webview'
 import { useHome } from '../hooks/componentHooks/useHome'
 import BasicControls from '../components/controls/BasicControls'
+import BasicChartInfo from '@/components/chartInfo/BasicChartInfo.native'
 
 const Single = () => {
   // ολη η λογική του component έχει μεταφερθεί σε hook
@@ -18,7 +19,7 @@ const Single = () => {
     userOrb,
     setUserOrb,
     handleSubmit,
-    shaken,
+    // shaken,
     // handleLLMInterpretation,
     // handleLLMClick,
     // showLLM,
@@ -63,19 +64,6 @@ const Single = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Single Chart</Text>
 
-      {/* basic panel οπως το θέλουμε σιγά σιγά να οργανωθεί
-          εδώ μέσα θα μπει TimeControls, WebView chart, PlanetSelector κλπ */}
-      <BasicControls
-        onSubmit={handleSubmit}
-        visiblePlanets={visiblePlanets}
-        setVisiblePlanets={setVisiblePlanets}
-        date={date}
-        setDate={setDate}
-        coords={coords}
-        userOrb={userOrb}
-        setUserOrb={setUserOrb}
-      />
-
       {/* προσωρινό debug info μέχρι να μπουν τα κανονικά reports */}
       {!data && (
         <Text style={styles.loading}>
@@ -86,14 +74,14 @@ const Single = () => {
       {data && (
         <>
           {/* basic text debug για να βλέπουμε ότι το useHome και το backend call δουλεύουν */}
-          <View style={styles.card}>
+          {/* <View style={styles.card}>
             <Text style={styles.row}>ASC: {data.ascendant?.sign ?? '-'}</Text>
             <Text style={styles.row}>Sun: {data.sun?.sign ?? '-'}</Text>
             <Text style={styles.row}>Moon: {data.moon?.sign ?? '-'}</Text>
             <Text style={styles.row}>Mercury: {data.mercury?.sign ?? '-'}</Text>
             <Text style={styles.row}>Venus: {data.venus?.sign ?? '-'}</Text>
             <Text style={styles.row}>Mars: {data.mars?.sign ?? '-'}</Text>
-          </View>
+          </View> */}
 
           {/* εδώ δείχνουμε μόνο το chart μέσω webview
               στο native θα παίξει κανονικά
@@ -123,24 +111,26 @@ const Single = () => {
         </>
       )}
 
-      {/* προέβαλε το json προς το llm. μόνο για dev
-          προς το παρόν δεν το μεταφέρουμε όλο στο native UI, αλλά κρατάμε τα states απο το hook */}
-      {/* 
-      <ChartDataDebug
-        data={data}
+      {/* basic panel οπως το θέλουμε σιγά σιγά να οργανωθεί
+          εδώ μέσα θα μπει TimeControls, WebView chart, PlanetSelector κλπ */}
+      <BasicControls
+        onSubmit={handleSubmit}
         visiblePlanets={visiblePlanets}
+        setVisiblePlanets={setVisiblePlanets}
         date={date}
+        setDate={setDate}
         coords={coords}
-        customPlanetInfo={customPlanetInfo}
-        customChartRuler={customChartRuler}
-        customBalance={customBalance}
-        customHouseRulers={customHouseRulers}
-        customAspects={customAspects}
-        customDignities={customDignities}
-        customDispositors={customDispositors}
-        customDynamics={customDynamics}
+        userOrb={userOrb}
+        setUserOrb={setUserOrb}
       />
-      */}
+
+      {/* analysis */}
+      {data && (
+        <BasicChartInfo
+          data={data}
+          userOrb={userOrb}
+        />
+      )}
     </ScrollView>
   )
 }
