@@ -1,40 +1,82 @@
 // app/single.tsx
 
-import { View, Text, Button, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native'
+import { useMemo } from 'react'
+import { WebView } from 'react-native-webview'
 import { useHome } from '../hooks/componentHooks/useHome'
+import BasicControls from '../components/controls/BasicControls'
 
 const Single = () => {
+  // ολη η λογική του component έχει μεταφερθεί σε hook
   const {
     data,
-    handleSubmit,
+    visiblePlanets,
+    setVisiblePlanets,
     date,
+    setDate,
     coords,
+    userOrb,
+    setUserOrb,
+    handleSubmit,
+    shaken,
+    // handleLLMInterpretation,
+    // handleLLMClick,
+    // showLLM,
+    // llmResult,
+    // llmLoading,
+    // llmError,
+    // saveLLMToDb,
+
+    // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json,
+    // γινονται expose απο το hook για να περαστουν στα διαφορα αρχεία οι setters και να μπορώ
+    // να έχω ένα ενιαίο state useHome όπου και κατασκευάζεται το json
+    // setCustomPlanetInfo,
+    // setCustomChartRuler,
+    // setCustomBalance,
+    // setCustomHouseRulers,
+    // customAspects,
+    // setCustomAspects,
+    // setCustomDignities,
+    // setCustomDispositors,
+    // setCustomDynamics,
   } = useHome()
 
-  const handleRun = () => {
-    handleSubmit({
-      date,
-      lat: coords.lat,
-      lng: coords.lng,
+  // το κρατάμε εδώ μόνο για debug / sanity check
+  // shaken → ενα απλοποιημένο json για να στέλνετε σε gpt για αναλυση
+  // console.log('shaken', shaken)
+  // console.log(data)
+
+  // φτιάχνουμε το webview url μόνο με τα primitive inputs
+  // το web page θα κάνει μόνο του fetch το chart και render το AstroChart
+  const chartUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      date: date.toISOString(),
+      lat: String(coords.lat),
+      lng: String(coords.lng),
+      userOrb: String(userOrb),
     })
-  }
+
+    return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
+  }, [date, coords.lat, coords.lng, userOrb])
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Single Chart</Text>
 
-      <Text style={styles.meta}>
-        Date: {date.toLocaleString()}
-      </Text>
+      {/* basic panel οπως το θέλουμε σιγά σιγά να οργανωθεί
+          εδώ μέσα θα μπει TimeControls, WebView chart, PlanetSelector κλπ */}
+      <BasicControls
+        onSubmit={handleSubmit}
+        visiblePlanets={visiblePlanets}
+        setVisiblePlanets={setVisiblePlanets}
+        date={date}
+        setDate={setDate}
+        coords={coords}
+        userOrb={userOrb}
+        setUserOrb={setUserOrb}
+      />
 
-      <Text style={styles.meta}>
-        Coords: {coords.lat}, {coords.lng}
-      </Text>
-
-      <View style={styles.buttonWrap}>
-        <Button title='Run Chart' onPress={handleRun} />
-      </View>
-
+      {/* προσωρινό debug info μέχρι να μπουν τα κανονικά reports */}
       {!data && (
         <Text style={styles.loading}>
           Loading chart...
@@ -42,15 +84,63 @@ const Single = () => {
       )}
 
       {data && (
-        <View style={styles.card}>
-          <Text style={styles.row}>ASC: {data.ascendant?.sign ?? '-'}</Text>
-          <Text style={styles.row}>Sun: {data.sun?.sign ?? '-'}</Text>
-          <Text style={styles.row}>Moon: {data.moon?.sign ?? '-'}</Text>
-          <Text style={styles.row}>Mercury: {data.mercury?.sign ?? '-'}</Text>
-          <Text style={styles.row}>Venus: {data.venus?.sign ?? '-'}</Text>
-          <Text style={styles.row}>Mars: {data.mars?.sign ?? '-'}</Text>
-        </View>
+        <>
+          {/* basic text debug για να βλέπουμε ότι το useHome και το backend call δουλεύουν */}
+          <View style={styles.card}>
+            <Text style={styles.row}>ASC: {data.ascendant?.sign ?? '-'}</Text>
+            <Text style={styles.row}>Sun: {data.sun?.sign ?? '-'}</Text>
+            <Text style={styles.row}>Moon: {data.moon?.sign ?? '-'}</Text>
+            <Text style={styles.row}>Mercury: {data.mercury?.sign ?? '-'}</Text>
+            <Text style={styles.row}>Venus: {data.venus?.sign ?? '-'}</Text>
+            <Text style={styles.row}>Mars: {data.mars?.sign ?? '-'}</Text>
+          </View>
+
+          {/* εδώ δείχνουμε μόνο το chart μέσω webview
+              στο native θα παίξει κανονικά
+              στο web δεν υποστηρίζεται απο react-native-webview, οπότε δείχνουμε fallback */}
+          <View style={styles.webviewWrap}>
+            {Platform.OS === 'web' ? (
+              <View style={styles.webFallback}>
+                <Text style={styles.webFallbackText}>
+                  WebView works only on Android/iOS. Open this screen in Expo Go or emulator.
+                </Text>
+
+                <Text style={styles.webFallbackUrl}>
+                  {chartUrl}
+                </Text>
+              </View>
+            ) : (
+              <WebView
+                source={{ uri: chartUrl }}
+                style={styles.webview}
+                javaScriptEnabled
+                domStorageEnabled
+                originWhitelist={['*']}
+                startInLoadingState
+              />
+            )}
+          </View>
+        </>
       )}
+
+      {/* προέβαλε το json προς το llm. μόνο για dev
+          προς το παρόν δεν το μεταφέρουμε όλο στο native UI, αλλά κρατάμε τα states απο το hook */}
+      {/* 
+      <ChartDataDebug
+        data={data}
+        visiblePlanets={visiblePlanets}
+        date={date}
+        coords={coords}
+        customPlanetInfo={customPlanetInfo}
+        customChartRuler={customChartRuler}
+        customBalance={customBalance}
+        customHouseRulers={customHouseRulers}
+        customAspects={customAspects}
+        customDignities={customDignities}
+        customDispositors={customDispositors}
+        customDynamics={customDynamics}
+      />
+      */}
     </ScrollView>
   )
 }
@@ -66,20 +156,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontWeight: '600',
   },
-  meta: {
-    fontSize: 14,
-    marginBottom: 6,
-  },
-  buttonWrap: {
-    marginTop: 12,
-    marginBottom: 20,
-  },
   loading: {
     marginTop: 20,
     fontSize: 16,
   },
   card: {
-    marginTop: 10,
+    marginTop: 16,
     padding: 16,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -89,5 +171,32 @@ const styles = StyleSheet.create({
   row: {
     fontSize: 16,
     marginBottom: 8,
+  },
+  webviewWrap: {
+    marginTop: 20,
+    height: 420,
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#000',
+  },
+  webview: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  webFallback: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'center',
+  },
+  webFallbackText: {
+    color: 'white',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  webFallbackUrl: {
+    color: '#9ecbff',
+    fontSize: 12,
   },
 })

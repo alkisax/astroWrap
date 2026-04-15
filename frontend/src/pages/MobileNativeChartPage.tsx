@@ -11,6 +11,19 @@ import { getAngleAspects } from '../utils/getAngleAspects'
 
 import type { ChartSummary, CustomAspect } from '../types/types'
 
+const DEFAULT_VISIBLE_PLANETS = [
+  'Sun',
+  'Moon',
+  'Mercury',
+  'Venus',
+  'Mars',
+  'Jupiter',
+  'Saturn',
+  'Uranus',
+  'Neptune',
+  'Pluto',
+]
+
 const MobileNativeChartPage = () => {
   const [searchParams] = useSearchParams()
 
@@ -22,10 +35,12 @@ const MobileNativeChartPage = () => {
   const latParam = searchParams.get('lat')
   const lngParam = searchParams.get('lng')
   const userOrbParam = searchParams.get('userOrb')
+  const planetsParam = searchParams.get('planets')
 
   // κάνουμε parse σε primitive values / memoized values για να μην έχουμε endless rerender
   const parsedDate = useMemo(() => {
     if (!dateParam) return new Date()
+
     const d = new Date(dateParam)
     return Number.isNaN(d.getTime()) ? new Date() : d
   }, [dateParam])
@@ -45,22 +60,18 @@ const MobileNativeChartPage = () => {
     return Number.isNaN(value) ? 1 : value
   }, [userOrbParam])
 
-  // προς το παρόν δείχνουμε όλους τους βασικούς πλανήτες
-  const visiblePlanets = useMemo(
-    () => [
-      'Sun',
-      'Moon',
-      'Mercury',
-      'Venus',
-      'Mars',
-      'Jupiter',
-      'Saturn',
-      'Uranus',
-      'Neptune',
-      'Pluto',
-    ],
-    []
-  )
+  // visible planets απο query param
+  // αν δεν έρθει τίποτα ή έρθει invalid string → fallback σε default list
+  const visiblePlanets = useMemo(() => {
+    if (!planetsParam) return DEFAULT_VISIBLE_PLANETS
+
+    const parsed = planetsParam
+      .split(',')
+      .map((p) => p.trim())
+      .filter(Boolean)
+
+    return parsed.length ? parsed : DEFAULT_VISIBLE_PLANETS
+  }, [planetsParam])
 
   useEffect(() => {
     let cancelled = false
@@ -107,6 +118,7 @@ const MobileNativeChartPage = () => {
   // το AstroChart θέλει planets/cusps format
   const chartData = useMemo(() => {
     if (!data) return null
+
     return mapToChartData(data, visiblePlanets)
   }, [data, visiblePlanets])
 
@@ -114,13 +126,19 @@ const MobileNativeChartPage = () => {
   const customAspects = useMemo<CustomAspect[]>(() => {
     if (!data) return []
 
-    return getAngleAspects(data, userOrb).map((a) => ({
-      point1: a.point1Key,
-      point2: a.point2Key,
-      type: a.type,
-      orb: a.orb ?? null,
-    }))
-  }, [data, userOrb])
+    return getAngleAspects(data, userOrb)
+      .filter(
+        (a) =>
+          visiblePlanets.includes(a.point1Label) &&
+          visiblePlanets.includes(a.point2Label)
+      )
+      .map((a) => ({
+        point1: a.point1Key,
+        point2: a.point2Key,
+        type: a.type,
+        orb: a.orb ?? null,
+      }))
+  }, [data, userOrb, visiblePlanets])
 
   if (loading) {
     return (
