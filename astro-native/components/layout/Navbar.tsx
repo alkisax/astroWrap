@@ -1,5 +1,5 @@
-import { View, Text, Pressable, StyleSheet, Modal } from 'react-native'
-import { useState, useContext } from 'react'
+import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { useContext } from 'react'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -10,7 +10,7 @@ const Navbar = () => {
   const { user, setUser } = useContext(UserAuthContext)
   const router = useRouter()
 
-  const [menuOpen, setMenuOpen] = useState(false)
+  // const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <>
