@@ -56,10 +56,11 @@ const Single = () => {
       lat: String(coords.lat),
       lng: String(coords.lng),
       userOrb: String(userOrb),
+      planets: visiblePlanets.join(','),
     })
 
     return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
-  }, [date, coords.lat, coords.lng, userOrb])
+  }, [date, coords.lat, coords.lng, userOrb, visiblePlanets])
 
   return (
     <ScreenWrapper>
@@ -101,6 +102,7 @@ const Single = () => {
                 </View>
               ) : (
                 <WebView
+                  key={chartUrl}
                   source={{ uri: chartUrl }}
                   injectedJavaScript={`
                     document.body.style.background = 'transparent';

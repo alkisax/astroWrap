@@ -1,10 +1,5 @@
-// astro-native/components/controls/TimeControls.tsx
-
-// in: ημερομηνια/συντεταγμένες (default "τώρα"/αθήνα)
-// out: ημερομηνία/συντεταγμένες με +- ωρες/μερες/μηνες/χρονια
-// και render των αντίστοιχων btns
-
 import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { colors } from '../../constants/constants' // assume έχεις yellow
 
 type Props = {
   date: Date
@@ -13,7 +8,7 @@ type Props = {
 }
 
 const TimeControls = ({ date, setDate, coords }: Props) => {
-  // Helper funcs που προσθέτουν/αφαιρούν ωρες/μερες/μηνες/χρονια στο date που χρησιμοποιεί το chart
+
   const addDays = (date: Date, days: number): Date => {
     const d = new Date(date)
     d.setDate(d.getDate() + days)
@@ -38,7 +33,6 @@ const TimeControls = ({ date, setDate, coords }: Props) => {
     return d
   }
 
-  // style consts
   const formattedDate = date.toLocaleString('el-GR', {
     day: '2-digit',
     month: '2-digit',
@@ -52,142 +46,113 @@ const TimeControls = ({ date, setDate, coords }: Props) => {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.dateText}>
-        {formattedDate} {formattedTime}
-      </Text>
 
-      <Text style={styles.coordsText}>
-        ({coords.lat.toFixed(2)}, {coords.lng.toFixed(2)})
-      </Text>
+      {/* 🔥 HIGHLIGHT BLOCK */}
+      <View style={styles.header}>
+        <Text style={styles.dateText}>
+          {formattedDate} {formattedTime}
+        </Text>
 
-      <View style={styles.rowsWrap}>
+        <Text style={styles.coordsText}>
+          ({coords.lat.toFixed(2)}, {coords.lng.toFixed(2)})
+        </Text>
+      </View>
+
+      {/* 🔥 FULL VERTICAL BUTTONS */}
+      <View style={styles.buttonsWrap}>
+
         <View style={styles.row}>
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addHours(d, -1))}
-          >
-            <Text style={styles.buttonText}>-1h</Text>
-          </Pressable>
-
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addHours(d, 1))}
-          >
-            <Text style={styles.buttonText}>+1h</Text>
-          </Pressable>
+          <Btn label="-1h" onPress={() => setDate((d) => addHours(d, -1))} />
+          <Btn label="+1h" onPress={() => setDate((d) => addHours(d, 1))} />
         </View>
 
         <View style={styles.row}>
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addDays(d, -1))}
-          >
-            <Text style={styles.buttonText}>-1d</Text>
-          </Pressable>
-
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addDays(d, 1))}
-          >
-            <Text style={styles.buttonText}>+1d</Text>
-          </Pressable>
+          <Btn label="-1d" onPress={() => setDate((d) => addDays(d, -1))} />
+          <Btn label="+1d" onPress={() => setDate((d) => addDays(d, 1))} />
         </View>
 
         <View style={styles.row}>
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addDays(d, -7))}
-          >
-            <Text style={styles.buttonText}>-1w</Text>
-          </Pressable>
-
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addDays(d, 7))}
-          >
-            <Text style={styles.buttonText}>+1w</Text>
-          </Pressable>
+          <Btn label="-1w" onPress={() => setDate((d) => addDays(d, -7))} />
+          <Btn label="+1w" onPress={() => setDate((d) => addDays(d, 7))} />
         </View>
 
         <View style={styles.row}>
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addMonths(d, -1))}
-          >
-            <Text style={styles.buttonText}>-1m</Text>
-          </Pressable>
-
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addMonths(d, 1))}
-          >
-            <Text style={styles.buttonText}>+1m</Text>
-          </Pressable>
+          <Btn label="-1m" onPress={() => setDate((d) => addMonths(d, -1))} />
+          <Btn label="+1m" onPress={() => setDate((d) => addMonths(d, 1))} />
         </View>
 
         <View style={styles.row}>
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addYears(d, -1))}
-          >
-            <Text style={styles.buttonText}>-1y</Text>
-          </Pressable>
-
-          <Pressable
-            style={styles.button}
-            onPress={() => setDate((d) => addYears(d, 1))}
-          >
-            <Text style={styles.buttonText}>+1y</Text>
-          </Pressable>
+          <Btn label="-1y" onPress={() => setDate((d) => addYears(d, -1))} />
+          <Btn label="+1y" onPress={() => setDate((d) => addYears(d, 1))} />
         </View>
+
       </View>
     </View>
   )
 }
+
+const Btn = ({ label, onPress }: { label: string; onPress: () => void }) => (
+  <Pressable style={styles.button} onPress={onPress}>
+    <Text style={styles.buttonText}>{label}</Text>
+  </Pressable>
+)
 
 export default TimeControls
 
 const styles = StyleSheet.create({
   card: {
     width: '100%',
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    padding: 14,
+    borderRadius: 16,
+
+    // 🔥 glass
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
+    borderColor: 'rgba(255,255,255,0.15)',
+  },
+
+  header: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
     marginBottom: 12,
   },
+
   dateText: {
-    color: 'white',
-    fontSize: 12,
+    color: '#1a1a1a', // rich dark
+    fontSize: 14,
+    fontWeight: '700',
     textAlign: 'center',
   },
+
   coordsText: {
-    color: '#bbb',
+    color: '#333',
     fontSize: 12,
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: 2,
   },
-  rowsWrap: {
-    marginTop: 10,
-    gap: 8,
+
+  buttonsWrap: {
+    gap: 10,
   },
+
   row: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
+    gap: 10,
   },
+
   button: {
-    backgroundColor: '#6c5ce7',
-    minWidth: 70,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 8,
+    flex: 1,
+    backgroundColor: colors.primary,
+    paddingVertical: 12,
+    borderRadius: 10,
     alignItems: 'center',
   },
+
   buttonText: {
-    color: '#000',
-    fontWeight: '600',
-    fontSize: 12,
+    color: '#1a1a1a',
+    fontWeight: '700',
+    fontSize: 13,
   },
 })
