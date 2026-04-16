@@ -9,6 +9,7 @@ import type {
   CustomDispositor,
   CustomDynamics,
   CustomHouseRuler,
+  CustomPlanetInfo,
   DignityType,
   Planet,
   PlanetKey,
@@ -20,7 +21,7 @@ import {
   calculateElementBalance,
   calculateModalityBalance,
 } from "../../utils/balanceCalculator";
-import { getZodiacSign } from "../../utils/angleToAstro";
+import { getZodiacSign, getHouse } from "../../utils/angleToAstro";
 import { getAllDispositors } from "../../utils/dispositorCalculator";
 import {
   detriment,
@@ -79,7 +80,7 @@ export const useChartAnalysis = (
         orb: a.orb ?? null,
       }));
 
-      return finalAspects
+    return finalAspects;
   }, [data, userOrb]);
 
   // 🔥 BALANCE
@@ -182,6 +183,34 @@ export const useChartAnalysis = (
     return computeChartRuler(data);
   }, [data]);
 
+  const planetInfo = useMemo<CustomPlanetInfo[]>(() => {
+    if (!data) return [];
+
+    const cusps = data.houses.map((h) => h.longitude ?? 0);
+
+    const planets = [
+      { name: "sun", value: data.sun?.longitude },
+      { name: "asc", value: data.ascendant?.longitude },
+      { name: "moon", value: data.moon?.longitude },
+      { name: "mercury", value: data.mercury?.longitude },
+      { name: "venus", value: data.venus?.longitude },
+      { name: "mars", value: data.mars?.longitude },
+      { name: "jupiter", value: data.jupiter?.longitude },
+      { name: "saturn", value: data.saturn?.longitude },
+      { name: "uranus", value: data.uranus?.longitude },
+      { name: "neptune", value: data.neptune?.longitude },
+      { name: "pluto", value: data.pluto?.longitude },
+    ];
+
+    return planets
+      .filter((p) => p.value != null)
+      .map((p) => ({
+        planet: p.name,
+        sign: getZodiacSign(p.value as number),
+        house: getHouse(p.value as number, cusps),
+      }));
+  }, [data]);
+
   return {
     houseRulers,
     aspects,
@@ -190,5 +219,6 @@ export const useChartAnalysis = (
     dispositors,
     dynamics,
     chartRuler,
+    planetInfo,
   };
 };

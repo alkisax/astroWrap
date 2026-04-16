@@ -20,27 +20,27 @@ const Single = () => {
     userOrb,
     setUserOrb,
     handleSubmit,
-    // shaken,
+    shaken,
     // handleLLMInterpretation,
-    // handleLLMClick,
-    // showLLM,
-    // llmResult,
-    // llmLoading,
-    // llmError,
-    // saveLLMToDb,
+    handleLLMClick,
+    showLLM,
+    llmResult,
+    llmLoading,
+    llmError,
+    saveLLMToDb,
 
     // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json,
     // γινονται expose απο το hook για να περαστουν στα διαφορα αρχεία οι setters και να μπορώ
     // να έχω ένα ενιαίο state useHome όπου και κατασκευάζεται το json
-    // setCustomPlanetInfo,
-    // setCustomChartRuler,
-    // setCustomBalance,
+    setCustomPlanetInfo,
+    setCustomChartRuler,
+    setCustomBalance,
     setCustomHouseRulers,
     customAspects,
     setCustomAspects,
-    // setCustomDignities,
-    // setCustomDispositors,
-    // setCustomDynamics,
+    setCustomDignities,
+    setCustomDispositors,
+    setCustomDynamics,
   } = useHome()
 
   // το κρατάμε εδώ μόνο για debug / sanity check
@@ -133,6 +133,19 @@ const Single = () => {
             setCustomAspects={setCustomAspects}
             customAspects={customAspects}
             setCustomHouseRulers={setCustomHouseRulers}
+
+            handleLLMClick={handleLLMClick}
+            showLLM={showLLM}
+            llmResult={llmResult}
+            llmLoading={llmLoading}
+            llmError={llmError}
+            saveLLMToDb={saveLLMToDb}
+            setCustomPlanetInfo={setCustomPlanetInfo}
+            setCustomChartRuler={setCustomChartRuler}
+            setCustomBalance={setCustomBalance}
+            setCustomDignities={setCustomDignities}
+            setCustomDispositors={setCustomDispositors}
+            setCustomDynamics={setCustomDynamics}
           />
         )}
       </ScrollView>

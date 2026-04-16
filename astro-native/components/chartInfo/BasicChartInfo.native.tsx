@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HouseRulers from './HouseRulers.native'
 import EssentialDignities from './EssentialDignities'
 import DispositorTree from './DispositorTree'
+import Markdown from 'react-native-markdown-display'
 
 type Props = {
   data: ChartSummary
@@ -22,6 +23,19 @@ type Props = {
   setCustomAspects: (a: CustomAspect[]) => void
   customAspects: CustomAspect[]
   setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void
+
+  handleLLMClick: () => void
+  showLLM: boolean
+  llmResult: string | null
+  llmLoading: boolean
+  llmError: string | null
+  saveLLMToDb: () => void
+  setCustomPlanetInfo: (v: any) => void
+  setCustomChartRuler: (v: any) => void
+  setCustomBalance: (v: any) => void
+  setCustomDignities: (v: any) => void
+  setCustomDispositors: (v: any) => void
+  setCustomDynamics: (v: any) => void
 }
 
 const BasicChartInfo = ({
@@ -29,7 +43,19 @@ const BasicChartInfo = ({
   userOrb,
   setCustomAspects,
   customAspects,
-  setCustomHouseRulers
+  setCustomHouseRulers,
+  handleLLMClick,
+  showLLM,
+  llmResult,
+  llmLoading,
+  llmError,
+  saveLLMToDb,
+  setCustomPlanetInfo,
+  setCustomChartRuler,
+  setCustomBalance,
+  setCustomDignities,
+  setCustomDispositors,
+  setCustomDynamics,
 }: Props) => {
   const {
     aspects,
@@ -59,6 +85,30 @@ const BasicChartInfo = ({
 
   // console.log('NATIVE aspects', aspects)
   // console.log('NATIVE customAspects', customAspects)
+
+  const {
+    dignities,
+    dispositors,
+    dynamics,
+    chartRuler,
+    houseRulers,
+    planetInfo
+  } = useChartAnalysis(data, userOrb)
+
+  useEffect(() => {
+    setCustomPlanetInfo(planetInfo)
+    setCustomAspects(aspects)
+    setCustomChartRuler(chartRuler)
+    setCustomHouseRulers(houseRulers)
+
+    if (balance) {
+      setCustomBalance(balance)
+    }
+
+    setCustomDignities(dignities)
+    setCustomDispositors(dispositors)
+    setCustomDynamics(dynamics)
+  }, [aspects, houseRulers, balance, dignities, dispositors, dynamics, setCustomAspects, setCustomHouseRulers, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomBalance, setCustomPlanetInfo, planetInfo, setCustomChartRuler, chartRuler])
 
   return (
     <ScrollView
@@ -140,6 +190,40 @@ const BasicChartInfo = ({
 
         {openSections.dispositors && (
           <DispositorTree data={data} />
+        )}
+      </GlassPanel>
+
+      <GlassPanel>
+        <Pressable onPress={handleLLMClick}>
+          <Text style={styles.sectionTitle}>
+            {llmLoading
+              ? '⏳ Loading...'
+              : llmError
+                ? 'Error ❌'
+                : 'call Lark 🦜'}
+          </Text>
+        </Pressable>
+
+        {showLLM && (
+          <>
+            {llmLoading && (
+              <Text style={{ color: colors.dim }}>
+                Generating interpretation...
+              </Text>
+            )}
+
+            {llmError && (
+              <Text style={{ color: 'red' }}>
+                Failed to load interpretation
+              </Text>
+            )}
+
+            {llmResult && (
+              <Markdown style={{ body: { color: colors.text } }}>
+                {llmResult}
+              </Markdown>
+            )}
+          </>
         )}
       </GlassPanel>
     </ScrollView>
