@@ -13,6 +13,8 @@ import { ChartSummary, CustomAspect, CustomHouseRuler } from '@/types/types'
 import { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HouseRulers from './HouseRulers.native'
+import EssentialDignities from './EssentialDignities'
+import DispositorTree from './DispositorTree'
 
 type Props = {
   data: ChartSummary
@@ -39,6 +41,8 @@ const BasicChartInfo = ({
   const [openSections, setOpenSections] = useState({
     aspects: false,
     houses: false,
+    dignities: false,
+    dispositors: false,
   })
 
   const toggleSection = (key: keyof typeof openSections) => {
@@ -106,6 +110,36 @@ const BasicChartInfo = ({
             data={data}
             setCustomHouseRulers={setCustomHouseRulers}
           />
+        )}
+      </GlassPanel>
+
+      <GlassPanel>
+        <Pressable
+          style={styles.sectionHeader}
+          onPress={() => toggleSection('dignities')}
+        >
+          <Text style={styles.sectionTitle}>
+            ⚖️ Essential Dignities {openSections.dignities ? '▲' : '▼'}
+          </Text>
+        </Pressable>
+
+        {openSections.dignities && (
+          <EssentialDignities data={data} />
+        )}
+      </GlassPanel>
+
+      <GlassPanel>
+        <Pressable
+          style={styles.sectionHeader}
+          onPress={() => toggleSection('dispositors')}
+        >
+          <Text style={styles.sectionTitle}>
+            🌳 Dispositor Tree {openSections.dispositors ? '▲' : '▼'}
+          </Text>
+        </Pressable>
+
+        {openSections.dispositors && (
+          <DispositorTree data={data} />
         )}
       </GlassPanel>
     </ScrollView>

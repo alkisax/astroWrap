@@ -76,16 +76,6 @@ const Single = () => {
 
         {data && (
           <>
-            {/* basic text debug για να βλέπουμε ότι το useHome και το backend call δουλεύουν */}
-            {/* <View style={styles.card}>
-            <Text style={styles.row}>ASC: {data.ascendant?.sign ?? '-'}</Text>
-            <Text style={styles.row}>Sun: {data.sun?.sign ?? '-'}</Text>
-            <Text style={styles.row}>Moon: {data.moon?.sign ?? '-'}</Text>
-            <Text style={styles.row}>Mercury: {data.mercury?.sign ?? '-'}</Text>
-            <Text style={styles.row}>Venus: {data.venus?.sign ?? '-'}</Text>
-            <Text style={styles.row}>Mars: {data.mars?.sign ?? '-'}</Text>
-          </View> */}
-
             {/* εδώ δείχνουμε μόνο το chart μέσω webview
               στο native θα παίξει κανονικά
               στο web δεν υποστηρίζεται απο react-native-webview, οπότε δείχνουμε fallback */}
