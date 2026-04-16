@@ -1,4 +1,4 @@
-
+// astro-native\types\types.ts
 export interface BasicPlacement {
   key: string;
   label?: string;

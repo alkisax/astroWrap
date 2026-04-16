@@ -1,6 +1,6 @@
 // astro-native/components/chartInfo/BasicChartInfo.native.tsx
 
-import { StyleSheet, ScrollView, View } from 'react-native'
+import { StyleSheet, ScrollView, } from 'react-native'
 import { useChartAnalysis } from '../../hooks/componentHooks/useChartAnalysis'
 import { colors } from '../../constants/constants'
 
