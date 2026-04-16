@@ -102,7 +102,14 @@ const Single = () => {
               ) : (
                 <WebView
                   source={{ uri: chartUrl }}
-                  style={styles.webview}
+                  injectedJavaScript={`
+                    document.body.style.background = 'transparent';
+                    document.documentElement.style.background = 'transparent';
+                    true;
+                  `}
+                  style={{ flex: 1, backgroundColor: 'transparent' }}
+                  containerStyle={{ backgroundColor: 'transparent' }}
+                  androidLayerType="software"
                   javaScriptEnabled
                   domStorageEnabled
                   originWhitelist={['*']}
@@ -158,9 +165,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
+    // borderColor: '#ccc',
     borderRadius: 10,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
   },
   row: {
     fontSize: 16,
@@ -171,13 +178,13 @@ const styles = StyleSheet.create({
     height: 420,
     borderRadius: 12,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#000',
+    // borderWidth: 1,
+    // borderColor: '#ccc',
+    backgroundColor: 'transparent',
   },
   webview: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: 'transparent',
   },
   webFallback: {
     flex: 1,
