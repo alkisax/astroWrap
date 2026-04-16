@@ -6,7 +6,9 @@ import { useRouter } from 'expo-router'
 import { UserAuthContext } from '../authLogin/context/UserAuthContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
-import { backendUrl } from '../constants/constants'
+import { backendUrl, colors } from '../constants/constants'
+import ScreenWrapper from '../components/layout/ScreenWrapper'
+import GlassPanel from '@/components/ui/GlassPanel'
 
 const Login = () => {
   const { user, setUser } = useContext(UserAuthContext)
@@ -54,39 +56,45 @@ const Login = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <ScreenWrapper>
+      <View style={styles.container}>
+        <GlassPanel>
+          <Text style={styles.title}>Login</Text>
 
-      {/* username */}
-      <TextInput
-        placeholder='Username'
-        value={username}
-        onChangeText={setUsername}
-        style={styles.input}
-      />
+          {/* username */}
+          <TextInput
+            placeholder='Username'
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
+          />
 
-      {/* password + reveal */}
-      <View style={styles.passwordContainer}>
-        <TextInput
-          placeholder='Password'
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword}
-          style={styles.passwordInput}
-        />
+          {/* password + reveal */}
+          <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder='Password'
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              style={styles.passwordInput}
+            />
 
-        <Pressable onPress={() => setShowPassword(!showPassword)}>
-          <Text style={styles.toggle}>
-            {showPassword ? 'Hide' : 'Show'}
-          </Text>
-        </Pressable>
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Text style={styles.toggle}>
+                {showPassword ? 'Hide' : 'Show'}
+              </Text>
+            </Pressable>
+          </View>
+
+          {/* login button */}
+          <Pressable style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Login</Text>
+          </Pressable>
+        </GlassPanel>
+
       </View>
+    </ScreenWrapper>
 
-      {/* login button */}
-      <Pressable style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </Pressable>
-    </View>
   )
 }
 
@@ -98,31 +106,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    // backgroundColor: '#f5f5f5',
   },
 
   title: {
     fontSize: 26,
     marginBottom: 20,
     textAlign: 'center',
+    color: colors.text,
   },
 
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'rgba(255,255,255,0.2)',
     marginBottom: 12,
     padding: 12,
     borderRadius: 8,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    color: colors.text,
   },
 
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'rgba(255,255,255,0.2)',
     borderRadius: 8,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.06)',
     marginBottom: 20,
     paddingHorizontal: 10,
   },
@@ -130,22 +140,23 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     padding: 12,
+    color: colors.text,
   },
 
   toggle: {
-    color: '#6c5ce7',
+    color: colors.secondary,
     fontWeight: '600',
   },
-
   button: {
-    backgroundColor: '#6c5ce7',
+    backgroundColor: colors.secondary,
     padding: 14,
     borderRadius: 10,
     alignItems: 'center',
   },
 
   buttonText: {
-    color: 'white',
+    color: colors.text,
     fontSize: 16,
+    fontWeight: '600',
   },
 })

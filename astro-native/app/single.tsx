@@ -6,6 +6,7 @@ import { WebView } from 'react-native-webview'
 import { useHome } from '../hooks/componentHooks/useHome'
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '@/components/chartInfo/BasicChartInfo.native'
+import ScreenWrapper from '../components/layout/ScreenWrapper'
 
 const Single = () => {
   // ολη η λογική του component έχει μεταφερθεί σε hook
@@ -61,20 +62,21 @@ const Single = () => {
   }, [date, coords.lat, coords.lng, userOrb])
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Single Chart</Text>
+    <ScreenWrapper>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Single Chart</Text>
 
-      {/* προσωρινό debug info μέχρι να μπουν τα κανονικά reports */}
-      {!data && (
-        <Text style={styles.loading}>
-          Loading chart...
-        </Text>
-      )}
+        {/* προσωρινό debug info μέχρι να μπουν τα κανονικά reports */}
+        {!data && (
+          <Text style={styles.loading}>
+            Loading chart...
+          </Text>
+        )}
 
-      {data && (
-        <>
-          {/* basic text debug για να βλέπουμε ότι το useHome και το backend call δουλεύουν */}
-          {/* <View style={styles.card}>
+        {data && (
+          <>
+            {/* basic text debug για να βλέπουμε ότι το useHome και το backend call δουλεύουν */}
+            {/* <View style={styles.card}>
             <Text style={styles.row}>ASC: {data.ascendant?.sign ?? '-'}</Text>
             <Text style={styles.row}>Sun: {data.sun?.sign ?? '-'}</Text>
             <Text style={styles.row}>Moon: {data.moon?.sign ?? '-'}</Text>
@@ -83,55 +85,57 @@ const Single = () => {
             <Text style={styles.row}>Mars: {data.mars?.sign ?? '-'}</Text>
           </View> */}
 
-          {/* εδώ δείχνουμε μόνο το chart μέσω webview
+            {/* εδώ δείχνουμε μόνο το chart μέσω webview
               στο native θα παίξει κανονικά
               στο web δεν υποστηρίζεται απο react-native-webview, οπότε δείχνουμε fallback */}
-          <View style={styles.webviewWrap}>
-            {Platform.OS === 'web' ? (
-              <View style={styles.webFallback}>
-                <Text style={styles.webFallbackText}>
-                  WebView works only on Android/iOS. Open this screen in Expo Go or emulator.
-                </Text>
+            <View style={styles.webviewWrap}>
+              {Platform.OS === 'web' ? (
+                <View style={styles.webFallback}>
+                  <Text style={styles.webFallbackText}>
+                    WebView works only on Android/iOS. Open this screen in Expo Go or emulator.
+                  </Text>
 
-                <Text style={styles.webFallbackUrl}>
-                  {chartUrl}
-                </Text>
-              </View>
-            ) : (
-              <WebView
-                source={{ uri: chartUrl }}
-                style={styles.webview}
-                javaScriptEnabled
-                domStorageEnabled
-                originWhitelist={['*']}
-                startInLoadingState
-              />
-            )}
-          </View>
-        </>
-      )}
+                  <Text style={styles.webFallbackUrl}>
+                    {chartUrl}
+                  </Text>
+                </View>
+              ) : (
+                <WebView
+                  source={{ uri: chartUrl }}
+                  style={styles.webview}
+                  javaScriptEnabled
+                  domStorageEnabled
+                  originWhitelist={['*']}
+                  startInLoadingState
+                />
+              )}
+            </View>
+          </>
+        )}
 
-      {/* basic panel οπως το θέλουμε σιγά σιγά να οργανωθεί
+        {/* basic panel οπως το θέλουμε σιγά σιγά να οργανωθεί
           εδώ μέσα θα μπει TimeControls, WebView chart, PlanetSelector κλπ */}
-      <BasicControls
-        onSubmit={handleSubmit}
-        visiblePlanets={visiblePlanets}
-        setVisiblePlanets={setVisiblePlanets}
-        date={date}
-        setDate={setDate}
-        coords={coords}
-        userOrb={userOrb}
-        setUserOrb={setUserOrb}
-      />
-
-      {/* analysis */}
-      {data && (
-        <BasicChartInfo
-          data={data}
+        <BasicControls
+          onSubmit={handleSubmit}
+          visiblePlanets={visiblePlanets}
+          setVisiblePlanets={setVisiblePlanets}
+          date={date}
+          setDate={setDate}
+          coords={coords}
           userOrb={userOrb}
+          setUserOrb={setUserOrb}
         />
-      )}
-    </ScrollView>
+
+        {/* analysis */}
+        {data && (
+          <BasicChartInfo
+            data={data}
+            userOrb={userOrb}
+          />
+        )}
+      </ScrollView>
+    </ScreenWrapper>
+
   )
 }
 

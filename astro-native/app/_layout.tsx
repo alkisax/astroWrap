@@ -1,8 +1,22 @@
-// app/_layout.tsx
 import { Stack } from 'expo-router'
+import { View } from 'react-native'
 
 const Layout = () => {
-  return <Stack screenOptions={{ headerShown: false }} />
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: 'black',
+      }}
+    >
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: 'transparent' },
+        }}
+      />
+    </View>
+  )
 }
 
 export default Layout

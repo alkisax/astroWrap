@@ -92,5 +92,5 @@ export const initSqlite = (): void => {
   });
 
   // 4️⃣ αυτό τρέχει sync (δεν περιμένει τα callbacks)
-  console.log("✅ sqlite init triggered");
+  // console.log("✅ sqlite init triggered");
 };

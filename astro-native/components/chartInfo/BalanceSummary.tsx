@@ -1,3 +1,5 @@
+// astro-native\components\chartInfo\BalanceSummary.tsx
+
 import { View, Text, StyleSheet } from 'react-native'
 import {
   calculateElementBalance,

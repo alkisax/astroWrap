@@ -1,3 +1,5 @@
+// astro-native\components\chartInfo\AspectsList.tsx
+
 import { View, Text, StyleSheet } from 'react-native'
 
 const AspectsList = ({ aspects }: any) => {

@@ -1,0 +1,43 @@
+import { Image, StyleSheet, View, Dimensions } from 'react-native'
+
+const bgImage = require('../../assets/images/bubblePRNGrayInvertLongColor.jpg')
+
+const { width, height } = Dimensions.get('window')
+
+const ScreenWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <View style={{ flex: 1 }}>
+      {/* background */}
+      <Image
+        source={bgImage}
+        style={[styles.bg, { width, height }]} // 👈 IMPORTANT
+        resizeMode="cover"
+      />
+
+      {/* overlay */}
+      <View style={styles.overlay} />
+
+      {/* content */}
+      <View style={styles.content}>
+        {children}
+      </View>
+    </View>
+  )
+}
+
+export default ScreenWrapper
+
+const styles = StyleSheet.create({
+  bg: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  content: {
+    flex: 1,
+  },
+})
