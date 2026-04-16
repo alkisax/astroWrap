@@ -1,24 +1,18 @@
-import type { IUser } from "./types/types"
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import type { IUser } from './types/types'
 
-type SetUser = (user: IUser | null) => void;
+type SetUser = (user: IUser | null) => void
 
-
-export const handleLogout = async (
-  setUser: SetUser,
-  navigate: (path: string) => void
-) => {
-
+export const handleLogout = async (setUser: SetUser) => {
   try {
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
+    // remove token
+    await AsyncStorage.removeItem('token')
 
-    // Clear React state
-    setUser(null);
+    // clear state
+    setUser(null)
 
-    // Redirect
-    navigate("/");
+    console.log('LOGOUT OK')
   } catch (error) {
-    console.error("Error during universal logout:", error);
+    console.error('Logout error:', error)
   }
-};
-
+}

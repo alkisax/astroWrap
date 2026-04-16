@@ -23,11 +23,11 @@ export default function Index() {
     <ScreenWrapper>
       <ScrollView contentContainerStyle={styles.container}>
 
-        <Pressable
+        {/* <Pressable
           onPress={() => router.push('/login')}
         >
           <Text>Go to Login</Text>
-        </Pressable>
+        </Pressable> */}
 
         {/* 🔝 buttons */}
         <View style={styles.buttonRow}>
@@ -38,12 +38,12 @@ export default function Index() {
             <Text style={styles.buttonText}>Single Chart</Text>
           </Pressable>
 
-          <Pressable
+          {/* <Pressable
             style={[styles.button, styles.outline]}
             onPress={() => router.push('/biwheel')}
           >
             <Text style={styles.buttonText}>Relationship Analysis</Text>
-          </Pressable>
+          </Pressable> */}
         </View>
 
         {/* 🔽 content */}

@@ -1,25 +1,35 @@
+import Navbar from '@/components/layout/Navbar'
 import { Stack } from 'expo-router'
 import { View } from 'react-native'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { UserProvider } from '../authLogin/context/UserAuthContext'
 
 const Layout = () => {
   return (
     <SafeAreaProvider>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'black',
-        }}
-      >
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: 'transparent' },
-          }}
-        />
-      </View>
-    </SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
+        <UserProvider>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: 'black',
+            }}
+          >
+            <Navbar />
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: {
+                  backgroundColor: 'transparent',
+                  paddingTop: 0
+                },
+              }}
+            />
+          </View>
+        </UserProvider>
+      </SafeAreaView>
 
+    </SafeAreaProvider>
   )
 }
 

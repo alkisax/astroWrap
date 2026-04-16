@@ -35,20 +35,24 @@ const Login = () => {
       )
 
       if (res.data.status) {
-        const token = res.data.data.token
+        const { token, user } = res.data.data
 
         console.log('TOKEN:', token)
 
-        // 🔥 save token (RN)
+        // save token (RN)
         await AsyncStorage.setItem('token', token)
 
-        // 🔥 trigger context refresh (temporary hack)
-        setUser(null)
+        // trigger context refresh (temporary hack)
+        setUser(user)
 
         console.log('LOGIN OK')
 
-        // 🔥 redirect μετά login
-        router.replace('/')
+        // redirect μετά login
+        setUser(user)
+
+        setTimeout(() => {
+          router.replace('/user')
+        }, 100)
       }
     } catch (err) {
       console.log('LOGIN ERROR', err)
