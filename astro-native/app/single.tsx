@@ -35,7 +35,7 @@ const Single = () => {
     // setCustomPlanetInfo,
     // setCustomChartRuler,
     // setCustomBalance,
-    // setCustomHouseRulers,
+    setCustomHouseRulers,
     customAspects,
     setCustomAspects,
     // setCustomDignities,
@@ -142,6 +142,7 @@ const Single = () => {
             userOrb={userOrb}
             setCustomAspects={setCustomAspects}
             customAspects={customAspects}
+            setCustomHouseRulers={setCustomHouseRulers}
           />
         )}
       </ScrollView>

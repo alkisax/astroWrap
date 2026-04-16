@@ -9,15 +9,17 @@ import ChartRuler from './ChartRuler'
 import BalanceSummary from './BalanceSummary'
 import MostImportantAspects from './MostImportantAspects'
 import GlassPanel from '../ui/GlassPanel'
-import { ChartSummary, CustomAspect } from '@/types/types'
+import { ChartSummary, CustomAspect, CustomHouseRuler } from '@/types/types'
 import { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import HouseRulers from './HouseRulers.native'
 
 type Props = {
   data: ChartSummary
   userOrb: number
   setCustomAspects: (a: CustomAspect[]) => void
   customAspects: CustomAspect[]
+  setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void
 }
 
 const BasicChartInfo = ({
@@ -25,6 +27,7 @@ const BasicChartInfo = ({
   userOrb,
   setCustomAspects,
   customAspects,
+  setCustomHouseRulers
 }: Props) => {
   const {
     aspects,
@@ -35,9 +38,10 @@ const BasicChartInfo = ({
 
   const [openSections, setOpenSections] = useState({
     aspects: false,
+    houses: false,
   })
 
-  const toggleSection = (key: 'aspects') => {
+  const toggleSection = (key: keyof typeof openSections) => {
     setOpenSections(prev => ({
       ...prev,
       [key]: !prev[key],
@@ -84,6 +88,24 @@ const BasicChartInfo = ({
 
         {openSections.aspects && (
           <MostImportantAspects aspects={aspects} />
+        )}
+      </GlassPanel>
+
+      <GlassPanel>
+        <Pressable
+          style={styles.sectionHeader}
+          onPress={() => toggleSection('houses')}
+        >
+          <Text style={styles.sectionTitle}>
+            🏠 House Rulers {openSections.houses ? '▲' : '▼'}
+          </Text>
+        </Pressable>
+
+        {openSections.houses && (
+          <HouseRulers
+            data={data}
+            setCustomHouseRulers={setCustomHouseRulers}
+          />
         )}
       </GlassPanel>
     </ScrollView>
