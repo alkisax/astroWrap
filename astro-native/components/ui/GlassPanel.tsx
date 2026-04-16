@@ -1,3 +1,5 @@
+// astro-native\components\ui\GlassPanel.tsx
+
 import { View, StyleSheet } from 'react-native'
 import { colors } from '../../constants/constants'
 

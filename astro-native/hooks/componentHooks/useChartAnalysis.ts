@@ -1,4 +1,4 @@
-// frontend\src\hooks\componentHooks\useChartAnalysis.ts
+// astro-native\hooks\componentHooks\useChartAnalysis.ts
 
 import { useMemo } from "react";
 import type {

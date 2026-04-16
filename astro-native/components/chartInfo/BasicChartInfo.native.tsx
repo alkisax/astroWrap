@@ -7,19 +7,36 @@ import { colors } from '../../constants/constants'
 import PlanetTable from './PlanetTable'
 import ChartRuler from './ChartRuler'
 import BalanceSummary from './BalanceSummary'
-import AspectsList from './AspectsList'
+import MostImportantAspects from './MostImportantAspects'
 import GlassPanel from '../ui/GlassPanel'
+import { ChartSummary, CustomAspect } from '@/types/types'
+import { useEffect } from 'react'
 
 type Props = {
-  data: any
+  data: ChartSummary
   userOrb: number
+  setCustomAspects: (a: CustomAspect[]) => void
+  customAspects: CustomAspect[]
 }
 
-const BasicChartInfo = ({ data, userOrb }: Props) => {
+const BasicChartInfo = ({
+  data,
+  userOrb,
+  setCustomAspects,
+  customAspects,
+}: Props) => {
   const {
     aspects,
     balance,
   } = useChartAnalysis(data, userOrb)
+
+  // 🔥 EXACT SAME LOGIC AS WEB
+  useEffect(() => {
+    setCustomAspects(aspects)
+  }, [aspects, setCustomAspects])
+
+  // console.log('NATIVE aspects', aspects)
+  // console.log('NATIVE customAspects', customAspects)
 
   return (
     <ScrollView
@@ -39,7 +56,7 @@ const BasicChartInfo = ({ data, userOrb }: Props) => {
       </GlassPanel>
 
       <GlassPanel>
-        <AspectsList aspects={aspects} />
+        <MostImportantAspects aspects={aspects} />
       </GlassPanel>
     </ScrollView>
   )

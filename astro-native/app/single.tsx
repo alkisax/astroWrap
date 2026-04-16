@@ -36,8 +36,8 @@ const Single = () => {
     // setCustomChartRuler,
     // setCustomBalance,
     // setCustomHouseRulers,
-    // customAspects,
-    // setCustomAspects,
+    customAspects,
+    setCustomAspects,
     // setCustomDignities,
     // setCustomDispositors,
     // setCustomDynamics,
@@ -140,6 +140,8 @@ const Single = () => {
           <BasicChartInfo
             data={data}
             userOrb={userOrb}
+            setCustomAspects={setCustomAspects}
+            customAspects={customAspects}
           />
         )}
       </ScrollView>

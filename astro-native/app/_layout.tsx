@@ -1,21 +1,25 @@
 import { Stack } from 'expo-router'
 import { View } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const Layout = () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'black',
-      }}
-    >
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: 'transparent' },
+    <SafeAreaProvider>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'black',
         }}
-      />
-    </View>
+      >
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: 'transparent' },
+          }}
+        />
+      </View>
+    </SafeAreaProvider>
+
   )
 }
 
