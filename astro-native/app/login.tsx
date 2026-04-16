@@ -17,15 +17,15 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  // 🔥 reveal password toggle
+  // reveal password toggle
   const [showPassword, setShowPassword] = useState(false)
 
-  // 🔥 αν είναι ήδη logged in → redirect
+  // αν είναι ήδη logged in → redirect
   useEffect(() => {
     if (user) {
       router.replace('/')
     }
-  }, [user])
+  }, [router, user])
 
   const handleLogin = async () => {
     try {

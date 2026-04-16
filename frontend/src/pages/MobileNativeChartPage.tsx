@@ -181,7 +181,7 @@ const MobileNativeChartPage = () => {
         width: '100%',
         padding: '10px',
         boxSizing: 'border-box',
-        background: 'black',
+        background: 'transparent',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
