@@ -1,6 +1,6 @@
 // astro-native/components/chartInfo/BasicChartInfo.native.tsx
 
-import { StyleSheet, ScrollView, } from 'react-native'
+import { StyleSheet, ScrollView, Pressable, Text } from 'react-native'
 import { useChartAnalysis } from '../../hooks/componentHooks/useChartAnalysis'
 import { colors } from '../../constants/constants'
 
@@ -10,7 +10,8 @@ import BalanceSummary from './BalanceSummary'
 import MostImportantAspects from './MostImportantAspects'
 import GlassPanel from '../ui/GlassPanel'
 import { ChartSummary, CustomAspect } from '@/types/types'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type Props = {
   data: ChartSummary
@@ -30,6 +31,19 @@ const BasicChartInfo = ({
     balance,
   } = useChartAnalysis(data, userOrb)
 
+  const insets = useSafeAreaInsets()
+
+  const [openSections, setOpenSections] = useState({
+    aspects: false,
+  })
+
+  const toggleSection = (key: 'aspects') => {
+    setOpenSections(prev => ({
+      ...prev,
+      [key]: !prev[key],
+    }))
+  }
+
   // 🔥 EXACT SAME LOGIC AS WEB
   useEffect(() => {
     setCustomAspects(aspects)
@@ -40,7 +54,10 @@ const BasicChartInfo = ({
 
   return (
     <ScrollView
-      contentContainerStyle={styles.container}
+      contentContainerStyle={[
+        styles.container,
+        { paddingBottom: insets.bottom + 20 }, // 👈 KEY FIX
+      ]}
       showsVerticalScrollIndicator={false}
     >
       <GlassPanel>
@@ -56,7 +73,18 @@ const BasicChartInfo = ({
       </GlassPanel>
 
       <GlassPanel>
-        <MostImportantAspects aspects={aspects} />
+        <Pressable
+          style={styles.sectionHeader}
+          onPress={() => toggleSection('aspects')}
+        >
+          <Text style={styles.sectionTitle}>
+            ✨ Aspects {openSections.aspects ? '▲' : '▼'}
+          </Text>
+        </Pressable>
+
+        {openSections.aspects && (
+          <MostImportantAspects aspects={aspects} />
+        )}
       </GlassPanel>
     </ScrollView>
   )
@@ -83,5 +111,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
 
     elevation: 3,
+  },
+
+  sectionHeader: {
+    paddingVertical: 6,
+  },
+
+  sectionTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 })
