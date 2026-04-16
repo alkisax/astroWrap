@@ -48,7 +48,7 @@ const TimeControls = ({ date, setDate, coords }: Props) => {
     <View style={styles.card}>
 
       {/* 🔥 HIGHLIGHT BLOCK */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.dateText}>
           {formattedDate} {formattedTime}
         </Text>
@@ -56,7 +56,7 @@ const TimeControls = ({ date, setDate, coords }: Props) => {
         <Text style={styles.coordsText}>
           ({coords.lat.toFixed(2)}, {coords.lng.toFixed(2)})
         </Text>
-      </View>
+      </View> */}
 
       {/* 🔥 FULL VERTICAL BUTTONS */}
       <View style={styles.buttonsWrap}>

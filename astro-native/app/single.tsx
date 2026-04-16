@@ -152,7 +152,7 @@ export default Single
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 0,
   },
   title: {
     fontSize: 22,
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
-    marginTop: 16,
-    padding: 16,
+    marginTop: 0,
+    padding: 0,
     borderWidth: 1,
     // borderColor: '#ccc',
     borderRadius: 10,
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   webviewWrap: {
-    marginTop: 20,
+    marginTop: 0,
     height: 420,
     borderRadius: 12,
     overflow: 'hidden',

@@ -2,6 +2,7 @@
 
 // in: παίρνει μια onSubmit με date/lat/lang τα οποία οταν αλλαχθούν εδώ προκαλούν trigger να δείξει το chart
 
+import { colors } from '@/constants/constants'
 import { useState } from 'react'
 import { View, Text, TextInput, Pressable, Linking, StyleSheet } from 'react-native'
 
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   button: {
-    backgroundColor: '#6c5ce7',
+    backgroundColor: colors.primary,
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
