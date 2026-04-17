@@ -211,6 +211,8 @@ export const useChartAnalysis = (
       }));
   }, [data]);
 
+  console.log("planetinfo", planetInfo)
+
   return {
     houseRulers,
     aspects,

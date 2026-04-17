@@ -20,7 +20,7 @@ const Single = () => {
     userOrb,
     setUserOrb,
     handleSubmit,
-    shaken,
+    // shaken,
     // handleLLMInterpretation,
     handleLLMClick,
     showLLM,

@@ -57,10 +57,6 @@ const BasicChartInfo = ({
   setCustomDispositors,
   setCustomDynamics,
 }: Props) => {
-  const {
-    aspects,
-    balance,
-  } = useChartAnalysis(data, userOrb)
 
   const insets = useSafeAreaInsets()
 
@@ -78,15 +74,9 @@ const BasicChartInfo = ({
     }))
   }
 
-  // 🔥 EXACT SAME LOGIC AS WEB
-  useEffect(() => {
-    setCustomAspects(aspects)
-  }, [aspects, setCustomAspects])
-
-  // console.log('NATIVE aspects', aspects)
-  // console.log('NATIVE customAspects', customAspects)
-
   const {
+    aspects,
+    balance,
     dignities,
     dispositors,
     dynamics,
@@ -108,7 +98,18 @@ const BasicChartInfo = ({
     setCustomDignities(dignities)
     setCustomDispositors(dispositors)
     setCustomDynamics(dynamics)
-  }, [aspects, houseRulers, balance, dignities, dispositors, dynamics, setCustomAspects, setCustomHouseRulers, setCustomDignities, setCustomDispositors, setCustomDynamics, setCustomBalance, setCustomPlanetInfo, planetInfo, setCustomChartRuler, chartRuler])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    aspects,
+    houseRulers,
+    balance,
+    dignities,
+    dispositors,
+    dynamics,
+    chartRuler,
+    planetInfo,
+  ])
+
 
   return (
     <ScrollView

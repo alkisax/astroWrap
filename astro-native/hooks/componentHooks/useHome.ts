@@ -46,14 +46,25 @@ export const useHome = () => {
   const [userOrb, setUserOrb] = useState<number>(1);
 
   // ολα αυτά τα state είναι για να συγκεντρώσουμε εδω όλους τους υπολογισμούς για να φτιαχτεί ένα απλοποιημένο json που θα σταλθεί στο gpt
-  const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>([]);
-  const [customChartRuler, setCustomChartRuler] = useState<CustomChartRuler | null>(null);
-  const [customBalance, setCustomBalance] = useState<CustomBalance | null>(null);
-  const [customHouseRulers, setCustomHouseRulers] = useState<CustomHouseRuler[]>([]);
+  const [customPlanetInfo, setCustomPlanetInfo] = useState<CustomPlanetInfo[]>(
+    [],
+  );
+  const [customChartRuler, setCustomChartRuler] =
+    useState<CustomChartRuler | null>(null);
+  const [customBalance, setCustomBalance] = useState<CustomBalance | null>(
+    null,
+  );
+  const [customHouseRulers, setCustomHouseRulers] = useState<
+    CustomHouseRuler[]
+  >([]);
   const [customAspects, setCustomAspects] = useState<CustomAspect[]>([]);
   const [customDignities, setCustomDignities] = useState<CustomDignity[]>([]);
-  const [customDispositors, setCustomDispositors] = useState<CustomDispositor[]>([]);
-  const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(null);
+  const [customDispositors, setCustomDispositors] = useState<
+    CustomDispositor[]
+  >([]);
+  const [customDynamics, setCustomDynamics] = useState<CustomDynamics | null>(
+    null,
+  );
 
   const [showLLM, setShowLLM] = useState(false);
   const [llmResult, setLlmResult] = useState<string | null>(null);
@@ -114,8 +125,8 @@ export const useHome = () => {
   // 🔥 shaken
   const shaken = useMemo(() => {
     if (!payload) return null;
-    return natalChartShakeJSONTreeHelper(payload);
-  }, [payload]);
+    return natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+  }, [customPlanetInfo, payload]);
 
   const handleLLMInterpretation = async (): Promise<string | null> => {
     if (!shaken) return null;
@@ -136,13 +147,24 @@ export const useHome = () => {
   };
 
   const handleLLMClick = async () => {
+    if (!payload) return;
+
+    const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+    console.log("snapshot", snapshot);
+
     setShowLLM(true);
+    setLlmLoading(true);
+    setLlmError(null);
 
     try {
-      const res = await handleLLMInterpretation();
-      setLlmResult(res);
+      const result = await getSingleChartInterpretation(snapshot);
+      console.log("SNAPSHOT", snapshot);
+      setLlmResult(result);
     } catch {
       setLlmResult(null);
+      setLlmError("LLM request failed");
+    } finally {
+      setLlmLoading(false);
     }
   };
 
@@ -155,7 +177,7 @@ export const useHome = () => {
       // ⚠️ RN → AsyncStorage (όχι localStorage)
       const token = null; // TODO: βάλε AsyncStorage
 
-      const res = await axios.put(
+      await axios.put(
         `${backendUrl}/api/sqlite/users/${userId}`,
         {
           natalChart: JSON.stringify(shaken),
@@ -165,7 +187,7 @@ export const useHome = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       console.log("✅ chart + LLM saved to DB");
@@ -196,7 +218,7 @@ export const useHome = () => {
     setCustomDynamics,
 
     // logic
-    shaken,
+    // shaken,
 
     handleSubmit,
 
