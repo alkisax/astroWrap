@@ -9,6 +9,7 @@ import axios from 'axios'
 import { backendUrl, colors } from '../constants/constants'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
 import GlassPanel from '@/components/ui/GlassPanel'
+import { Ionicons } from '@expo/vector-icons'
 
 const Login = () => {
   const { user, setUser } = useContext(UserAuthContext)
@@ -84,9 +85,11 @@ const Login = () => {
             />
 
             <Pressable onPress={() => setShowPassword(!showPassword)}>
-              <Text style={styles.toggle}>
-                {showPassword ? 'Hide' : 'Show'}
-              </Text>
+              <Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={20}
+                color={colors.secondary}
+              />
             </Pressable>
           </View>
 
@@ -94,8 +97,14 @@ const Login = () => {
           <Pressable style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
-        </GlassPanel>
 
+          {/* register link */}
+          <Pressable onPress={() => router.push('/register')}>
+            <Text style={styles.link}>
+              Don’t have an account? Register
+            </Text>
+          </Pressable>
+        </GlassPanel>
       </View>
     </ScreenWrapper>
 
@@ -130,27 +139,30 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
 
-  passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 8,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    marginBottom: 20,
-    paddingHorizontal: 10,
-  },
+passwordContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: 'rgba(255,255,255,0.2)',
+  borderRadius: 12,
+  backgroundColor: '#fff', // 👈 WHITE FULL
+  marginBottom: 20,
+  paddingHorizontal: 12,
+  overflow: 'hidden',
+},
 
   passwordInput: {
     flex: 1,
     padding: 12,
     color: colors.text,
+    backgroundColor: 'transparent',
   },
 
   toggle: {
     color: colors.secondary,
     fontWeight: '600',
   },
+
   button: {
     backgroundColor: colors.secondary,
     padding: 14,
@@ -163,4 +175,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+
+  link: {
+    marginTop: 12,
+    textAlign: 'center',
+    color: colors.secondary,
+    fontWeight: '600',
+  }
 })

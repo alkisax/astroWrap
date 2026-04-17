@@ -1,4 +1,4 @@
-// frontend\src\authLogin\utils\registerBackend.ts
+// astro-native\authLogin\utils\registerBackend.ts
 // password validation regex
 // returns a message to be used ο έλεγχος ελέγχει αν υπάρχει μήνυμα και αν ναι θεωρεί οτι δεν πέρασε
 export const frontendValidatePassword = (password: string) => {

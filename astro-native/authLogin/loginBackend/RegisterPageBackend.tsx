@@ -1,5 +1,4 @@
-// frontend\src\authLogin\loginBackend\RegisterPageBackend.tsx
-import { useState } from "react";
+// astro-native\authLogin\loginBackend\RegisterPageBackend.tsximport { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
