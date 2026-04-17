@@ -81,7 +81,7 @@ const ALLOWED_PLANETS: PlanetName[] = [
 ];
 
 // type guards
-const isPlanetArray = (arr: unknown): arr is PlanetItem[] => Array.isArray(arr);
+// const isPlanetArray = (arr: unknown): arr is PlanetItem[] => Array.isArray(arr);
 
 const isAspectArray = (arr: unknown): arr is Aspect[] => Array.isArray(arr);
 
