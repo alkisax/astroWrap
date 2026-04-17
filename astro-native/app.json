@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "astro-native",
-    "slug": "astro-native",
+    "name": "astro-lark",
+    "slug": "astro-lark",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,11 +12,11 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
+      "package": "com.alkis.astronative",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
@@ -43,6 +43,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4b963c41-858e-43dc-9bbc-42b2356734ce"
+      }
+    },
+    "owner": "alkisax"
   }
 }
