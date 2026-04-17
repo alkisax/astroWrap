@@ -98,7 +98,7 @@ const BasicChartInfo = ({
     setCustomDignities(dignities)
     setCustomDispositors(dispositors)
     setCustomDynamics(dynamics)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     aspects,
     houseRulers,
@@ -223,6 +223,23 @@ const BasicChartInfo = ({
               <Markdown style={{ body: { color: colors.text } }}>
                 {llmResult}
               </Markdown>
+            )}
+
+            {llmResult && (
+              <Pressable
+                onPress={saveLLMToDb}
+                style={{
+                  marginTop: 10,
+                  padding: 10,
+                  backgroundColor: colors.secondary,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: colors.text, fontWeight: '600' }}>
+                  Save interpretation
+                </Text>
+              </Pressable>
             )}
           </>
         )}

@@ -1,3 +1,9 @@
+# προστασια db
+# SQLite
+*.sqlite
+*.db
+backend/*.db
+
 # Logs
 logs
 *.log

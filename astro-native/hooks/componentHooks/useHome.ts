@@ -19,6 +19,8 @@ import type {
 
 import axios from "axios";
 import { backendUrl } from "../../constants/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 export const useHome = () => {
   const [data, setData] = useState<ChartSummary | null>(null);
@@ -171,16 +173,17 @@ export const useHome = () => {
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;
 
-    if (!llmResult || !shaken || !userId) return;
+    if (!llmResult || !payload || !userId) return;
+
+    const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
 
     try {
-      // ⚠️ RN → AsyncStorage (όχι localStorage)
-      const token = null; // TODO: βάλε AsyncStorage
+      const token = await AsyncStorage.getItem("token");
 
       await axios.put(
         `${backendUrl}/api/sqlite/users/${userId}`,
         {
-          natalChart: JSON.stringify(shaken),
+          natalChart: JSON.stringify(snapshot),
           natalDelineation: llmResult,
         },
         {
@@ -191,6 +194,7 @@ export const useHome = () => {
       );
 
       console.log("✅ chart + LLM saved to DB");
+      Alert.alert("Saved ✅", "Chart saved successfully")
     } catch (err) {
       console.error("❌ save failed", err);
     }
