@@ -4,6 +4,7 @@ import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
 import { UserAuthContext } from "../../authLogin/context/UserAuthContext";
+import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd";
 
 import type {
   ChartSummary,
@@ -74,6 +75,7 @@ export const useHome = () => {
   const [llmError, setLlmError] = useState<string | null>(null);
 
   const { user } = useContext(UserAuthContext);
+  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd();
 
   // 🔥 ΕΠΙΣΤΡΟΦΗ στο backend call (RN compatible)
   // input: ημερομηνια και συντεταγμένες
@@ -148,27 +150,70 @@ export const useHome = () => {
     }
   };
 
+  // το αφήνω εδώ για legacy λογους. Μεταφέραμε την λογική ωστε να δέχεται διαφημίσεις. διάβασε επόμενο
+  // const handleLLMClick = async () => {
+  //   if (!payload) return;
+
+  //   const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+  //   console.log("snapshot", snapshot);
+
+  //   setShowLLM(true);
+  //   setLlmLoading(true);
+  //   setLlmError(null);
+
+  //   try {
+  //     const result = await getSingleChartInterpretation(snapshot);
+  //     console.log("SNAPSHOT", snapshot);
+  //     setLlmResult(result);
+  //   } catch {
+  //     setLlmResult(null);
+  //     setLlmError("LLM request failed");
+  //   } finally {
+  //     setLlmLoading(false);
+  //   }
+  // };
+
+  // σπάσαμε την λογική του handleLLMClick σε δύο μέρη
+  // εδώ το μονο που κοιτάζει είναι αν έχουμε preloaded διαφήμιση και αν ναι την προβάλει και όλη η λογική του κουμπιού γίνετε απο ενα useEffect που γίνετε trigger με την ολοκλήρωση της διαφήμισης (reward earned)
   const handleLLMClick = async () => {
     if (!payload) return;
 
-    const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
-    console.log("snapshot", snapshot);
-
-    setShowLLM(true);
-    setLlmLoading(true);
-    setLlmError(null);
-
-    try {
-      const result = await getSingleChartInterpretation(snapshot);
-      console.log("SNAPSHOT", snapshot);
-      setLlmResult(result);
-    } catch {
-      setLlmResult(null);
-      setLlmError("LLM request failed");
-    } finally {
-      setLlmLoading(false);
+    if (!loaded) {
+      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+      return;
     }
+
+    showAd();
   };
+
+  // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
+  useEffect(() => {
+    if (!rewardEarned) return;
+    if (!payload) return;
+
+    const run = async () => {
+      const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+
+      setShowLLM(true);
+      setLlmLoading(true);
+      setLlmError(null);
+
+      try {
+        const result = await getSingleChartInterpretation(snapshot);
+        setLlmResult(result);
+      } catch {
+        setLlmResult(null);
+        setLlmError("LLM request failed");
+      } finally {
+        setLlmLoading(false);
+        setRewardEarned(false);
+      }
+    };
+
+    run();
+  // disable lint on purpose for triggering when ad finished    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardEarned, customPlanetInfo]);
 
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;
@@ -194,7 +239,7 @@ export const useHome = () => {
       );
 
       console.log("✅ chart + LLM saved to DB");
-      Alert.alert("Saved ✅", "Chart saved successfully")
+      Alert.alert("Saved ✅", "Chart saved successfully");
     } catch (err) {
       console.error("❌ save failed", err);
     }
