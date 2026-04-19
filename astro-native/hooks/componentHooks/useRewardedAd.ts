@@ -69,16 +69,4 @@
  *
  */
 
-import { Platform } from 'react-native'
-
-export const useRewardedAd = () => {
-  if (Platform.OS === 'web') {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const mod = require('./useRewardedAd.web')
-    return mod.useRewardedAd()
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const mod = require('./useRewardedAd.native')
-  return mod.useRewardedAd()
-}
+export { useRewardedAd } from './useRewardedAd.web'

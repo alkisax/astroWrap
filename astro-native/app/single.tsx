@@ -8,7 +8,7 @@ import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '@/components/chartInfo/BasicChartInfo.native'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
 
-const Single = () => {
+export default function Single() {
   // ολη η λογική του component έχει μεταφερθεί σε hook
   const {
     data,
@@ -157,8 +157,6 @@ const Single = () => {
 
   )
 }
-
-export default Single
 
 const styles = StyleSheet.create({
   container: {
