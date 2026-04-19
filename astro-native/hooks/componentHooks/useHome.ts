@@ -72,7 +72,9 @@ export const useHome = () => {
   const [showLLM, setShowLLM] = useState(false);
   const [llmResult, setLlmResult] = useState<string | null>(null);
   const [llmLoading, setLlmLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); // είναι αλλο απο το llmLoading που αφορα μονο το LLM. εδω κοιτάμε την όλη διαδικασία με την διαφήμιση
   const [llmError, setLlmError] = useState<string | null>(null);
+  const [lastCallAt, setLastCallAt] = useState<number | null>(null); // για να υποχρεώσουμε σε cooldown ένα llm call ανα 30sec
 
   const { user } = useContext(UserAuthContext);
   const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd();
@@ -175,14 +177,27 @@ export const useHome = () => {
 
   // σπάσαμε την λογική του handleLLMClick σε δύο μέρη
   // εδώ το μονο που κοιτάζει είναι αν έχουμε preloaded διαφήμιση και αν ναι την προβάλει και όλη η λογική του κουμπιού γίνετε απο ενα useEffect που γίνετε trigger με την ολοκλήρωση της διαφήμισης (reward earned)
+  const COOLDOWN = 30000; // 30 sec
+
   const handleLLMClick = async () => {
     if (!payload) return;
+    if (isProcessing) return; // 🔥 anti spam
 
     if (!loaded) {
       Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
       return;
     }
 
+    if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+      Alert.alert("Wait", "Please wait a bit before next reading");
+      return;
+    }
+
+    setIsProcessing(true);
+    // fallback unlock αν κάτι πάει στραβά
+    setTimeout(() => {
+      setIsProcessing(false);
+    }, 15000);
     showAd();
   };
 
@@ -207,13 +222,15 @@ export const useHome = () => {
       } finally {
         setLlmLoading(false);
         setRewardEarned(false);
+        setIsProcessing(false);
+        setLastCallAt(Date.now());
       }
     };
 
     run();
-  // disable lint on purpose for triggering when ad finished    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardEarned, customPlanetInfo]);
+    // disable lint on purpose for triggering when ad finished
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardEarned]);
 
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;
@@ -274,6 +291,8 @@ export const useHome = () => {
     handleLLMInterpretation,
     llmLoading,
     llmError,
+    loaded,
+    isProcessing,
     handleLLMClick,
     showLLM,
     llmResult,

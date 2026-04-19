@@ -27,6 +27,8 @@ const Single = () => {
     llmResult,
     llmLoading,
     llmError,
+    loaded,
+    isProcessing,
     saveLLMToDb,
 
     // ολα αυτά τα custom είναι συμπτύξεις των διάφορων reports για να φτιαχτεί ένα απλοποιημένο json,
@@ -139,6 +141,8 @@ const Single = () => {
             llmResult={llmResult}
             llmLoading={llmLoading}
             llmError={llmError}
+            loaded={loaded}
+            isProcessing={isProcessing}
             saveLLMToDb={saveLLMToDb}
             setCustomPlanetInfo={setCustomPlanetInfo}
             setCustomChartRuler={setCustomChartRuler}

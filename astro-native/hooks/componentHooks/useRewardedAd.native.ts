@@ -67,6 +67,7 @@ export const useRewardedAd = () => {
       () => {
         setLoaded(false);
         rewarded.load();
+        setRewardEarned(false);
       },
     );
 

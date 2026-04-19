@@ -29,6 +29,8 @@ type Props = {
   llmResult: string | null
   llmLoading: boolean
   llmError: string | null
+  loaded: boolean
+  isProcessing: boolean
   saveLLMToDb: () => void
   setCustomPlanetInfo: (v: any) => void
   setCustomChartRuler: (v: any) => void
@@ -49,6 +51,8 @@ const BasicChartInfo = ({
   llmResult,
   llmLoading,
   llmError,
+  isProcessing,
+  loaded,
   saveLLMToDb,
   setCustomPlanetInfo,
   setCustomChartRuler,
@@ -195,7 +199,13 @@ const BasicChartInfo = ({
       </GlassPanel>
 
       <GlassPanel>
-        <Pressable onPress={handleLLMClick}>
+        <Pressable
+          onPress={handleLLMClick}
+          disabled={!loaded || isProcessing || llmLoading}
+          style={{
+            opacity: !loaded || isProcessing || llmLoading ? 0.5 : 1,
+          }}
+        >
           <Text style={styles.sectionTitle}>
             {llmLoading
               ? '⏳ Loading...'
