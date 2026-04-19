@@ -17,8 +17,8 @@ const isExpoGo = Constants.executionEnvironment === "storeClient";
 // αλλιώς το πραγματικό σου
 const adUnitId = __DEV__
   ? TestIds.REWARDED
-  // : "ca-app-pub-4041382605494077/3041229365";
-  : TestIds.REWARDED  // TODO για περισσοτερη ασφάλεια δεν έχουμε καθόλου το id και θα αλλαχθει αργότερα
+  : "ca-app-pub-4041382605494077/3041229365";
+  // : TestIds.REWARDED  // TODO για περισσοτερη ασφάλεια δεν έχουμε καθόλου το id και θα αλλαχθει αργότερα
 
 export const useRewardedAd = () => {
   // κρατάμε reference στο ad instance (για να μην ξαναδημιουργείται κάθε render)
