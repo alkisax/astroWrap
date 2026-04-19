@@ -18,7 +18,14 @@ export default function ChartForm({ onSubmit }: Props) {
   // το form κρατάει δικό του local state (date/lat/lng) σκόπιμα
   // ΔΕΝ είναι λάθος → αποφεύγουμε recalculation του chart σε κάθε input change.
   // Sync με parent γίνεται μόνο στο submit (controlled flow)
-  const [dateInput, setDateInput] = useState('1981-01-01 23:30')
+  // const [dateInput, setDateInput] = useState('1981-01-01 23:30')
+  const formatNow = () => {
+    const now = new Date()
+    const pad = (n: number) => n.toString().padStart(2, '0')
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`
+  }
+
+  const [dateInput, setDateInput] = useState(formatNow())
   const [lat, setLat] = useState('37.9838')
   const [lng, setLng] = useState('23.7275')
 
@@ -48,6 +55,9 @@ export default function ChartForm({ onSubmit }: Props) {
       <Text style={styles.title}>Generate Chart</Text>
 
       <Text style={styles.label}>Date & Time</Text>
+      <Text style={styles.helpText}>
+        Format: YYYY-MM-DD HH:mm (e.g. 1981-01-01 23:30)
+      </Text>
       <TextInput
         value={dateInput}
         onChangeText={setDateInput}
@@ -56,7 +66,11 @@ export default function ChartForm({ onSubmit }: Props) {
         style={styles.input}
       />
 
+      <Text style={styles.helpText}>
+        Default: Athens, Greece
+      </Text>
       <View style={styles.row}>
+
         <View style={styles.half}>
           <Text style={styles.label}>Lat</Text>
           <TextInput

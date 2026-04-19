@@ -72,35 +72,6 @@ const BasicControls = ({
   return (
     <View style={styles.container}>
       <GlassPanel>
-        {/* 
-      εδώ δείχνουμε το chart μέσω webview
-      το chart έρχεται απο το υπάρχον web AstroChart route
-      θέλουμε να είναι πρώτο και να πιάνει το βασικό χώρο
-      */}
-        {/* το chart θα είναι εκτός του controls */}
-        {/* <View style={styles.webviewWrap}>
-        {Platform.OS === 'web' ? (
-          <View style={styles.webFallback}>
-            <Text style={styles.webFallbackText}>
-              WebView works only on Android/iOS.
-            </Text>
-
-            <Text style={styles.webFallbackUrl}>
-              {chartUrl}
-            </Text>
-          </View>
-        ) : (
-          <WebView
-            source={{ uri: chartUrl }}
-            style={styles.webview}
-            javaScriptEnabled
-            domStorageEnabled
-            originWhitelist={['*']}
-            startInLoadingState
-          />
-        )}
-      </View> */}
-
         {/* 🔥 ALWAYS VISIBLE CONTEXT */}
         <DateHeader date={date} coords={coords} />
 
