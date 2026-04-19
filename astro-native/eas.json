@@ -11,5 +11,8 @@
       },
       "autoIncrement": true
     }
+  },
+  "cli": {
+    "appVersionSource": "remote"
   }
 }
