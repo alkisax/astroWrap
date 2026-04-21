@@ -15,6 +15,7 @@ import { backendUrl, colors } from '../constants/constants'
 import { UserAuthContext } from '../authLogin/context/UserAuthContext'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
 import GlassPanel from '../components/ui/GlassPanel'
+import DeleteAccountButton from '@/components/DeleteAccountButton.native'
 
 /* 🔥 ICON MAPPINGS */
 
@@ -315,6 +316,9 @@ export default function UserPage() {
           </View>
         </Modal>
       )}
+
+      <DeleteAccountButton userId={user.id} />
+      
     </ScreenWrapper>
   )
 }

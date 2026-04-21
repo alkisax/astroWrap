@@ -1,4 +1,4 @@
-// components/DeleteAccountButton.tsx
+// frontend\src\components\DeleteAccountButton.tsx
 import { Button } from '@mui/material'
 import axios from 'axios'
 import { backendUrl } from '../constants/constants'

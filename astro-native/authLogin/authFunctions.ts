@@ -1,3 +1,4 @@
+// astro-native\authLogin\authFunctions.ts
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import type { IUser } from './types/types'
 
