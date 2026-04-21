@@ -40,6 +40,10 @@ app.use(express.static(publicPath));
 app.get('/privacy', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../public/privacy.html'));
 });
+app.get('/delete-account', (_req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '../public/delete-account.html'));
+});
+
 
 //αυτο είναι για να σερβίρει το index.html του front όταν ο χρήστης επισκέπτεται το root path ή οποιοδήποτε άλλο path που δεν είναι api ή api-docs
 app.get(/^\/(?!api|api-docs).*/, (_req, res) => {
