@@ -13,7 +13,7 @@
     },
     "android": {
       "versionCode": 1,
-      "package": "com.alkis.astronative",
+      "package": "com.alkis.astrolark",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png"
