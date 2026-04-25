@@ -1,6 +1,6 @@
 // astro-native\app\login.tsx
 
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native'
+import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native'
 import { useState, useContext, useEffect } from 'react'
 import { useRouter } from 'expo-router'
 import { UserAuthContext } from '../authLogin/context/UserAuthContext'
@@ -55,8 +55,26 @@ const Login = () => {
           router.replace('/user')
         }, 100)
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.log('LOGIN ERROR', err)
+
+      if (err instanceof Error) {
+        // axios error check
+        if ('response' in err) {
+          const axiosErr = err as {
+            response?: { status?: number }
+          }
+
+          const status = axiosErr.response?.status
+
+          if (status === 401 || status === 400) {
+            Alert.alert('Error', 'Wrong username or password')
+            return
+          }
+        }
+      }
+
+      Alert.alert('Error', 'Login failed')
     }
   }
 
@@ -75,16 +93,25 @@ const Login = () => {
           />
 
           {/* password + reveal */}
-          <View style={styles.passwordContainer}>
+          <View style={{ position: 'relative' }}>
             <TextInput
               placeholder='Password'
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
-              style={styles.passwordInput}
+              style={styles.input}
+              placeholderTextColor='rgba(255,255,255,0.5)'
             />
 
-            <Pressable onPress={() => setShowPassword(!showPassword)}>
+            <Pressable
+              onPress={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: 12,
+                top: '50%',
+                transform: [{ translateY: -10 }],
+              }}
+            >
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
                 size={20}
@@ -139,23 +166,24 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
 
-passwordContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  borderWidth: 1,
-  borderColor: 'rgba(255,255,255,0.2)',
-  borderRadius: 12,
-  backgroundColor: '#fff', // 👈 WHITE FULL
-  marginBottom: 20,
-  paddingHorizontal: 12,
-  overflow: 'hidden',
-},
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    marginBottom: 20,
+    paddingHorizontal: 12,
+    overflow: 'hidden',
+  },
 
   passwordInput: {
     flex: 1,
     padding: 12,
     color: colors.text,
     backgroundColor: 'transparent',
+    borderWidth: 0,
   },
 
   toggle: {

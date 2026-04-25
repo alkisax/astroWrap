@@ -6,6 +6,9 @@ import {
   Pressable,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from 'react-native'
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
@@ -84,64 +87,74 @@ const Register = () => {
 
   return (
     <ScreenWrapper>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.container}>
+            <GlassPanel>
+              <Text style={styles.title}>Register</Text>
+
+              <TextInput
+                placeholder='Username'
+                value={username}
+                onChangeText={setUsername}
+                style={styles.input}
+              />
+
+              <TextInput
+                placeholder='Full Name'
+                value={name}
+                onChangeText={setName}
+                style={styles.input}
+              />
+
+              <TextInput
+                placeholder='Email'
+                value={email}
+                onChangeText={setEmail}
+                style={styles.input}
+                autoCapitalize='none'
+              />
+
+              <TextInput
+                placeholder='Password'
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+
+              <TextInput
+                placeholder='Confirm Password'
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+
+              {error && (
+                <Text style={styles.error}>{error}</Text>
+              )}
+
+              <Pressable style={styles.button} onPress={handleRegister}>
+                <Text style={styles.buttonText}>
+                  {loading ? 'Loading...' : 'Register'}
+                </Text>
+              </Pressable>
+
+              <Pressable onPress={() => router.replace('/login')}>
+                <Text style={styles.link}>
+                  Already have an account? Login
+                </Text>
+              </Pressable>
+            </GlassPanel>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+
       <View style={styles.container}>
-        <GlassPanel>
-          <Text style={styles.title}>Register</Text>
-
-          <TextInput
-            placeholder='Username'
-            value={username}
-            onChangeText={setUsername}
-            style={styles.input}
-          />
-
-          <TextInput
-            placeholder='Full Name'
-            value={name}
-            onChangeText={setName}
-            style={styles.input}
-          />
-
-          <TextInput
-            placeholder='Email'
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-            autoCapitalize='none'
-          />
-
-          <TextInput
-            placeholder='Password'
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.input}
-          />
-
-          <TextInput
-            placeholder='Confirm Password'
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-            style={styles.input}
-          />
-
-          {error && (
-            <Text style={styles.error}>{error}</Text>
-          )}
-
-          <Pressable style={styles.button} onPress={handleRegister}>
-            <Text style={styles.buttonText}>
-              {loading ? 'Loading...' : 'Register'}
-            </Text>
-          </Pressable>
-
-          <Pressable onPress={() => router.replace('/login')}>
-            <Text style={styles.link}>
-              Already have an account? Login
-            </Text>
-          </Pressable>
-        </GlassPanel>
       </View>
     </ScreenWrapper>
   )
