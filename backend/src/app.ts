@@ -43,6 +43,9 @@ app.get('/privacy', (_req: Request, res: Response) => {
 app.get('/delete-account', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../public/delete-account.html'));
 });
+app.get('/app-ads', (_req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '../public/app-ads.txt'));
+});
 
 
 //αυτο είναι για να σερβίρει το index.html του front όταν ο χρήστης επισκέπτεται το root path ή οποιοδήποτε άλλο path που δεν είναι api ή api-docs
