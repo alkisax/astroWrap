@@ -6,10 +6,8 @@ import {
   Pressable,
   StyleSheet,
   Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
 } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
 import axios from 'axios'
@@ -87,72 +85,73 @@ const Register = () => {
 
   return (
     <ScreenWrapper>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollContainer}
+        enableOnAndroid
+        extraScrollHeight={20}
+        keyboardShouldPersistTaps='handled'
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={styles.container}>
-            <GlassPanel>
-              <Text style={styles.title}>Register</Text>
 
-              <TextInput
-                placeholder='Username'
-                value={username}
-                onChangeText={setUsername}
-                style={styles.input}
-              />
+        <View style={styles.container}>
+          <GlassPanel>
+            <Text style={styles.title}>Register!</Text>
 
-              <TextInput
-                placeholder='Full Name'
-                value={name}
-                onChangeText={setName}
-                style={styles.input}
-              />
+            <TextInput
+              placeholder='Username'
+              value={username}
+              onChangeText={setUsername}
+              style={styles.input}
+            />
 
-              <TextInput
-                placeholder='Email'
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-                autoCapitalize='none'
-              />
+            <TextInput
+              placeholder='Full Name'
+              value={name}
+              onChangeText={setName}
+              style={styles.input}
+            />
 
-              <TextInput
-                placeholder='Password'
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.input}
-              />
+            <TextInput
+              placeholder='Email'
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+              autoCapitalize='none'
+            />
 
-              <TextInput
-                placeholder='Confirm Password'
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-                style={styles.input}
-              />
+            <TextInput
+              placeholder='Password'
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={styles.input}
+            />
 
-              {error && (
-                <Text style={styles.error}>{error}</Text>
-              )}
+            <TextInput
+              placeholder='Confirm Password'
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+              style={styles.input}
+            />
 
-              <Pressable style={styles.button} onPress={handleRegister}>
-                <Text style={styles.buttonText}>
-                  {loading ? 'Loading...' : 'Register'}
-                </Text>
-              </Pressable>
+            {error && (
+              <Text style={styles.error}>{error}</Text>
+            )}
 
-              <Pressable onPress={() => router.replace('/login')}>
-                <Text style={styles.link}>
-                  Already have an account? Login
-                </Text>
-              </Pressable>
-            </GlassPanel>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+            <Pressable style={styles.button} onPress={handleRegister}>
+              <Text style={styles.buttonText}>
+                {loading ? 'Loading...' : 'Register'}
+              </Text>
+            </Pressable>
+
+            <Pressable onPress={() => router.replace('/login')}>
+              <Text style={styles.link}>
+                Already have an account? Login
+              </Text>
+            </Pressable>
+          </GlassPanel>
+        </View>
+      </KeyboardAwareScrollView>
 
       <View style={styles.container}>
       </View>
@@ -165,8 +164,18 @@ export default Register
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     padding: 20,
+  },
+
+  scrollContainer: {
+    flexGrow: 1,
+    padding: 20,
+  },
+
+  inner: {
+    flex: 1,
+    justifyContent: 'center',
   },
 
   title: {
