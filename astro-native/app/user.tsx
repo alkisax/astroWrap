@@ -126,10 +126,26 @@ export default function UserPage() {
     if (userId) fetchUser()
   }, [fetchUser, userId])
 
-  // logger can be removed but keep commented out
+  // 💻💻 logger can be removed but keep commented out
+  // useEffect(() => {
+  //   if (user) {
+  //     console.log('🔥 USER FULL:', user)
+  //   }
+  // }, [user])
   useEffect(() => {
-    if (user) {
-      console.log('🔥 USER FULL:', user)
+    if (user?.natalChart) {
+      try {
+        const parsed = JSON.parse(user.natalChart)
+        const d = new Date(parsed?.meta?.date)
+
+        console.log('RAW:', parsed?.meta?.date)
+        console.log('LOCAL:', d.toString())
+        console.log('UTC:', d.toISOString())
+        console.log('HOURS local:', d.getHours())
+        console.log('HOURS utc:', d.getUTCHours())
+      } catch (e) {
+        console.log('parse error', e)
+      }
     }
   }, [user])
 

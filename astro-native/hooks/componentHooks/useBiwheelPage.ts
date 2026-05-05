@@ -27,7 +27,11 @@ export const useBiwheelPage = () => {
 
   // inputs
   const [radixInput, setRadixInput] = useState<ChartInput | null>(null);
-  const [transitInput, setTransitInput] = useState<ChartInput | null>(null);
+  const [transitInput, setTransitInput] = useState<ChartInput | null>({
+    date: new Date(),
+    lat: 37.9838,
+    lng: 23.7275,
+  });
 
   // planets
   const [selectedPlanets, setSelectedPlanets] = useState<string[]>([
@@ -68,6 +72,7 @@ export const useBiwheelPage = () => {
   const [llmError, setLlmError] = useState<string | null>(null);
 
   const defaultUserOrb = 1;
+
   //  analysis
   const radixAnalysis = useChartAnalysis(radixData, defaultUserOrb);
   const transitAnalysis = useChartAnalysis(transitData, defaultUserOrb);
@@ -257,6 +262,7 @@ export const useBiwheelPage = () => {
     // inputs
     setRadixInput,
     setTransitInput,
+    transitInput,
 
     radixCustomPlanetInfo,
     transitCustomPlanetInfo,

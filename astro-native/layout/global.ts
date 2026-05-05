@@ -103,7 +103,7 @@ export const globalStyles = StyleSheet.create({
   // 🌐 webview
   webviewWrap: {
     width: "100%",
-    height: 360,
+    height: 370,
     borderRadius: 12,
     overflow: "hidden",
     backgroundColor: "transparent",
@@ -161,5 +161,11 @@ export const globalStyles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 6,
     textAlign: "center",
+  },
+
+  subLabel: {
+    color: colors.dim,
+    fontSize: 12,
+    marginBottom: 4,
   },
 });

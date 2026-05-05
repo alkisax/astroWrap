@@ -86,11 +86,11 @@ export const useHome = () => {
     const fetchData = async () => {
       try {
         const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
-          year: date.getFullYear(),
-          month: date.getMonth() + 1,
-          day: date.getDate(),
-          hour: date.getHours(),
-          minute: date.getMinutes(),
+          year: date.getUTCFullYear(),
+          month: date.getUTCMonth() + 1,
+          day: date.getUTCDate(),
+          hour: date.getUTCHours(),
+          minute: date.getUTCMinutes(),
           latitude: coords.lat,
           longitude: coords.lng,
           houseSystem: "placidus",

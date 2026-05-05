@@ -26,6 +26,7 @@ const BiwheelBasicChartInfo = ({
   setSelectedPlanets,
 }: Props) => {
   const [showPlanets, setShowPlanets] = useState(false)
+  const [showTables, setShowTables] = useState(false)
 
   const { aspects } = useChartAnalysis(data1, userOrb)
 
@@ -53,16 +54,26 @@ const BiwheelBasicChartInfo = ({
         )}
       </GlassPanel>
 
-      {/* YOU */}
       <GlassPanel>
-        <Text style={globalStyles.sectionLabel}>You</Text>
-        <PlanetTable data={data1} />
-      </GlassPanel>
+        <Pressable onPress={() => setShowTables(!showTables)}>
+          <Text style={globalStyles.sectionLabel}>
+            🌛 Planet Tables {showTables ? '▲' : '▼'}
+          </Text>
+        </Pressable>
 
-      {/* OTHER */}
-      <GlassPanel>
-        <Text style={globalStyles.sectionLabel}>Other</Text>
-        <PlanetTable data={data2} />
+        {showTables && (
+          <>
+            {/* YOU */}
+            <Text style={globalStyles.subLabel}>You</Text>
+            <PlanetTable data={data1} />
+
+            {/* OTHER */}
+            <Text style={[globalStyles.subLabel, { marginTop: 10 }]}>
+              Other
+            </Text>
+            <PlanetTable data={data2} />
+          </>
+        )}
       </GlassPanel>
 
     </ScrollView>

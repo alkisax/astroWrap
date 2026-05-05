@@ -9,9 +9,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { backendUrl } from '@/constants/constants'
 import type { IUser } from '@/authLogin/types/types'
-import type { ChartSummary } from '@/types/types'
+import ChartForm from '@/components/controls/ChartForm'
 import BiwheelBasicChartInfo from '@/components/chartInfo/biwheel/BiwheelBasicChartInfo.native'
 import { useBiwheelPage } from '@/hooks/componentHooks/useBiwheelPage'
+import { formatChartDate } from '@/utils/formatChartDate'
+import tzLookup from 'tz-lookup'
 
 type ParsedChart = {
   meta?: {
@@ -25,14 +27,24 @@ type ParsedChart = {
 
 const Relationship = () => {
   const [fullUser, setFullUser] = useState<IUser | null>(null)
-  const [radixData, setRadixData] = useState<ChartSummary | null>(null)
-  const [transitData, setTransitData] = useState<ChartSummary | null>(null)
 
   const { user } = useContext(UserAuthContext)
   const {
+    radixData,
+    transitData,
+    setTransitInput,
     selectedPlanets,
     setSelectedPlanets,
+    transitInput,
   } = useBiwheelPage()
+
+  const toChartInputString = (date: Date, coords: { lat: number; lng: number }) => {
+    const timezone = tzLookup(coords.lat, coords.lng)
+
+    return date.toLocaleString('sv-SE', {
+      timeZone: timezone,
+    }).replace(' ', 'T').slice(0, 16)
+  }
 
   // fetch full user 
   useEffect(() => {
@@ -56,13 +68,14 @@ const Relationship = () => {
     run()
   }, [user])
 
-  let parsed: ParsedChart | null = null
-
-  try {
-    if (fullUser?.natalChart) {
-      parsed = JSON.parse(fullUser.natalChart) as ParsedChart
+  const parsed = useMemo(() => {
+    try {
+      if (!fullUser?.natalChart) return null
+      return JSON.parse(fullUser.natalChart) as ParsedChart
+    } catch {
+      return null
     }
-  } catch { }
+  }, [fullUser?.natalChart])
 
   const date1 = useMemo(() => {
     return parsed?.meta?.date
@@ -78,68 +91,11 @@ const Relationship = () => {
     parsed?.meta?.location?.lng
   ])
 
-  // fetch YOU chart
-  useEffect(() => {
-    const run = async () => {
-      try {
-        const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
-          year: date1.getFullYear(),
-          month: date1.getMonth() + 1,
-          day: date1.getDate(),
-          hour: date1.getHours(),
-          minute: date1.getMinutes(),
-          latitude: coords1.lat,
-          longitude: coords1.lng,
-          houseSystem: "placidus",
-          zodiac: "tropical",
-        })
-
-        setRadixData(res.data)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    run()
-  }, [date1, coords1.lat, coords1.lng])
-
-
-  const date2 = useMemo(() => new Date(), [])
-
-  const coords2 = useMemo(() => ({
-    lat: 40.7128,
-    lng: -74.0060,
-  }), [])
-  // fetch OTHER chart
-  useEffect(() => {
-    const run = async () => {
-      try {
-        const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
-          year: date2.getFullYear(),
-          month: date2.getMonth() + 1,
-          day: date2.getDate(),
-          hour: date2.getHours(),
-          minute: date2.getMinutes(),
-          latitude: coords2.lat,
-          longitude: coords2.lng,
-          houseSystem: "placidus",
-          zodiac: "tropical",
-        })
-
-        setTransitData(res.data)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    run()
-  }, [date2, coords2.lat, coords2.lng])
-
   const userOrb = 1
 
   const chartUrl1 = useMemo(() => {
     const params = new URLSearchParams({
-      date: date1.toISOString(),
+      date: toChartInputString(date1, coords1),
       lat: String(coords1.lat),
       lng: String(coords1.lng),
       userOrb: String(userOrb),
@@ -147,24 +103,34 @@ const Relationship = () => {
     })
 
     return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
-  }, [coords1.lat, coords1.lng, date1, selectedPlanets])
+  }, [coords1, date1, selectedPlanets])
 
   const chartUrl2 = useMemo(() => {
+    if (!transitInput) return ''
+
     const params = new URLSearchParams({
-      date: date2.toISOString(),
-      lat: String(coords2.lat),
-      lng: String(coords2.lng),
+      date: toChartInputString(transitInput.date, {
+        lat: transitInput.lat,
+        lng: transitInput.lng,
+      }),
+      lat: String(transitInput.lat),
+      lng: String(transitInput.lng),
       userOrb: String(userOrb),
       planets: selectedPlanets.join(','),
     })
 
     return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
-  }, [coords2.lat, coords2.lng, date2, selectedPlanets])
+  }, [transitInput, selectedPlanets])
 
   const formatInfo = (date: Date, coords: { lat: number; lng: number }) => {
-    return `${date.toISOString().slice(0, 16)} | ${coords.lat.toFixed(2)}, ${coords.lng.toFixed(2)}`
+    return `${formatChartDate(date, coords)} | ${coords.lat.toFixed(2)}, 
+            ${coords.lng.toFixed(2)}`
   }
 
+  console.log('⌚ date1 local hour:', date1.getHours())
+  console.log('⌚ date1 utc hour:', date1.getUTCHours())
+  console.log('⌛ chart hour:', formatChartDate(date1, coords1))
+  console.log('timezone offset:', new Date().getTimezoneOffset())
   return (
     <ScreenWrapper>
       <ScrollView contentContainerStyle={{ padding: 16, gap: 8 }}>
@@ -203,9 +169,14 @@ const Relationship = () => {
             <Text>WebView not supported</Text>
           ) : (
             <>
-              <Text style={[globalStyles.text, { color: '#fff', marginTop: 8 }]}>
-                👤 The Other · {formatInfo(date2, coords2)}
-              </Text>
+              {transitInput && (
+                <Text style={[globalStyles.text, { color: '#fff', marginTop: 8 }]}>
+                  👤 The Other · {formatInfo(transitInput.date, {
+                    lat: transitInput.lat,
+                    lng: transitInput.lng,
+                  })}
+                </Text>
+              )}
               <WebView
                 key={chartUrl2}
                 source={{ uri: chartUrl2 }}
@@ -220,6 +191,12 @@ const Relationship = () => {
             </>
           )}
         </View>
+
+        <ChartForm
+          onSubmit={({ date, lat, lng }) => {
+            setTransitInput({ date, lat, lng })
+          }}
+        />
 
         {radixData && transitData && (
           <BiwheelBasicChartInfo
