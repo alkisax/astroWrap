@@ -75,13 +75,6 @@ export default function Index() {
   return (
     <ScreenWrapper>
       <ScrollView contentContainerStyle={styles.container}>
-
-        {/* <Pressable
-          onPress={() => router.push('/login')}
-        >
-          <Text>Go to Login</Text>
-        </Pressable> */}
-
         {/* 🔝 buttons */}
         <View style={styles.buttonRow}>
           <View>
@@ -115,8 +108,6 @@ export default function Index() {
                 </Text>
               )}
             </Pressable>
-
-
           </View>
         </View>
 
@@ -142,7 +133,6 @@ export default function Index() {
         </View>
       </ScrollView>
     </ScreenWrapper>
-
   )
 }
 
