@@ -1,59 +1,62 @@
-import type { ReactNode } from 'react'
-import type { JwtPayload } from 'jwt-decode'
+import type { ReactNode } from "react";
+import type { JwtPayload } from "jwt-decode";
 
 // 🔥 ίδιο enum με backend (important)
-export type Roles = 'ADMIN' | 'STAFF' | 'USER'
+export type Roles = "ADMIN" | "STAFF" | "USER";
 
 export interface IUser {
-  id?: number
-  _id?: number // legacy support
+  id?: number;
+  _id?: number; // legacy support
 
-  username: string
-  name?: string
-  surname?: string
-  email?: string
+  username: string;
+  name?: string;
+  surname?: string;
+  email?: string;
 
-  hashedPassword?: string
-  password?: string
+  hashedPassword?: string;
+  password?: string;
 
-  hasPassword: boolean
+  hasPassword: boolean;
 
-  roles: Roles[] // 🔥 UI needs array
+  roles: Roles[]; // 🔥 UI needs array
 
-  provider?: 'backend'
+  provider?: "backend";
 
-  favorites?: string[]
+  favorites?: string[];
+
+  natalChart?: string;
+  natalDelineation?: string;
 }
 
 // 🔥 aligned with sqlite backend JWT
 export interface BackendJwtPayload extends JwtPayload {
-  id: number
-  username: string
-  email?: string
-  name?: string
+  id: number;
+  username: string;
+  email?: string;
+  name?: string;
 
-  role: Roles // 🔥 single role από backend
+  role: Roles; // 🔥 single role από backend
 }
 
 export interface UserAuthContextType {
-  user: IUser | null
-  setUser: (user: IUser | null) => void
-  isLoading: boolean
-  setIsLoading: (loading: boolean) => void
-  refreshUser: () => Promise<void>
+  user: IUser | null;
+  setUser: (user: IUser | null) => void;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+  refreshUser: () => Promise<void>;
 }
 
 // Props type for the provider
 export interface UserProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 // for updating a user (future use)
 export interface UpdateUser {
-  username?: string
-  name?: string
-  roles?: Roles[]
-  password?: string
-  hashedPassword?: string
-  favorites?: string[]
+  username?: string;
+  name?: string;
+  roles?: Roles[];
+  password?: string;
+  hashedPassword?: string;
+  favorites?: string[];
 }

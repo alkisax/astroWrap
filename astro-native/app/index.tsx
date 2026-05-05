@@ -1,8 +1,13 @@
 // astro-native\app\index.tsx
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
-import { colors } from '../constants/constants'
+import { useContext, useEffect, useState } from 'react'
+import { UserAuthContext } from '../authLogin/context/UserAuthContext'
+import { backendUrl, colors } from '../constants/constants'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
+import { IUser } from '@/authLogin/types/types'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
 
 const poemText = `
 Once upon a time there was a lark who was renowned for her beautiful singing. Her song was judged by all who heard her to be the sweetest sound on earth. From dawn to dusk she would sing her song and as she sang, the beginnings of a desire grew. The desire was to sing for the gods. 
@@ -14,10 +19,58 @@ One day she saw an eagle soaring high in the sky, far higher then she had ever f
 Now the eagle was aware of the gods because he could fly in their domain and yet, ashamed of his raucous voice, he never had the courage to contact them. Eagerly he agreed to carry the tiny lark.
 
 Tentatively she climbed onto his back and with a stretch and a flap of his mighty wings, he set aloft. Higher and higher they soared. The lark was almost too scared to look down and yet onward still they flew. The lark had never been this high. She could see the whole world spread out beneath her. And then, all of a sudden, they were there. The tiny lark knew that now it was her turn, the eagle having done his part. Firmly she stood up on the eagle’s back and, filling her lungs with air, began to sing. Heaven was filled with her glorious music. The gods were astonished at the power of the eagle and enthralled by the beauty of the lark’s song. The eagle was no longer ashamed and the lark was filled with joy. Together, as a team, they had brought music to the gods.
+
+Bernadette Brady
 `
 
 export default function Index() {
   const router = useRouter()
+  const { user } = useContext(UserAuthContext)
+
+  const [showPoem, setShowPoem] = useState(false)
+  // είναι άλλο ο user που μας έρχεται απο το auth (που αφορα το reusable login) και αλλο ο full user που έχει και τα αστρολογικά του. και άρα πρέπει να τον κάνουμε fetch
+  const [fullUser, setFullUser] = useState<IUser | null>(null)
+
+  // fetch full user για να δουμε αν έχει natal chart info
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token')
+        const userId = user?._id || user?.id
+        if (!token || !userId) return
+
+        const res = await axios.get(
+          `${backendUrl}/api/sqlite/users/${userId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+
+        setFullUser(res.data.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    run()
+  }, [user])
+
+  const hasChartData = (() => {
+    try {
+      if (!fullUser?.natalChart) return false
+
+      const parsed = JSON.parse(fullUser.natalChart)
+
+      return Boolean(
+        parsed?.meta?.date &&
+        parsed?.meta?.location?.lat &&
+        parsed?.meta?.location?.lng
+      )
+    } catch {
+      return false
+    }
+  })()
+
+  console.log('user:', user)
+  console.log('hasChartData:', hasChartData)
 
   return (
     <ScreenWrapper>
@@ -31,30 +84,61 @@ export default function Index() {
 
         {/* 🔝 buttons */}
         <View style={styles.buttonRow}>
-          <Pressable
-            style={[styles.button, styles.primary]}
-            onPress={() => router.push('/single')}
-          >
-            <Text style={styles.buttonText}>Single Chart</Text>
-          </Pressable>
+          <View>
+            <Pressable
+              style={[
+                styles.button,
+                styles.primary,
+                { marginBottom: 12 }
+              ]}
+              onPress={() => router.push('/single')}
+            >
+              <Text style={styles.buttonText}>Single Chart</Text>
+            </Pressable>
 
-          {/* <Pressable
-            style={[styles.button, styles.outline]}
-            onPress={() => router.push('/biwheel')}
-          >
-            <Text style={styles.buttonText}>Relationship Analysis</Text>
-          </Pressable> */}
+            <Pressable
+              style={[
+                styles.button,
+                styles.outline,
+                (!user || !hasChartData) && { opacity: 0.4 },
+              ]}
+              disabled={!user || !hasChartData}
+              onPress={() => router.push('/relationship')}
+            >
+              <Text style={styles.buttonText}>
+                Relationship Analysis
+              </Text>
+
+              {(!user || !hasChartData) && (
+                <Text style={{ fontSize: 12, color: colors.dim, marginTop: 4 }}>
+                  {!user ? 'Please login' : 'Add birth data'}
+                </Text>
+              )}
+            </Pressable>
+
+
+          </View>
         </View>
 
         {/* 🔽 content */}
         <View style={styles.card}>
-          <Text style={styles.title}>
-            THE FABLE OF THE EAGLE AND THE LARK
-          </Text>
+          <View style={{ position: 'relative' }}>
+            <Pressable onPress={() => setShowPoem(!showPoem)}>
+              <Text style={styles.title}>
+                THE FABLE OF THE EAGLE AND THE LARK
+              </Text>
+            </Pressable>
 
-          <Text style={styles.text}>
-            {poemText}
-          </Text>
+            <Text style={styles.arrow}>
+              {showPoem ? '▲' : '▼'}
+            </Text>
+          </View>
+
+          {showPoem && (
+            <Text style={styles.text}>
+              {poemText}
+            </Text>
+          )}
         </View>
       </ScrollView>
     </ScreenWrapper>
@@ -121,5 +205,13 @@ const styles = StyleSheet.create({
     color: colors.dim,
     lineHeight: 22,
     fontSize: 14,
+  },
+
+  arrow: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    fontSize: 16,
+    color: colors.dim,
   },
 })

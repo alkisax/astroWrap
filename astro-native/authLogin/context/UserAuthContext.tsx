@@ -42,7 +42,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
     // αν έχει token παίρνουμε απο εκεί τον Provider
     if (token) {
-      console.log("TOKEN:", token);
+      // console.log("TOKEN:", token);
       try {
         decodedToken = jwtDecode<BackendJwtPayload>(token);
         provider = "backend";

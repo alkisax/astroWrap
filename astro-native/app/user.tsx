@@ -94,7 +94,7 @@ type Chart = {
   }[]
 }
 
-/* 🔥 COMPONENT */
+/* COMPONENT */
 
 export default function UserPage() {
   const [user, setUser] = useState<UserData | null>(null)
@@ -126,6 +126,13 @@ export default function UserPage() {
     if (userId) fetchUser()
   }, [fetchUser, userId])
 
+  // logger can be removed but keep commented out
+  useEffect(() => {
+    if (user) {
+      console.log('🔥 USER FULL:', user)
+    }
+  }, [user])
+
   if (!user) {
     return (
       <ScreenWrapper>
@@ -137,7 +144,7 @@ export default function UserPage() {
   let chart: Chart | null = null
   try {
     chart = user.natalChart ? JSON.parse(user.natalChart) : null
-  } catch {}
+  } catch { }
 
   return (
     <ScreenWrapper>
@@ -318,12 +325,12 @@ export default function UserPage() {
       )}
 
       <DeleteAccountButton userId={user.id} />
-      
+
     </ScreenWrapper>
   )
 }
 
-/* 🔥 STYLES */
+/* STYLES */
 
 const styles = StyleSheet.create({
   container: { padding: 16, gap: 12 },
@@ -383,3 +390,98 @@ const styles = StyleSheet.create({
 const markdownStyles = {
   body: { color: colors.text },
 }
+
+
+/*
+FULL USER STRUCTURE (from backend)
+
+user = {
+  id: number,
+  username: string,
+  email: string,
+  name: string,
+  role?: string,
+  roles?: string[],
+
+  createdAt: string,
+  updatedAt: string,
+
+  // 🔮 chart data (stringified JSON)
+  natalChart: string,
+
+  // 🧠 LLM interpretation (plain text / markdown)
+  natalDelineation: string
+}
+
+
+----------------------------------------
+natalChart (JSON.parse(user.natalChart))
+----------------------------------------
+
+{
+  meta: {
+    date: string, // ISO date e.g. "1981-01-01T21:30:00.000Z"
+    location: {
+      lat: number,
+      lng: number
+    },
+    zodiac: string,
+    houseSystem: string
+  },
+
+  planets: [
+    {
+      planet: string,
+      sign: string,
+      house: number
+    }
+  ],
+
+  houses: [
+    {
+      house: number,
+      sign: string,
+      longitude: number
+    }
+  ],
+
+  chartRuler: {
+    planet: string,
+    sign: string,
+    house: number
+  },
+
+  balance: {
+    elements: Record<string, number>,
+    modalities: Record<string, number>
+  },
+
+  aspects: [
+    {
+      point1: string,
+      point2: string,
+      type: string,
+      orb: number
+    }
+  ],
+
+  dignities: [
+    {
+      planet: string,
+      dignity: string
+    }
+  ],
+
+  dispositors: {
+    loops: string[],
+    backbone: string[]
+  }
+}
+
+
+----------------------------------------
+natalDelineation
+----------------------------------------
+
+string (LLM generated analysis, markdown-ready text)
+*/
