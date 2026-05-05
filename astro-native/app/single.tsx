@@ -7,6 +7,15 @@ import { WebView } from 'react-native-webview'
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '@/components/chartInfo/BasicChartInfo.native'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
+import tzLookup from 'tz-lookup'
+
+const toChartInputString = (date: Date, coords: { lat: number; lng: number }) => {
+  const timezone = tzLookup(coords.lat, coords.lng)
+
+  return date.toLocaleString('sv-SE', {
+    timeZone: timezone,
+  }).replace(' ', 'T').slice(0, 16)
+}
 
 export default function Single() {
   // ολη η λογική του component έχει μεταφερθεί σε hook
@@ -22,12 +31,12 @@ export default function Single() {
     handleSubmit,
     // shaken,
     // handleLLMInterpretation,
-    handleLLMClick,
+    handleLLMClick, // TODO
     showLLM,
     llmResult,
     llmLoading,
     llmError,
-    loaded,
+    loaded, // TODO
     isProcessing,
     saveLLMToDb,
 
@@ -54,14 +63,21 @@ export default function Single() {
   // το web page θα κάνει μόνο του fetch το chart και render το AstroChart
   const chartUrl = useMemo(() => {
     const params = new URLSearchParams({
-      date: date.toISOString(),
+      date: toChartInputString(date, coords),
       lat: String(coords.lat),
       lng: String(coords.lng),
       userOrb: String(userOrb),
       planets: visiblePlanets.join(','),
     })
 
-    return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
+    const url = `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
+
+    // 🔍 DEBUG ONLY
+    console.log('🧪 WEBVIEW URL:', url)
+
+    return url
+    // ετσι λιγοτερα rerender
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, coords.lat, coords.lng, userOrb, visiblePlanets])
 
   return (
@@ -114,6 +130,8 @@ export default function Single() {
           </>
         )}
 
+
+
         {/* basic panel οπως το θέλουμε σιγά σιγά να οργανωθεί
           εδώ μέσα θα μπει TimeControls, WebView chart, PlanetSelector κλπ */}
         <BasicControls
@@ -136,12 +154,12 @@ export default function Single() {
             customAspects={customAspects}
             setCustomHouseRulers={setCustomHouseRulers}
 
-            handleLLMClick={handleLLMClick}
+            handleLLMClick={handleLLMClick} // TODO
             showLLM={showLLM}
             llmResult={llmResult}
             llmLoading={llmLoading}
             llmError={llmError}
-            loaded={loaded}
+            loaded={loaded} // TODO
             isProcessing={isProcessing}
             saveLLMToDb={saveLLMToDb}
             setCustomPlanetInfo={setCustomPlanetInfo}

@@ -5,6 +5,7 @@
 import { colors } from '@/constants/constants'
 import { useState } from 'react'
 import { View, Text, TextInput, Pressable, Linking, StyleSheet } from 'react-native'
+import tzLookup from 'tz-lookup'
 
 type Props = {
   onSubmit: (data: {
@@ -35,16 +36,71 @@ export default function ChartForm({ onSubmit }: Props) {
 
     if (Number.isNaN(parsedLat) || Number.isNaN(parsedLng)) return
 
-    // προσπαθούμε να κάνουμε parse ένα απλό local date string
-    // πχ 1981-01-01 23:30
     const normalized = dateInput.trim().replace(' ', 'T')
-    const parsedDate = new Date(normalized)
 
-    if (Number.isNaN(parsedDate.getTime())) return
+    const [datePart, timePart] = normalized.split('T')
+    if (!datePart || !timePart) return
 
-    // εδω γίνετε και ο τελικός υπολογισμός του chart
+    const [year, month, day] = datePart.split('-').map(Number)
+    const [hour, minute] = timePart.split(':').map(Number)
+
+    const timezone = tzLookup(parsedLat, parsedLng)
+
+    // 🔥 create base UTC (no assumptions)
+    const utcGuess = new Date(Date.UTC(year, month - 1, day, hour, minute))
+
+    // 🔥 SAFE offset calc (RN compatible)
+    const getOffset = (date: Date, timeZone: string) => {
+      try {
+        const dtf = new Intl.DateTimeFormat('en-US', {
+          timeZone,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        })
+
+        const parts = dtf.formatToParts(date)
+
+        const map: Record<string, string> = {}
+        parts.forEach(p => {
+          if (p.type !== 'literal') map[p.type] = p.value
+        })
+
+        const asUTC = Date.UTC(
+          Number(map.year),
+          Number(map.month) - 1,
+          Number(map.day),
+          Number(map.hour),
+          Number(map.minute),
+          Number(map.second)
+        )
+
+        return asUTC - date.getTime()
+      } catch (e) {
+        console.log('❌ offset error', e)
+        return 0
+      }
+    }
+
+    const offset = getOffset(utcGuess, timezone)
+
+    const finalUtc = new Date(utcGuess.getTime() - offset)
+
+    if (Number.isNaN(finalUtc.getTime())) {
+      console.log('❌ INVALID finalUtc')
+      return
+    }
+
+    console.log('🧪 INPUT:', dateInput)
+    console.log('🧪 TZ:', timezone)
+    console.log('🧪 FINAL UTC:', finalUtc.toISOString())
+
     onSubmit({
-      date: parsedDate, // ήδη Date
+      date: finalUtc,
       lat: parsedLat,
       lng: parsedLng,
     })

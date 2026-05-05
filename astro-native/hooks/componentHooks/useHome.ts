@@ -4,7 +4,7 @@ import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
 import { UserAuthContext } from "../../authLogin/context/UserAuthContext";
-import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd";
+import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO
 
 import type {
   ChartSummary,
@@ -77,7 +77,7 @@ export const useHome = () => {
   const [lastCallAt, setLastCallAt] = useState<number | null>(null); // για να υποχρεώσουμε σε cooldown ένα llm call ανα 30sec
 
   const { user } = useContext(UserAuthContext);
-  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd();
+  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO
 
   // 🔥 ΕΠΙΣΤΡΟΦΗ στο backend call (RN compatible)
   // input: ημερομηνια και συντεταγμένες
@@ -179,6 +179,7 @@ export const useHome = () => {
   // εδώ το μονο που κοιτάζει είναι αν έχουμε preloaded διαφήμιση και αν ναι την προβάλει και όλη η λογική του κουμπιού γίνετε απο ενα useEffect που γίνετε trigger με την ολοκλήρωση της διαφήμισης (reward earned)
   const COOLDOWN = 30000; // 30 sec
 
+  // TODO
   const handleLLMClick = async () => {
     if (!payload) return;
     if (isProcessing) return; // 🔥 anti spam
@@ -202,8 +203,9 @@ export const useHome = () => {
   };
 
   // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
+  // TODO
   useEffect(() => {
-    if (!rewardEarned) return;
+    if (!rewardEarned) return; // TODO
     if (!payload) return;
 
     const run = async () => {
@@ -221,7 +223,7 @@ export const useHome = () => {
         setLlmError("LLM request failed");
       } finally {
         setLlmLoading(false);
-        setRewardEarned(false);
+        setRewardEarned(false); 
         setIsProcessing(false);
         setLastCallAt(Date.now());
       }
@@ -235,9 +237,11 @@ export const useHome = () => {
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;
 
-    if (!llmResult || !payload || !userId) return;
+    if (!llmResult || !payload || !userId) return; // TODO
+    // if (!payload || !userId) return; //TODO
 
     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+    console.log('💾 SAVING SNAPSHOT:', JSON.stringify(snapshot, null, 2)) 
 
     try {
       const token = await AsyncStorage.getItem("token");
@@ -246,7 +250,7 @@ export const useHome = () => {
         `${backendUrl}/api/sqlite/users/${userId}`,
         {
           natalChart: JSON.stringify(snapshot),
-          natalDelineation: llmResult,
+          natalDelineation: llmResult ?? 'debug' // TODO
         },
         {
           headers: {
@@ -291,9 +295,9 @@ export const useHome = () => {
     handleLLMInterpretation,
     llmLoading,
     llmError,
-    loaded,
+    loaded, // TODO
     isProcessing,
-    handleLLMClick,
+    handleLLMClick, // TODO
     showLLM,
     llmResult,
     saveLLMToDb,

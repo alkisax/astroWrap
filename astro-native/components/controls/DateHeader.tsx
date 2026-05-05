@@ -2,6 +2,7 @@
 
 import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../../constants/constants'
+import tzLookup from 'tz-lookup'
 
 type Props = {
   date: Date
@@ -9,14 +10,13 @@ type Props = {
 }
 
 const DateHeader = ({ date, coords }: Props) => {
+  const tz = tzLookup(coords.lat, coords.lng)
 
-  const formattedDate = date.toLocaleString('el-GR', {
+  const formatted = date.toLocaleString('el-GR', {
+    timeZone: tz,
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
-  })
-
-  const formattedTime = date.toLocaleTimeString('el-GR', {
     hour: '2-digit',
     minute: '2-digit',
   })
@@ -24,7 +24,7 @@ const DateHeader = ({ date, coords }: Props) => {
   return (
     <View style={styles.header}>
       <Text style={styles.dateText}>
-        {formattedDate} {formattedTime}
+        {formatted}
       </Text>
 
       <Text style={styles.coordsText}>

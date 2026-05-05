@@ -24,12 +24,12 @@ type Props = {
   customAspects: CustomAspect[]
   setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void
 
-  handleLLMClick: () => void
+  handleLLMClick: () => void // TODO
   showLLM: boolean
   llmResult: string | null
   llmLoading: boolean
   llmError: string | null
-  loaded: boolean
+  loaded: boolean // TODO
   isProcessing: boolean
   saveLLMToDb: () => void
   setCustomPlanetInfo: (v: any) => void
@@ -46,13 +46,13 @@ const BasicChartInfo = ({
   setCustomAspects,
   customAspects,
   setCustomHouseRulers,
-  handleLLMClick,
+  handleLLMClick, // TODO
   showLLM,
   llmResult,
   llmLoading,
   llmError,
   isProcessing,
-  loaded,
+  loaded, // TODO
   saveLLMToDb,
   setCustomPlanetInfo,
   setCustomChartRuler,
@@ -123,6 +123,23 @@ const BasicChartInfo = ({
       ]}
       showsVerticalScrollIndicator={false}
     >
+
+      {/* TODO REMOVE */}
+      {/* <Pressable
+        onPress={saveLLMToDb}
+        style={{
+          marginTop: 10,
+          padding: 10,
+          backgroundColor: colors.secondary,
+          borderRadius: 8,
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ color: colors.text, fontWeight: '600' }}>
+          Save interpretation
+        </Text>
+      </Pressable> */}
+
       <GlassPanel>
         <PlanetTable data={data} />
       </GlassPanel>
@@ -199,6 +216,7 @@ const BasicChartInfo = ({
       </GlassPanel>
 
       <GlassPanel>
+        {/* TODO */}
         <Pressable
           onPress={handleLLMClick}
           disabled={!loaded || isProcessing || llmLoading}
