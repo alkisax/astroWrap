@@ -1,3 +1,4 @@
+// astro-native\app\relationship.tsx
 import { View, Text, Platform, ScrollView } from 'react-native'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { WebView } from 'react-native-webview'
@@ -10,6 +11,7 @@ import { backendUrl } from '@/constants/constants'
 import type { IUser } from '@/authLogin/types/types'
 import type { ChartSummary } from '@/types/types'
 import BiwheelBasicChartInfo from '@/components/chartInfo/biwheel/BiwheelBasicChartInfo.native'
+import { useBiwheelPage } from '@/hooks/componentHooks/useBiwheelPage'
 
 type ParsedChart = {
   meta?: {
@@ -27,6 +29,10 @@ const Relationship = () => {
   const [transitData, setTransitData] = useState<ChartSummary | null>(null)
 
   const { user } = useContext(UserAuthContext)
+  const {
+    selectedPlanets,
+    setSelectedPlanets,
+  } = useBiwheelPage()
 
   // fetch full user 
   useEffect(() => {
@@ -129,16 +135,7 @@ const Relationship = () => {
     run()
   }, [date2, coords2.lat, coords2.lng])
 
-
-
   const userOrb = 1
-  const planets = useMemo(() => [
-    'Sun',
-    'Moon',
-    'Mercury',
-    'Venus',
-    'Mars',
-  ], [])
 
   const chartUrl1 = useMemo(() => {
     const params = new URLSearchParams({
@@ -146,11 +143,11 @@ const Relationship = () => {
       lat: String(coords1.lat),
       lng: String(coords1.lng),
       userOrb: String(userOrb),
-      planets: planets.join(','),
+      planets: selectedPlanets.join(','),
     })
 
     return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
-  }, [coords1.lat, coords1.lng, date1, planets])
+  }, [coords1.lat, coords1.lng, date1, selectedPlanets])
 
   const chartUrl2 = useMemo(() => {
     const params = new URLSearchParams({
@@ -158,11 +155,11 @@ const Relationship = () => {
       lat: String(coords2.lat),
       lng: String(coords2.lng),
       userOrb: String(userOrb),
-      planets: planets.join(','),
+      planets: selectedPlanets.join(','),
     })
 
     return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
-  }, [coords2.lat, coords2.lng, date2, planets])
+  }, [coords2.lat, coords2.lng, date2, selectedPlanets])
 
   const formatInfo = (date: Date, coords: { lat: number; lng: number }) => {
     return `${date.toISOString().slice(0, 16)} | ${coords.lat.toFixed(2)}, ${coords.lng.toFixed(2)}`
@@ -229,6 +226,8 @@ const Relationship = () => {
             data1={radixData}
             data2={transitData}
             userOrb={1}
+            selectedPlanets={selectedPlanets}
+            setSelectedPlanets={setSelectedPlanets}
           />
         )}
 

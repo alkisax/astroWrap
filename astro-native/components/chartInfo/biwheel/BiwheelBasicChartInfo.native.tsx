@@ -1,18 +1,20 @@
-import { ScrollView, StyleSheet, Text } from 'react-native'
+// astro-native\components\chartInfo\biwheel\BiwheelBasicChartInfo.native.tsx
+import { Pressable, ScrollView, StyleSheet, Text } from 'react-native'
 import { useChartAnalysis } from '../../../hooks/componentHooks/useChartAnalysis'
 import PlanetTable from '../PlanetTable'
 import GlassPanel from '../../ui/GlassPanel'
-import { useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import type { CustomAspect, ChartSummary } from '@/types/types'
 import { globalStyles } from '../../../layout/global'
-// import type { ChartSummary } from '@/types/astro.types'
-
+import PlanetSelector from '../../controls/PlanetSelector'
 
 type Props = {
   data1: ChartSummary
   data2: ChartSummary
   userOrb: number
   setCustomAspects?: (a: CustomAspect[]) => void
+  selectedPlanets: string[]
+  setSelectedPlanets: Dispatch<SetStateAction<string[]>>
 }
 
 const BiwheelBasicChartInfo = ({
@@ -20,7 +22,10 @@ const BiwheelBasicChartInfo = ({
   data2,
   userOrb,
   setCustomAspects,
+  selectedPlanets,
+  setSelectedPlanets,
 }: Props) => {
+  const [showPlanets, setShowPlanets] = useState(false)
 
   const { aspects } = useChartAnalysis(data1, userOrb)
 
@@ -33,17 +38,32 @@ const BiwheelBasicChartInfo = ({
   return (
     <ScrollView contentContainerStyle={styles.container}>
 
-      {/* YOU */}
-    <GlassPanel>
-      <Text style={globalStyles.sectionLabel}>You</Text>
-      <PlanetTable data={data1} />
-    </GlassPanel>
+      <GlassPanel>
+        <Pressable onPress={() => setShowPlanets(!showPlanets)}>
+          <Text style={globalStyles.sectionLabel}>
+            🪐 Visible Planets {showPlanets ? '▲' : '▼'}
+          </Text>
+        </Pressable>
 
-    {/* OTHER */}
-    <GlassPanel>
-      <Text style={globalStyles.sectionLabel}>Other</Text>
-      <PlanetTable data={data2} />
-    </GlassPanel>
+        {showPlanets && (
+          <PlanetSelector
+            selected={selectedPlanets}
+            setSelected={setSelectedPlanets}
+          />
+        )}
+      </GlassPanel>
+
+      {/* YOU */}
+      <GlassPanel>
+        <Text style={globalStyles.sectionLabel}>You</Text>
+        <PlanetTable data={data1} />
+      </GlassPanel>
+
+      {/* OTHER */}
+      <GlassPanel>
+        <Text style={globalStyles.sectionLabel}>Other</Text>
+        <PlanetTable data={data2} />
+      </GlassPanel>
 
     </ScrollView>
   )
