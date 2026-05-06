@@ -1,15 +1,15 @@
 // backend\src\openAI\astroInterpretation.service.ts
-import axios from 'axios';
-import { consts } from '../config/constants';
-import { ValidationError } from '../utils/error/errors.types';
+import axios from "axios";
+import { consts } from "../config/constants";
+import { ValidationError } from "../utils/error/errors.types";
 
 // 🤖 ChatGPT
 // const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
 // const MODEL = 'gpt-4o-mini';
 
 // 🤖 DEEPSEEK
-const OPENAI_URL = 'https://api.deepseek.com/chat/completions';
-const MODEL = 'deepseek-chat';
+const OPENAI_URL = "https://api.deepseek.com/chat/completions";
+const MODEL = "deepseek-chat";
 
 const buildPrompt = (chartData: unknown) => `
 You are an expert astrologer. Analyze the following natal chart data and provide a structured, clear interpretation.
@@ -97,9 +97,11 @@ CHART DATA:
 ${JSON.stringify(chartData)}
 `;
 
-export const getAstroInterpretation = async (chartData: unknown): Promise<string> => {
+export const getAstroInterpretation = async (
+  chartData: unknown,
+): Promise<string> => {
   if (!chartData) {
-    throw new ValidationError('Missing chart data');
+    throw new ValidationError("Missing chart data");
   }
 
   const response = await axios.post(
@@ -108,7 +110,7 @@ export const getAstroInterpretation = async (chartData: unknown): Promise<string
       model: MODEL,
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: buildPrompt(chartData),
         },
       ],
@@ -118,10 +120,15 @@ export const getAstroInterpretation = async (chartData: unknown): Promise<string
       headers: {
         // Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
         Authorization: `Bearer ${consts.env.DEEPSEEK_API_KEY}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    }
+    },
   );
+
+  console.log("🤖 LLM MODEL:", response.data.model);
+  let relationshipLLMRequests = 0;
+  relationshipLLMRequests++;
+  console.log(`🦜 Relationship LLM Requests: ${relationshipLLMRequests}`);
 
   return response.data.choices[0].message.content;
 };
