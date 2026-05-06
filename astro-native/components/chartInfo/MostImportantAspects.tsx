@@ -1,3 +1,4 @@
+// astro-native\components\chartInfo\MostImportantAspects.tsx
 import { View, Text, StyleSheet, Pressable, Modal } from 'react-native'
 import { useState } from 'react'
 import { colors, aspectIcons, planetIcons, aspectKeywords, planetKeywords } from '../../constants/constants'

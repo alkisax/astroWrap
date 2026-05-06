@@ -1,5 +1,43 @@
 // utils/TwoChartsAspectFinder.ts
 
+/*
+  🔮 TWO CHART ASPECTS (Synastry / Transit Aspects)
+
+  Αυτός ο helper βρίσκει αστρολογικές όψεις μεταξύ δύο charts.
+  Συνήθως:
+  
+  - Transit → Natal
+  - Person A → Person B (synastry)
+
+  Η λογική:
+  
+  1. Παίρνουμε βασικά σημεία από τα δύο charts
+     (πλανήτες + angles όπως ASC / MC)
+
+  2. Υπολογίζουμε την γωνιακή απόσταση
+     μεταξύ κάθε ζευγαριού σημείων.
+
+  3. Ελέγχουμε αν η απόσταση ταιριάζει
+     με γνωστές όψεις:
+     
+     conjunction = 0°
+     sextile = 60°
+     square = 90°
+     trine = 120°
+     opposition = 180°
+
+  4. Αν η απόσταση είναι μέσα στο επιτρεπτό orb,
+     καταγράφεται ως aspect.
+
+  Το αποτέλεσμα χρησιμοποιείται για:
+  
+  - synastry analysis
+  - transit interpretation
+  - compatibility scoring
+  - LLM prompts
+  - cross-chart tables
+*/
+
 import { aspectDefs } from "../constants/constants";
 import type { ChartSummary, Aspect, Point } from "../types/types";
 
@@ -9,6 +47,8 @@ type RawPoint = {
   longitude?: number | null;
 };
 
+// υπολογίζει την μικρότερη γωνιακή απόσταση
+// μεταξύ δύο σημείων στον ζωδιακό κύκλο
 const angleDiff = (a: number, b: number) => {
   let diff = Math.abs(a - b);
   if (diff > 180) diff = 360 - diff;
@@ -27,6 +67,8 @@ const isPoint = (p: unknown): p is Point => {
   );
 };
 
+// βασικά σημεία που συμμετέχουν
+// στους cross-chart aspect υπολογισμούς
 const allowedKeys = [
   "sun",
   "moon",
@@ -42,6 +84,7 @@ const allowedKeys = [
   "midheaven",
 ];
 
+// εξάγει valid astro points από ChartSummary
 const getPoints = (data: ChartSummary): Point[] => {
   const base = allowedKeys
     .map((k) => data[k as keyof ChartSummary])
@@ -50,6 +93,7 @@ const getPoints = (data: ChartSummary): Point[] => {
   return base;
 };
 
+// main synastry / transit aspect finder
 export const findTwoChartAspects = (
   radix: ChartSummary,
   transit: ChartSummary,
@@ -61,16 +105,21 @@ export const findTwoChartAspects = (
 
   const isAngle = (key: string) => key === "ascendant" || key === "midheaven";
 
+  // συγκρίνουμε κάθε transit point
+  // με κάθε radix point
   for (const t of transitPoints) {
     for (const r of radixPoints) {
       const diff = angleDiff(t.longitude, r.longitude);
 
       for (const asp of aspectDefs) {
+        // πόσο κοντά είμαστε στην θεωρητική aspect γωνία
         const orb = Math.abs(diff - asp.angle);
 
         const maxOrb =
           isAngle(t.key) || isAngle(r.key) ? Math.min(asp.orb, 3) : asp.orb;
 
+        // αν είμαστε μέσα στο orb,
+        // τότε θεωρούμε ότι υπάρχει aspect
         if (orb <= maxOrb) {
           results.push({
             point1Key: t.key,
@@ -85,5 +134,7 @@ export const findTwoChartAspects = (
     }
   }
 
+  // sort:
+  // οι πιο ακριβείς όψεις πρώτες
   return results.sort((a, b) => (a.orb ?? 999) - (b.orb ?? 999));
 };

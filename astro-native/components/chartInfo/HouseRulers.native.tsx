@@ -1,3 +1,4 @@
+// astro-native\components\chartInfo\HouseRulers.native.tsx
 import { View, Text, StyleSheet, Pressable, Modal, ScrollView } from 'react-native'
 import { useEffect, useMemo, useState } from 'react'
 import type { ChartSummary, CustomHouseRuler } from '@/types/types'

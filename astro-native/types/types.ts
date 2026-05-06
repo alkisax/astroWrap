@@ -182,3 +182,10 @@ export type EagleGrid = {
     natalRules: number[];
   };
 };
+
+export type Overlay = {
+  planet: string
+  fromChart: 'A' | 'B'
+  inHouseOf: 'A' | 'B'
+  house: number | null
+}

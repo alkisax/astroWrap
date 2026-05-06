@@ -36,7 +36,10 @@ const Relationship = () => {
     selectedPlanets,
     setSelectedPlanets,
     transitInput,
-    setRadixInput
+    setRadixInput,
+    radixCustomAspects,
+    transitCustomAspects,
+    houseOverlay
   } = useBiwheelPage()
 
   const toChartInputString = (date: Date, coords: { lat: number; lng: number }) => {
@@ -216,6 +219,9 @@ const Relationship = () => {
             userOrb={1}
             selectedPlanets={selectedPlanets}
             setSelectedPlanets={setSelectedPlanets}
+            radixCustomAspects={radixCustomAspects}
+            transitCustomAspects={transitCustomAspects}
+            houseOverlay={houseOverlay}
           />
         )}
 

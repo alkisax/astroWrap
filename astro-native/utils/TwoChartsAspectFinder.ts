@@ -1,4 +1,4 @@
-// utils/TwoChartsAspectFinder.ts
+// astro-native\utils\TwoChartsAspectFinder.ts
 
 import { aspectDefs } from "../constants/constants";
 import type { ChartSummary, Aspect, Point } from "../types/types";
