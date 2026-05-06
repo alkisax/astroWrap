@@ -98,6 +98,7 @@ const Register = () => {
 
             <TextInput
               placeholder='Username'
+              placeholderTextColor='rgba(255,255,255,0.5)'
               value={username}
               onChangeText={setUsername}
               style={styles.input}
@@ -105,6 +106,7 @@ const Register = () => {
 
             <TextInput
               placeholder='Full Name'
+              placeholderTextColor='rgba(255,255,255,0.5)'
               value={name}
               onChangeText={setName}
               style={styles.input}
@@ -112,6 +114,7 @@ const Register = () => {
 
             <TextInput
               placeholder='Email'
+              placeholderTextColor='rgba(255,255,255,0.5)'
               value={email}
               onChangeText={setEmail}
               style={styles.input}
@@ -120,6 +123,7 @@ const Register = () => {
 
             <TextInput
               placeholder='Password'
+              placeholderTextColor='rgba(255,255,255,0.5)'
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -128,6 +132,7 @@ const Register = () => {
 
             <TextInput
               placeholder='Confirm Password'
+              placeholderTextColor='rgba(255,255,255,0.5)'
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry
