@@ -12,6 +12,7 @@ import MostImportantAspects from '../MostImportantAspects'
 import TwoChartsAspectsTable from '../biwheel/TwoChartsAspectsTable.native'
 import TransitGrid from './TransitGrid.native'
 import HouseOverlayBiwheel from './HouseOverlayBiwheel.native'
+import EagleLarkGridList from './EagleLarkGridList.native'
 
 type Props = {
   data1: ChartSummary
@@ -43,6 +44,8 @@ const BiwheelBasicChartInfo = ({
   const [showCrossAspects, setShowCrossAspects] = useState(false)
   const [showGrid, setShowGrid] = useState(false)
   const [showOverlay, setShowOverlay] = useState(false)
+  const [showEagle, setShowEagle] = useState(false)
+  const [showAstroInfo, setShowAstroInfo] = useState(false)
 
   const { aspects } = useChartAnalysis(data1, userOrb)
 
@@ -93,102 +96,146 @@ const BiwheelBasicChartInfo = ({
       </GlassPanel>
 
       <GlassPanel>
-        <Pressable onPress={() => setShowRulers(!showRulers)}>
+
+        <Pressable onPress={() => setShowAstroInfo(!showAstroInfo)}>
           <Text style={globalStyles.sectionLabel}>
-            🏠 House Rulers {showRulers ? '▲' : '▼'}
+            🦅 Eagle Info (Astrological Calculations)
+            {' '}
+            {showAstroInfo ? '▲' : '▼'}
           </Text>
         </Pressable>
 
-        {showRulers && (
+        {showAstroInfo && (
           <>
-            {/* YOU */}
-            <Text style={globalStyles.sectionLabel}>You</Text>
 
-            <HouseRulers
-              data={data1}
-              setCustomHouseRulers={() => { }}
-            />
+            <GlassPanel>
+              <Pressable onPress={() => setShowRulers(!showRulers)}>
+                <Text style={globalStyles.sectionLabel}>
+                  🏠 House Rulers {showRulers ? '▲' : '▼'}
+                </Text>
+              </Pressable>
 
-            {/* OTHER */}
-            <Text style={[globalStyles.sectionLabel, { marginTop: 10 }]}>
-              Other
-            </Text>
+              {showRulers && (
+                <>
+                  {/* YOU */}
+                  <Text style={globalStyles.sectionLabel}>You</Text>
 
-            <HouseRulers
-              data={data2}
-              setCustomHouseRulers={() => { }}
-            />
+                  <HouseRulers
+                    data={data1}
+                    setCustomHouseRulers={() => { }}
+                  />
+
+                  {/* OTHER */}
+                  <Text
+                    style={[
+                      globalStyles.sectionLabel,
+                      { marginTop: 10 },
+                    ]}
+                  >
+                    Other
+                  </Text>
+
+                  <HouseRulers
+                    data={data2}
+                    setCustomHouseRulers={() => { }}
+                  />
+                </>
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable onPress={() => setShowAspects(!showAspects)}>
+                <Text style={globalStyles.sectionLabel}>
+                  🔗 Aspects {showAspects ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {showAspects && (
+                <>
+                  {/* YOU */}
+                  <Text style={globalStyles.sectionLabel}>You</Text>
+
+                  <MostImportantAspects
+                    aspects={radixCustomAspects}
+                  />
+
+                  {/* OTHER */}
+                  <Text
+                    style={[
+                      globalStyles.sectionLabel,
+                      { marginTop: 10 },
+                    ]}
+                  >
+                    Other
+                  </Text>
+
+                  <MostImportantAspects
+                    aspects={transitCustomAspects}
+                  />
+                </>
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable onPress={() => setShowCrossAspects(!showCrossAspects)}>
+                <Text style={globalStyles.sectionLabel}>
+                  🔮 Cross Aspects {showCrossAspects ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {showCrossAspects && (
+                <TwoChartsAspectsTable
+                  radix={data1}
+                  transit={data2}
+                />
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable onPress={() => setShowGrid(!showGrid)}>
+                <Text style={globalStyles.sectionLabel}>
+                  💫 Aspect Grid {showGrid ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {showGrid && (
+                <TransitGrid
+                  radix={data1}
+                  transit={data2}
+                />
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable onPress={() => setShowOverlay(!showOverlay)}>
+                <Text style={globalStyles.sectionLabel}>
+                  🏠 House Overlay {showOverlay ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {showOverlay && (
+                <HouseOverlayBiwheel
+                  overlays={houseOverlay}
+                />
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable onPress={() => setShowEagle(!showEagle)}>
+                <Text style={globalStyles.sectionLabel}>
+                  🦅 Eagle {showEagle ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {showEagle && (
+                <EagleLarkGridList
+                  radix={data1}
+                  transit={data2}
+                />
+              )}
+            </GlassPanel>
+
           </>
-        )}
-      </GlassPanel>
-
-      <GlassPanel>
-        <Pressable onPress={() => setShowAspects(!showAspects)}>
-          <Text style={globalStyles.sectionLabel}>
-            🔗 Aspects {showAspects ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {showAspects && (
-          <>
-            {/* YOU */}
-            <Text style={globalStyles.sectionLabel}>You</Text>
-
-            <MostImportantAspects
-              aspects={radixCustomAspects}
-            />
-
-            {/* OTHER */}
-            <Text style={[globalStyles.sectionLabel, { marginTop: 10 }]}>
-              Other
-            </Text>
-
-            <MostImportantAspects
-              aspects={transitCustomAspects}
-            />
-          </>
-        )}
-      </GlassPanel>
-
-      <GlassPanel>
-        <Pressable onPress={() => setShowCrossAspects(!showCrossAspects)}>
-          <Text style={globalStyles.sectionLabel}>
-            🔮 Cross Aspects {showCrossAspects ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {showCrossAspects && (
-          <TwoChartsAspectsTable
-            radix={data1}
-            transit={data2}
-          />
-        )}
-      </GlassPanel>
-      <GlassPanel>
-        <Pressable onPress={() => setShowGrid(!showGrid)}>
-          <Text style={globalStyles.sectionLabel}>
-            💫 Aspect Grid {showGrid ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {showGrid && (
-          <TransitGrid
-            radix={data1}
-            transit={data2}
-          />
-        )}
-      </GlassPanel>
-
-      <GlassPanel>
-
-        <Pressable onPress={() => setShowOverlay(!showOverlay)}>
-          <Text style={globalStyles.sectionLabel}>
-            🏠 House Overlay {showOverlay ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {showOverlay && (
-          <HouseOverlayBiwheel overlays={houseOverlay} />
         )}
 
       </GlassPanel>

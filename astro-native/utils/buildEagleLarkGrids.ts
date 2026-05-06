@@ -1,4 +1,4 @@
-// utils/buildEagleLarkGrids.ts
+// astro-native\utils\buildEagleLarkGrids.ts
 
 // import { planetToNaturalHouse } from "../constants/constants";
 import type { ChartSummary, Aspect, Planet, EagleGrid } from "../types/types";
