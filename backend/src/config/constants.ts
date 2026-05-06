@@ -15,5 +15,6 @@ export const consts = {
     PORT: Number(process.env.PORT || 3013),
     MONGO_URI: process.env.MONGO_URI,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY ?? '',
   },
 };
