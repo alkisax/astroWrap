@@ -3,6 +3,9 @@ import axios from "axios";
 import { consts } from "../config/constants";
 import { ValidationError } from "../utils/error/errors.types";
 
+console.log("ASTRO SERVICE CALLED");
+let relationshipLLMRequests = 0;
+
 // 🤖 ChatGPT
 // const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
 // const MODEL = 'gpt-4o-mini';
@@ -103,6 +106,9 @@ export const getAstroInterpretation = async (
   if (!chartData) {
     throw new ValidationError("Missing chart data");
   }
+  
+  relationshipLLMRequests++;
+  console.log(`🦜 Relationship LLM Requests: ${relationshipLLMRequests}`);
 
   const response = await axios.post(
     OPENAI_URL,
@@ -126,9 +132,6 @@ export const getAstroInterpretation = async (
   );
 
   console.log("🤖 LLM MODEL:", response.data.model);
-  let relationshipLLMRequests = 0;
-  relationshipLLMRequests++;
-  console.log(`🦜 Relationship LLM Requests: ${relationshipLLMRequests}`);
 
   return response.data.choices[0].message.content;
 };
