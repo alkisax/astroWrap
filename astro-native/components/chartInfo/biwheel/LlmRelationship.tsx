@@ -5,9 +5,8 @@ import {
   Text,
   Pressable,
 } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Markdown from 'react-native-markdown-display'
-import GlassPanel from '@/components/ui/GlassPanel'
 import CompatibilityViewer from '@/components/chartInfo/biwheel/CompatibilityViewer'
 import { globalStyles } from '@/layout/global'
 import { markdownStyles } from '@/layout/markdownStyles'
@@ -18,6 +17,7 @@ type Props = {
   handleBiwheelLLM: () => Promise<string | null>
   llmLoading: boolean
   llmError: string | null
+  resetTrigger: string | null
 }
 
 /*
@@ -40,10 +40,17 @@ const LlmRelationship = ({
   handleBiwheelLLM,
   llmLoading,
   llmError,
+  resetTrigger,
 }: Props) => {
 
   const [showLLM, setShowLLM] = useState(false)
   const [llmResult, setLlmResult] = useState<string | null>(null)
+
+  // όταν αλλάζει chart καθαρίζουμε το llm
+  useEffect(() => {
+    setShowLLM(false)
+    setLlmResult(null)
+  }, [resetTrigger])
 
   const handlePress = async () => {
     setShowLLM(true)
@@ -81,7 +88,7 @@ const LlmRelationship = ({
             {llmResult}
           </Markdown>
         </View>
-      )}    
+      )}
     </>
 
   )

@@ -25,7 +25,19 @@ export interface Aspect {
   orb?: number;
 }
 
+export interface ChartMeta {
+  date?: string
+  houseSystem?: string
+  zodiac?: string
+
+  location?: {
+    lat?: number
+    lng?: number
+  }
+}
+
 export interface ChartSummary {
+  meta?: ChartMeta
   ascendant: BasicPlacement | null;
   midheaven: BasicPlacement | null;
 

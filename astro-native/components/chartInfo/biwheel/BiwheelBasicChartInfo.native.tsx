@@ -81,6 +81,7 @@ const BiwheelBasicChartInfo = ({
           handleBiwheelLLM={handleBiwheelLLM}
           llmLoading={llmLoading}
           llmError={llmError}
+          resetTrigger={JSON.stringify(data2)}
         />
       </GlassPanel>
 

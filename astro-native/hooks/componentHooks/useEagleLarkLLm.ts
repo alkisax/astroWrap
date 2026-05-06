@@ -1,3 +1,4 @@
+// astro-native\hooks\componentHooks\useEagleLarkLLm.ts
 import { useState } from "react";
 import type { CustomPlanetInfo, EagleGrid } from "../../types/types";
 import { getEagleLarkInterpretation } from "../../services/llmService";
