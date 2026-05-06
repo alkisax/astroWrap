@@ -1,4 +1,4 @@
-// frontend/src/utils/synastryCompatibilityHelper.ts
+// astro-native\utils\synastryCompatibilityHelper.ts
 
 import type { CleanSynastryPayload } from './synastryShakeJSONtreeHelper';
 

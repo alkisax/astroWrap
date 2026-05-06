@@ -211,7 +211,7 @@ export const useChartAnalysis = (
       }));
   }, [data]);
 
-  console.log("planetinfo", planetInfo)
+  // console.log("planetInfo", planetInfo)
 
   return {
     houseRulers,

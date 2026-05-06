@@ -22,7 +22,7 @@ export default function PlanetSelector({ selected, setSelected }: Props) {
     )
   }
 
-  console.log('RENDER selected', selected)
+  // console.log('RENDER selected', selected)
   
   return (
     <View style={styles.card}>

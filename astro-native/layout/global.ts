@@ -168,4 +168,32 @@ export const globalStyles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 4,
   },
+
+  // 🔮 llm
+  llmButton: {
+    alignSelf: "center",
+    width: 280,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.1)",
+  },
+
+  llmButtonText: {
+    color: colors.text,
+    textAlign: "center",
+    lineHeight: 20,
+    fontWeight: "600",
+  },
+
+  llmResultBox: {
+    marginTop: 14,
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: colors.panel,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.1)",
+  },
 });

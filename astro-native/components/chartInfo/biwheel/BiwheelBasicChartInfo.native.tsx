@@ -4,7 +4,7 @@ import { useChartAnalysis } from '../../../hooks/componentHooks/useChartAnalysis
 import PlanetTable from '../PlanetTable'
 import GlassPanel from '../../ui/GlassPanel'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import type { CustomAspect, ChartSummary, Overlay } from '@/types/types'
+import type { CustomAspect, ChartSummary, Overlay, Compatibility } from '@/types/types'
 import { globalStyles } from '../../../layout/global'
 import PlanetSelector from '../../controls/PlanetSelector'
 import HouseRulers from '../HouseRulers.native'
@@ -13,6 +13,9 @@ import TwoChartsAspectsTable from '../biwheel/TwoChartsAspectsTable.native'
 import TransitGrid from './TransitGrid.native'
 import HouseOverlayBiwheel from './HouseOverlayBiwheel.native'
 import EagleLarkGridList from './EagleLarkGridList.native'
+
+import LlmRelationship from './LlmRelationship'
+
 
 type Props = {
   data1: ChartSummary
@@ -24,6 +27,11 @@ type Props = {
   radixCustomAspects: CustomAspect[]
   transitCustomAspects: CustomAspect[]
   houseOverlay: Overlay[]
+
+  compatibility: Compatibility
+  handleBiwheelLLM: () => Promise<string | null>
+  llmLoading: boolean
+  llmError: string | null
 }
 
 const BiwheelBasicChartInfo = ({
@@ -35,7 +43,11 @@ const BiwheelBasicChartInfo = ({
   setSelectedPlanets,
   radixCustomAspects,
   transitCustomAspects,
-  houseOverlay
+  houseOverlay,
+  compatibility,
+  handleBiwheelLLM,
+  llmLoading,
+  llmError,
 }: Props) => {
   const [showPlanets, setShowPlanets] = useState(false)
   const [showTables, setShowTables] = useState(false)
@@ -57,6 +69,20 @@ const BiwheelBasicChartInfo = ({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <GlassPanel>
+        <Text style={globalStyles.sectionLabel}>
+          Relationship Analysis
+        </Text>
+        <Text style={[globalStyles.subLabel, { textAlign: 'center' }]}>
+          using Llm
+        </Text>
+        <LlmRelationship
+          compatibility={compatibility}
+          handleBiwheelLLM={handleBiwheelLLM}
+          llmLoading={llmLoading}
+          llmError={llmError}
+        />
+      </GlassPanel>
 
       <GlassPanel>
         <Pressable onPress={() => setShowPlanets(!showPlanets)}>
@@ -79,7 +105,6 @@ const BiwheelBasicChartInfo = ({
             🌛 Planet Tables {showTables ? '▲' : '▼'}
           </Text>
         </Pressable>
-
         {showTables && (
           <>
             {/* YOU */}

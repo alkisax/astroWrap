@@ -1,4 +1,4 @@
-// frontend\src\utils\synastryShakeJSONtreeHelper.ts
+// astro-native\utils\synastryShakeJSONtreeHelper.ts
 
 /**
  * 🎯 LIGHT LLM MODE (aggressive + weighted)

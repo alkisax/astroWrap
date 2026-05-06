@@ -237,13 +237,13 @@ const chartUrl =
       }).toString()}`
     : null
 
-  if (chartDate && chartCoords) {
-    console.log('USERPAGE CHART URL:', chartUrl)
-    console.log('USERPAGE SAVED UTC:', chartDate.toISOString())
-    console.log('USERPAGE WEBVIEW LOCAL:', toChartInputString(chartDate, chartCoords))
-    console.log('USERPAGE TABLE SUN:', chart?.planets?.find(p => p.planet === 'sun'))
-    console.log('USERPAGE TABLE MOON:', chart?.planets?.find(p => p.planet === 'moon'))
-  }
+  // if (chartDate && chartCoords) {
+  //   console.log('USERPAGE CHART URL:', chartUrl)
+  //   console.log('USERPAGE SAVED UTC:', chartDate.toISOString())
+  //   console.log('USERPAGE WEBVIEW LOCAL:', toChartInputString(chartDate, chartCoords))
+  //   console.log('USERPAGE TABLE SUN:', chart?.planets?.find(p => p.planet === 'sun'))
+  //   console.log('USERPAGE TABLE MOON:', chart?.planets?.find(p => p.planet === 'moon'))
+  // }
 
   return (
     <ScreenWrapper>

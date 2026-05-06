@@ -39,7 +39,11 @@ const Relationship = () => {
     setRadixInput,
     radixCustomAspects,
     transitCustomAspects,
-    houseOverlay
+    houseOverlay,
+    compatibility,
+    handleBiwheelLLM,
+    llmLoading,
+    llmError,
   } = useBiwheelPage()
 
   const toChartInputString = (date: Date, coords: { lat: number; lng: number }) => {
@@ -141,10 +145,11 @@ const Relationship = () => {
             ${coords.lng.toFixed(2)}`
   }
 
-  console.log('⌚ date1 local hour:', date1.getHours())
-  console.log('⌚ date1 utc hour:', date1.getUTCHours())
-  console.log('⌛ chart hour:', formatChartDate(date1, coords1))
-  console.log('timezone offset:', new Date().getTimezoneOffset())
+  // console.log('⌚ date1 local hour:', date1.getHours())
+  // console.log('⌚ date1 utc hour:', date1.getUTCHours())
+  // console.log('⌛ chart hour:', formatChartDate(date1, coords1))
+  // console.log('timezone offset:', new Date().getTimezoneOffset())
+
   return (
     <ScreenWrapper>
       <ScrollView contentContainerStyle={{ padding: 16, gap: 8 }}>
@@ -222,6 +227,10 @@ const Relationship = () => {
             radixCustomAspects={radixCustomAspects}
             transitCustomAspects={transitCustomAspects}
             houseOverlay={houseOverlay}
+            compatibility={compatibility}
+            handleBiwheelLLM={handleBiwheelLLM}
+            llmLoading={llmLoading}
+            llmError={llmError}
           />
         )}
 

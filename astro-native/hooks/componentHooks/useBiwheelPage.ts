@@ -216,6 +216,7 @@ export const useBiwheelPage = () => {
       ? buildEagleLarkGrids(radixData, transitData, eagleAspects)
       : [];
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const eagleJson = {
     grids: eagleGrids,
     generatedAt: new Date().toISOString(),
@@ -244,9 +245,9 @@ export const useBiwheelPage = () => {
     }
   };
 
-  console.log("synastry: ", synastryShakenTreeJson);
-  console.log("compatibility:", compatibility);
-  console.log("eagle grids: ", eagleJson);
+  // console.log("synastry: ", synastryShakenTreeJson);
+  // console.log("compatibility:", compatibility);
+  // console.log("eagle grids: ", eagleJson);
 
   return {
     // data

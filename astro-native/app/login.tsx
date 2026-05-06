@@ -37,8 +37,7 @@ const Login = () => {
 
       if (res.data.status) {
         const { token, user } = res.data.data
-
-        console.log('TOKEN:', token)
+        // console.log('TOKEN:', token)
 
         // save token (RN)
         await AsyncStorage.setItem('token', token)
@@ -87,6 +86,7 @@ const Login = () => {
           {/* username */}
           <TextInput
             placeholder='Username'
+            placeholderTextColor='rgba(255,255,255,0.5)'
             value={username}
             onChangeText={setUsername}
             style={styles.input}

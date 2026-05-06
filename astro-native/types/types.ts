@@ -189,3 +189,14 @@ export type Overlay = {
   inHouseOf: 'A' | 'B'
   house: number | null
 }
+
+export type AspectItem = {
+  type: string
+  text: string
+  score: number
+}
+export
+ type Compatibility = {
+  scores: Record<string, number>
+  explanations: Record<string, AspectItem[]>
+}

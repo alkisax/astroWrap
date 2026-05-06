@@ -1,3 +1,5 @@
+// frontend\src\components\biwheel\CompatibilityViewer.tsx
+
 import { Paper, Text, Stack } from '@mantine/core';
 import { colors } from '../../constants/constants';
 

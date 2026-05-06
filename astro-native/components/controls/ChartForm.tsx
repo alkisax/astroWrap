@@ -95,9 +95,9 @@ export default function ChartForm({ onSubmit }: Props) {
       return
     }
 
-    console.log('🧪 INPUT:', dateInput)
-    console.log('🧪 TZ:', timezone)
-    console.log('🧪 FINAL UTC:', finalUtc.toISOString())
+    // console.log('🧪 INPUT:', dateInput)
+    // console.log('🧪 TZ:', timezone)
+    // console.log('🧪 FINAL UTC:', finalUtc.toISOString())
 
     onSubmit({
       date: finalUtc,
