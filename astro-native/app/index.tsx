@@ -94,12 +94,33 @@ export default function Index() {
                 styles.button,
                 styles.outline,
                 (!user || !hasChartData) && { opacity: 0.4 },
+                { marginBottom: 12 },
               ]}
               disabled={!user || !hasChartData}
               onPress={() => router.push('/relationship')}
             >
               <Text style={styles.buttonText}>
                 Relationship Analysis
+              </Text>
+
+              {(!user || !hasChartData) && (
+                <Text style={{ fontSize: 12, color: colors.dim, marginTop: 4 }}>
+                  {!user ? 'Please login' : 'Add birth data'}
+                </Text>
+              )}
+            </Pressable>
+
+            <Pressable
+              style={[
+                styles.button,
+                styles.outline,
+                (!user || !hasChartData) && { opacity: 0.4 },
+              ]}
+              disabled={!user || !hasChartData}
+              onPress={() => router.push('/prediction')}
+            >
+              <Text style={styles.buttonText}>
+                Prediction With Aspects
               </Text>
 
               {(!user || !hasChartData) && (
