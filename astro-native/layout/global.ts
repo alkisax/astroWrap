@@ -103,7 +103,7 @@ export const globalStyles = StyleSheet.create({
   // 🌐 webview
   webviewWrap: {
     width: "100%",
-    height: 370,
+    height: 400,
     borderRadius: 12,
     overflow: "hidden",
     backgroundColor: "transparent",
