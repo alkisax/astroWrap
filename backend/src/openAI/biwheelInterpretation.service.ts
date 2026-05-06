@@ -1,9 +1,18 @@
-import axios from 'axios';
-import { consts } from '../config/constants';
-import { ValidationError } from '../utils/error/errors.types';
+// backend\src\openAI\biwheelInterpretation.service.ts
+import axios from "axios";
+import { consts } from "../config/constants";
+import { ValidationError } from "../utils/error/errors.types";
 
-const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
-const MODEL = 'gpt-4o-mini';
+console.log("ASTRO SERVICE SINGLE CHART CALLED");
+let relationshipLLMRequests = 0;
+
+// 🤖 ChatGpt
+// const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+// const MODEL = 'gpt-4o-mini';
+
+// 🤖 DEEPSEEK
+const OPENAI_URL = "https://api.deepseek.com/chat/completions";
+const MODEL = "deepseek-chat";
 
 const buildPrompt = (synastry: unknown, compatibility: unknown) => `
 You are an expert astrologer specializing in relationship analysis.
@@ -88,11 +97,14 @@ STYLE:
 
 export const getBiwheelInterpretation = async (
   synastry: unknown,
-  compatibility: unknown
+  compatibility: unknown,
 ): Promise<string> => {
   if (!synastry || !compatibility) {
-    throw new ValidationError('Missing data');
+    throw new ValidationError("Missing data");
   }
+
+  relationshipLLMRequests++;
+  console.log(`🦜 Relationship LLM Requests: ${relationshipLLMRequests}`);
 
   const response = await axios.post(
     OPENAI_URL,
@@ -100,7 +112,7 @@ export const getBiwheelInterpretation = async (
       model: MODEL,
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: buildPrompt(synastry, compatibility),
         },
       ],
@@ -108,11 +120,14 @@ export const getBiwheelInterpretation = async (
     },
     {
       headers: {
-        Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${consts.env.DEEPSEEK_API_KEY}`,
+        "Content-Type": "application/json",
       },
-    }
+    },
   );
+
+   console.log("🤖 LLM MODEL:", response.data.model);
 
   return response.data.choices[0].message.content;
 };
