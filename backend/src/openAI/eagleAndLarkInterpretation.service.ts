@@ -1,9 +1,16 @@
-import axios from 'axios'
-import { consts } from '../config/constants'
-import { ValidationError } from '../utils/error/errors.types'
+import axios from "axios";
+import { consts } from "../config/constants";
+import { ValidationError } from "../utils/error/errors.types";
 
-const OPENAI_URL = 'https://api.openai.com/v1/chat/completions'
-const MODEL = 'gpt-4o-mini'
+let eagleLarkLLMRequests = 0;
+
+// 🤖 ChatGPT
+const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
+const MODEL = "gpt-4o-mini";
+
+// 🤖 DEEPSEEK
+// const OPENAI_URL = "https://api.deepseek.com/chat/completions";
+// const MODEL = "deepseek-chat";
 
 const buildPrompt = (data: unknown) => `
 You are an expert astrologer specializing in predictive astrology (transits).
@@ -71,14 +78,16 @@ STYLE:
 - No textbook definitions
 - No generic horoscope tone
 - Focus on real-life experience
-`
+`;
 
 export const getEagleAndLarkInterpretation = async (
   payload: unknown,
 ): Promise<string> => {
   if (!payload) {
-    throw new ValidationError('Missing data')
+    throw new ValidationError("Missing data");
   }
+  eagleLarkLLMRequests++;
+  console.log(`🪐 Relationship LLM Requests: ${eagleLarkLLMRequests}`);
 
   const response = await axios.post(
     OPENAI_URL,
@@ -86,7 +95,7 @@ export const getEagleAndLarkInterpretation = async (
       model: MODEL,
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: buildPrompt(payload),
         },
       ],
@@ -95,10 +104,13 @@ export const getEagleAndLarkInterpretation = async (
     {
       headers: {
         Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${consts.env.DEEPSEEK_API_KEY}`,
+        "Content-Type": "application/json",
       },
     },
-  )
+  );
 
-  return response.data.choices[0].message.content
-}
+  console.log("🤖 LLM MODEL:", response.data.model);
+
+  return response.data.choices[0].message.content;
+};
