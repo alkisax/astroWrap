@@ -5,8 +5,10 @@ import {
   StyleSheet,
   Pressable,
   Modal,
+  Platform,
 } from 'react-native'
 import { useEffect, useState, useContext, useCallback } from 'react'
+import { WebView } from 'react-native-webview'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Markdown from 'react-native-markdown-display'
@@ -16,8 +18,10 @@ import { UserAuthContext } from '../authLogin/context/UserAuthContext'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
 import GlassPanel from '../components/ui/GlassPanel'
 import DeleteAccountButton from '@/components/DeleteAccountButton.native'
+import { formatChartDate } from '@/utils/formatChartDate'
+import tzLookup from 'tz-lookup'
 
-/* 🔥 ICON MAPPINGS */
+/* ICON MAPPINGS */
 
 const signIcons: Record<string, string> = {
   Aries: '♈',
@@ -79,6 +83,13 @@ type UserData = {
 }
 
 type Chart = {
+  meta?: {
+    date?: string
+    location?: {
+      lat?: number
+      lng?: number
+    }
+  }
   planets: { planet: string; sign: string; house: number }[]
   houses: { house: number; sign: string }[]
   chartRuler: { planet: string; sign: string; house: number }
@@ -132,22 +143,22 @@ export default function UserPage() {
   //     console.log('🔥 USER FULL:', user)
   //   }
   // }, [user])
-  useEffect(() => {
-    if (user?.natalChart) {
-      try {
-        const parsed = JSON.parse(user.natalChart)
-        const d = new Date(parsed?.meta?.date)
+  // useEffect(() => {
+  //   if (user?.natalChart) {
+  //     try {
+  //       const parsed = JSON.parse(user.natalChart)
+  //       const d = new Date(parsed?.meta?.date)
 
-        console.log('RAW:', parsed?.meta?.date)
-        console.log('LOCAL:', d.toString())
-        console.log('UTC:', d.toISOString())
-        console.log('HOURS local:', d.getHours())
-        console.log('HOURS utc:', d.getUTCHours())
-      } catch (e) {
-        console.log('parse error', e)
-      }
-    }
-  }, [user])
+  //       console.log('RAW:', parsed?.meta?.date)
+  //       console.log('LOCAL:', d.toString())
+  //       console.log('UTC:', d.toISOString())
+  //       console.log('HOURS local:', d.getHours())
+  //       console.log('HOURS utc:', d.getUTCHours())
+  //     } catch (e) {
+  //       console.log('parse error', e)
+  //     }
+  //   }
+  // }, [user])
 
   if (!user) {
     return (
@@ -160,7 +171,79 @@ export default function UserPage() {
   let chart: Chart | null = null
   try {
     chart = user.natalChart ? JSON.parse(user.natalChart) : null
-  } catch { }
+  } catch (err) {
+    console.log('Failed to parse natalChart:', err)
+    chart = null
+  }
+
+  const chartDate = chart?.meta?.date
+    ? new Date(chart.meta.date)
+    : null
+
+  const chartCoords =
+    typeof chart?.meta?.location?.lat === 'number' &&
+      typeof chart?.meta?.location?.lng === 'number'
+      ? {
+        lat: chart.meta.location.lat,
+        lng: chart.meta.location.lng,
+      }
+      : null
+
+  const chartLocalInfo =
+    chartDate && chartCoords
+      ? formatChartDate(chartDate, chartCoords)
+      : null
+
+  const chartTimezone = chartCoords
+    ? tzLookup(chartCoords.lat, chartCoords.lng)
+    : null
+
+  const chartUtcInfo = chartDate
+    ? chartDate.toISOString()
+    : null
+
+  // chart webview
+  const toChartInputString = (
+    date: Date,
+    coords: { lat: number; lng: number }
+  ) => {
+    const timezone = tzLookup(coords.lat, coords.lng)
+
+    return date
+      .toLocaleString('sv-SE', { timeZone: timezone })
+      .replace(' ', 'T')
+      .slice(0, 16)
+  }
+
+const chartUrl =
+  chartDate && chartCoords
+    ? `https://astro.portfolio-projects.space/chart-mobile?${new URLSearchParams({
+        date: chartDate.toISOString(),
+        lat: String(chartCoords.lat),
+        lng: String(chartCoords.lng),
+        userOrb: '1',
+        planets: [
+          'Sun',
+          'Moon',
+          'Mercury',
+          'Venus',
+          'Mars',
+          'Jupiter',
+          'Saturn',
+          'Uranus',
+          'Neptune',
+          'Pluto',
+        ].join(','),
+      }).toString()}`
+    : null
+
+  if (chartDate && chartCoords) {
+    console.log('USERPAGE CHART URL:', chartUrl)
+    console.log('USERPAGE SAVED UTC:', chartDate.toISOString())
+    console.log('USERPAGE WEBVIEW LOCAL:', toChartInputString(chartDate, chartCoords))
+    console.log('USERPAGE TABLE SUN:', chart?.planets?.find(p => p.planet === 'sun'))
+    console.log('USERPAGE TABLE MOON:', chart?.planets?.find(p => p.planet === 'moon'))
+  }
 
   return (
     <ScreenWrapper>
@@ -173,6 +256,57 @@ export default function UserPage() {
             {user.role || user.roles?.[0]}
           </Text>
         </GlassPanel>
+
+        {chartLocalInfo && chartCoords && (
+          <>
+            <Text style={styles.valueLeft}>
+              Local: {chartLocalInfo} · {chartCoords.lat.toFixed(2)}, {chartCoords.lng.toFixed(2)}
+            </Text>
+            {chartTimezone && (
+              <Text style={styles.dimValueLeft}>
+                Timezone: {chartTimezone}
+              </Text>
+            )}
+
+            {chartUtcInfo && (
+              <Text style={styles.dimValueLeft}>
+                UTC: {chartUtcInfo}
+              </Text>
+            )}
+          </>
+        )}
+
+        {/* webview chart */}
+        {chartUrl && (
+          <GlassPanel>
+            <Text style={styles.sectionTitle}>Natal Chart</Text>
+
+            <View style={styles.webviewWrap}>
+              {Platform.OS === 'web' ? (
+                <Text style={styles.valueLeft}>
+                  WebView not supported
+                </Text>
+              ) : (
+                <WebView
+                  key={chartUrl}
+                  source={{ uri: chartUrl }}
+                  injectedJavaScript={`
+            document.body.style.background = 'transparent';
+            document.documentElement.style.background = 'transparent';
+            true;
+          `}
+                  style={{ flex: 1, backgroundColor: 'transparent' }}
+                  containerStyle={{ backgroundColor: 'transparent' }}
+                  androidLayerType="software"
+                  javaScriptEnabled
+                  domStorageEnabled
+                  originWhitelist={['*']}
+                  startInLoadingState
+                />
+              )}
+            </View>
+          </GlassPanel>
+        )}
 
         {chart && (
           <>
@@ -400,6 +534,28 @@ const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: 'center',
     color: colors.primary,
+  },
+
+  valueLeft: {
+    color: colors.text,
+    width: '100%',
+    textAlign: 'left',
+  },
+
+  dimValueLeft: {
+    color: colors.dim,
+    fontSize: 12,
+    marginTop: 4,
+    width: '100%',
+    textAlign: 'left',
+  },
+
+  webviewWrap: {
+    width: '100%',
+    height: 330,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: 'transparent',
   },
 })
 
