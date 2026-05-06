@@ -3,7 +3,6 @@ import axios from "axios";
 import { consts } from "../config/constants";
 import { ValidationError } from "../utils/error/errors.types";
 
-console.log("ASTRO SERVICE SINGLE CHART CALLED");
 let singleChartLLMRequests = 0;
 
 // 🤖 ChatGPT
