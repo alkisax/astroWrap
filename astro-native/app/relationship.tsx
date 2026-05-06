@@ -36,6 +36,7 @@ const Relationship = () => {
     selectedPlanets,
     setSelectedPlanets,
     transitInput,
+    setRadixInput
   } = useBiwheelPage()
 
   const toChartInputString = (date: Date, coords: { lat: number; lng: number }) => {
@@ -76,6 +77,16 @@ const Relationship = () => {
       return null
     }
   }, [fullUser?.natalChart])
+
+  useEffect(() => {
+    if (!parsed?.meta?.date) return
+
+    setRadixInput({
+      date: new Date(parsed.meta.date),
+      lat: parsed.meta.location?.lat ?? 37.9838,
+      lng: parsed.meta.location?.lng ?? 23.7275,
+    })
+  }, [parsed, setRadixInput])
 
   const date1 = useMemo(() => {
     return parsed?.meta?.date
