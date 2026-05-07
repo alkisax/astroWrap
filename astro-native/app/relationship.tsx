@@ -41,9 +41,13 @@ const Relationship = () => {
     transitCustomAspects,
     houseOverlay,
     compatibility,
-    handleBiwheelLLM,
     llmLoading,
     llmError,
+    handleBiwheelLLMClick,
+    showLLM,
+    llmResult,
+    loaded,
+    isProcessing,
   } = useBiwheelPage()
 
   const toChartInputString = (date: Date, coords: { lat: number; lng: number }) => {
@@ -228,9 +232,13 @@ const Relationship = () => {
             transitCustomAspects={transitCustomAspects}
             houseOverlay={houseOverlay}
             compatibility={compatibility}
-            handleBiwheelLLM={handleBiwheelLLM}
+            handleBiwheelLLMClick={handleBiwheelLLMClick}
             llmLoading={llmLoading}
             llmError={llmError}
+            showLLM={showLLM}
+            llmResult={llmResult}
+            loaded={loaded}
+            isProcessing={isProcessing}
           />
         )}
 

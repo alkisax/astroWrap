@@ -13,9 +13,7 @@ import TwoChartsAspectsTable from '../biwheel/TwoChartsAspectsTable.native'
 import TransitGrid from './TransitGrid.native'
 import HouseOverlayBiwheel from './HouseOverlayBiwheel.native'
 import EagleLarkGridList from './EagleLarkGridList.native'
-
 import LlmRelationship from './LlmRelationship'
-
 
 type Props = {
   data1: ChartSummary
@@ -29,9 +27,15 @@ type Props = {
   houseOverlay: Overlay[]
 
   compatibility: Compatibility
-  handleBiwheelLLM: () => Promise<string | null>
+
   llmLoading: boolean
   llmError: string | null
+
+  handleBiwheelLLMClick: () => void
+  showLLM: boolean
+  llmResult: string | null
+  loaded: boolean
+  isProcessing: boolean
 }
 
 const BiwheelBasicChartInfo = ({
@@ -45,9 +49,13 @@ const BiwheelBasicChartInfo = ({
   transitCustomAspects,
   houseOverlay,
   compatibility,
-  handleBiwheelLLM,
   llmLoading,
   llmError,
+  handleBiwheelLLMClick,
+  showLLM,
+  llmResult,
+  loaded,
+  isProcessing,
 }: Props) => {
   const [showPlanets, setShowPlanets] = useState(false)
   const [showTables, setShowTables] = useState(false)
@@ -78,10 +86,14 @@ const BiwheelBasicChartInfo = ({
         </Text>
         <LlmRelationship
           compatibility={compatibility}
-          handleBiwheelLLM={handleBiwheelLLM}
+          handleBiwheelLLMClick={handleBiwheelLLMClick}
           llmLoading={llmLoading}
           llmError={llmError}
           resetTrigger={JSON.stringify(data2)}
+          showLLM={showLLM}
+          llmResult={llmResult}
+          loaded={loaded}
+          isProcessing={isProcessing}
         />
       </GlassPanel>
 

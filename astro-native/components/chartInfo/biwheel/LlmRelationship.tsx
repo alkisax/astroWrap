@@ -5,7 +5,6 @@ import {
   Text,
   Pressable,
 } from 'react-native'
-import { useEffect, useState } from 'react'
 import Markdown from 'react-native-markdown-display'
 import CompatibilityViewer from '@/components/chartInfo/biwheel/CompatibilityViewer'
 import { globalStyles } from '@/layout/global'
@@ -14,9 +13,13 @@ import type { Compatibility } from '@/types/types'
 
 type Props = {
   compatibility: Compatibility
-  handleBiwheelLLM: () => Promise<string | null>
+  handleBiwheelLLMClick: () => void
   llmLoading: boolean
   llmError: string | null
+  showLLM: boolean
+  llmResult: string | null
+  loaded: boolean
+  isProcessing: boolean
   resetTrigger: string | null
 }
 
@@ -37,33 +40,33 @@ type Props = {
 
 const LlmRelationship = ({
   compatibility,
-  handleBiwheelLLM,
+  handleBiwheelLLMClick,
   llmLoading,
   llmError,
-  resetTrigger,
+  showLLM,
+  llmResult,
+  loaded,
+  isProcessing,
 }: Props) => {
 
-  const [showLLM, setShowLLM] = useState(false)
-  const [llmResult, setLlmResult] = useState<string | null>(null)
-
-  // όταν αλλάζει chart καθαρίζουμε το llm
-  useEffect(() => {
-    setShowLLM(false)
-    setLlmResult(null)
-  }, [resetTrigger])
-
-  const handlePress = async () => {
-    setShowLLM(true)
-    const result = await handleBiwheelLLM()
-    setLlmResult(result)
+  const handlePress = () => {
+    handleBiwheelLLMClick()
   }
 
   return (
     <>
       <Pressable
         onPress={handlePress}
-        disabled={llmLoading}
-        style={globalStyles.llmButton}
+        disabled={!loaded || isProcessing || llmLoading}
+        style={[
+          globalStyles.llmButton,
+          {
+            opacity:
+              !loaded || isProcessing || llmLoading
+                ? 0.5
+                : 1,
+          },
+        ]}
       >
         <Text style={globalStyles.llmButtonText}>
           {llmLoading
@@ -76,21 +79,16 @@ const LlmRelationship = ({
 
       {showLLM && llmResult && (
         <View style={globalStyles.llmResultBox}>
-          {/* compatibility */}
           <CompatibilityViewer
             compatibility={compatibility}
           />
 
-          {/* markdown */}
-          <Markdown
-            style={markdownStyles}
-          >
+          <Markdown style={markdownStyles}>
             {llmResult}
           </Markdown>
         </View>
       )}
     </>
-
   )
 }
 

@@ -1,4 +1,5 @@
 // astro-native\hooks\componentHooks\useBiwheelPage.ts
+import { Alert } from "react-native";
 import { useEffect, useState } from "react";
 import type {
   ChartInput,
@@ -19,6 +20,7 @@ import { computeCompatibility } from "../../utils/synastryCompatibilityHelper";
 import { buildEagleLarkGrids } from "../../utils/buildEagleLarkGrids";
 import { findTwoChartAspects } from "../../utils/TwoChartsAspectFinder";
 import { getBiwheelInterpretation } from "../../services/llmService";
+import { useRewardedAd } from "./useRewardedAd";
 
 export const useBiwheelPage = () => {
   // raw data
@@ -70,6 +72,20 @@ export const useBiwheelPage = () => {
 
   const [llmLoading, setLlmLoading] = useState(false);
   const [llmError, setLlmError] = useState<string | null>(null);
+
+  const [showLLM, setShowLLM] = useState(false);
+  const [llmResult, setLlmResult] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [lastCallAt, setLastCallAt] = useState<number | null>(null);
+
+  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd();
+
+  const COOLDOWN = 30000;
+
+  useEffect(() => {
+    setShowLLM(false);
+    setLlmResult(null);
+  }, [radixData, transitData]);
 
   const defaultUserOrb = 1;
 
@@ -245,6 +261,55 @@ export const useBiwheelPage = () => {
     }
   };
 
+  const handleBiwheelLLMClick = async () => {
+    if (isProcessing) return;
+
+    if (!loaded) {
+      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+      return;
+    }
+
+    if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+      Alert.alert("Wait", "Please wait a bit before next reading");
+      return;
+    }
+
+    setIsProcessing(true);
+
+    setTimeout(() => {
+      setIsProcessing(false);
+    }, 15000);
+
+    showAd();
+  };
+
+  useEffect(() => {
+    if (!rewardEarned) return;
+
+    const run = async () => {
+      setShowLLM(true);
+      setLlmLoading(true);
+      setLlmError(null);
+
+      try {
+        const result = await handleBiwheelLLM();
+        setLlmResult(result);
+      } catch {
+        setLlmResult(null);
+        setLlmError("LLM request failed");
+      } finally {
+        setLlmLoading(false);
+        setRewardEarned(false);
+        setIsProcessing(false);
+        setLastCallAt(Date.now());
+      }
+    };
+
+    run();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardEarned]);
+
   // console.log("synastry: ", synastryShakenTreeJson);
   // console.log("compatibility:", compatibility);
   // console.log("eagle grids: ", eagleJson);
@@ -294,5 +359,12 @@ export const useBiwheelPage = () => {
     handleBiwheelLLM,
     llmLoading,
     llmError,
+
+    //ads
+    handleBiwheelLLMClick,
+    showLLM,
+    llmResult,
+    loaded,
+    isProcessing,
   };
 };

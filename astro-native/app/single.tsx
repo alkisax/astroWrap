@@ -3,7 +3,7 @@
 import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native'
 import { useMemo } from 'react'
 import { WebView } from 'react-native-webview'
-// import { useHome } from '../hooks/componentHooks/useHome' //⚠️ TODO turn back on
+import { useHome } from '../hooks/componentHooks/useHome' //⚠️ TODO turn back on
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '@/components/chartInfo/BasicChartInfo.native'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
