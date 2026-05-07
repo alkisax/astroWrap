@@ -46,6 +46,9 @@ const Prediction = () => {
     handleBiwheelLLM,
     llmLoading,
     llmError,
+    radixCustomPlanetInfo,
+    transitCustomPlanetInfo,
+    eagleGrids,
   } = useBiwheelPage()
 
   const toChartInputString = (
@@ -281,11 +284,12 @@ const Prediction = () => {
             handleBiwheelLLM={handleBiwheelLLM}
             llmLoading={llmLoading}
             llmError={llmError}
+            radixCustomPlanetInfo={radixCustomPlanetInfo}
+            transitCustomPlanetInfo={transitCustomPlanetInfo}
+            eagleGrids={eagleGrids}
           />
         )}
-
       </ScrollView>
-
     </ScreenWrapper>
   )
 }

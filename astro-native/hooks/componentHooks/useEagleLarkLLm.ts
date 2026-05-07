@@ -142,6 +142,7 @@ export const useEagleLarkLLm = ({
     handleQuestionSubmit,
 
     llmEagleLarkResult,
+    setLlmEagleLarkResult,
     llmEagleLarkLoading,
     llmEagleLarkError,
 
