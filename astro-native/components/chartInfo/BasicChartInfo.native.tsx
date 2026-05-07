@@ -61,6 +61,7 @@ const BasicChartInfo = ({
   setCustomDispositors,
   setCustomDynamics,
 }: Props) => {
+  const [showEagleInfo, setShowEagleInfo] = useState(false)
 
   const insets = useSafeAreaInsets()
 
@@ -124,97 +125,6 @@ const BasicChartInfo = ({
       showsVerticalScrollIndicator={false}
     >
 
-      {/* TODO REMOVE */}
-      {/* <Pressable
-        onPress={saveLLMToDb}
-        style={{
-          marginTop: 10,
-          padding: 10,
-          backgroundColor: colors.secondary,
-          borderRadius: 8,
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: colors.text, fontWeight: '600' }}>
-          Save interpretation
-        </Text>
-      </Pressable> */}
-
-      <GlassPanel>
-        <PlanetTable data={data} />
-      </GlassPanel>
-
-      <GlassPanel>
-        <ChartRuler data={data} />
-      </GlassPanel>
-
-      <GlassPanel>
-        <BalanceSummary data={data} balance={balance} />
-      </GlassPanel>
-
-      <GlassPanel>
-        <Pressable
-          style={styles.sectionHeader}
-          onPress={() => toggleSection('aspects')}
-        >
-          <Text style={styles.sectionTitle}>
-            ✨ Aspects {openSections.aspects ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {openSections.aspects && (
-          <MostImportantAspects aspects={aspects} />
-        )}
-      </GlassPanel>
-
-      <GlassPanel>
-        <Pressable
-          style={styles.sectionHeader}
-          onPress={() => toggleSection('houses')}
-        >
-          <Text style={styles.sectionTitle}>
-            🏠 House Rulers {openSections.houses ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {openSections.houses && (
-          <HouseRulers
-            data={data}
-            setCustomHouseRulers={setCustomHouseRulers}
-          />
-        )}
-      </GlassPanel>
-
-      <GlassPanel>
-        <Pressable
-          style={styles.sectionHeader}
-          onPress={() => toggleSection('dignities')}
-        >
-          <Text style={styles.sectionTitle}>
-            ⚖️ Essential Dignities {openSections.dignities ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {openSections.dignities && (
-          <EssentialDignities data={data} />
-        )}
-      </GlassPanel>
-
-      <GlassPanel>
-        <Pressable
-          style={styles.sectionHeader}
-          onPress={() => toggleSection('dispositors')}
-        >
-          <Text style={styles.sectionTitle}>
-            🌳 Dispositor Tree {openSections.dispositors ? '▲' : '▼'}
-          </Text>
-        </Pressable>
-
-        {openSections.dispositors && (
-          <DispositorTree data={data} />
-        )}
-      </GlassPanel>
-
       <GlassPanel>
         {/* TODO */}
         <Pressable
@@ -269,6 +179,115 @@ const BasicChartInfo = ({
                 </Text>
               </Pressable>
             )}
+          </>
+        )}
+      </GlassPanel>
+
+      {/* TODO REMOVE */}
+      {/* <Pressable
+        onPress={saveLLMToDb}
+        style={{
+          marginTop: 10,
+          padding: 10,
+          backgroundColor: colors.secondary,
+          borderRadius: 8,
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ color: colors.text, fontWeight: '600' }}>
+          Save interpretation
+        </Text>
+      </Pressable> */}
+
+      <GlassPanel>
+        <PlanetTable data={data} />
+      </GlassPanel>
+
+      <GlassPanel>
+        <ChartRuler data={data} />
+      </GlassPanel>
+
+      <GlassPanel>
+        <BalanceSummary data={data} balance={balance} />
+      </GlassPanel>
+
+      <GlassPanel>
+
+        <Pressable
+          style={styles.sectionHeader}
+          onPress={() => setShowEagleInfo(!showEagleInfo)}
+        >
+          <Text style={styles.sectionTitle}>
+            🦅 Eagle Info (Astrological Calculations)
+            {' '}
+            {showEagleInfo ? '▲' : '▼'}
+          </Text>
+        </Pressable>
+
+        {showEagleInfo && (
+          <>
+            <GlassPanel>
+              <Pressable
+                style={styles.sectionHeader}
+                onPress={() => toggleSection('aspects')}
+              >
+                <Text style={styles.sectionTitle}>
+                  ✨ Aspects {openSections.aspects ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {openSections.aspects && (
+                <MostImportantAspects aspects={aspects} />
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable
+                style={styles.sectionHeader}
+                onPress={() => toggleSection('houses')}
+              >
+                <Text style={styles.sectionTitle}>
+                  🏠 House Rulers {openSections.houses ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {openSections.houses && (
+                <HouseRulers
+                  data={data}
+                  setCustomHouseRulers={setCustomHouseRulers}
+                />
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable
+                style={styles.sectionHeader}
+                onPress={() => toggleSection('dignities')}
+              >
+                <Text style={styles.sectionTitle}>
+                  ⚖️ Essential Dignities {openSections.dignities ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {openSections.dignities && (
+                <EssentialDignities data={data} />
+              )}
+            </GlassPanel>
+
+            <GlassPanel>
+              <Pressable
+                style={styles.sectionHeader}
+                onPress={() => toggleSection('dispositors')}
+              >
+                <Text style={styles.sectionTitle}>
+                  🌳 Dispositor Tree {openSections.dispositors ? '▲' : '▼'}
+                </Text>
+              </Pressable>
+
+              {openSections.dispositors && (
+                <DispositorTree data={data} />
+              )}
+            </GlassPanel>
           </>
         )}
       </GlassPanel>

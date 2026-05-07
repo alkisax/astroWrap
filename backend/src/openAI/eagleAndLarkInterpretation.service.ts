@@ -87,7 +87,7 @@ export const getEagleAndLarkInterpretation = async (
     throw new ValidationError("Missing data");
   }
   eagleLarkLLMRequests++;
-  console.log(`🪐 Relationship LLM Requests: ${eagleLarkLLMRequests}`);
+  console.log(`🪐 prediction LLM Requests: ${eagleLarkLLMRequests}`);
 
   const response = await axios.post(
     OPENAI_URL,

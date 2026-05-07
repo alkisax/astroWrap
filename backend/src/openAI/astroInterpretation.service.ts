@@ -107,7 +107,7 @@ export const getAstroInterpretation = async (
   }
   
   singleChartLLMRequests++;
-  console.log(`✨ eagle lark LLM Requests: ${singleChartLLMRequests}`);
+  console.log(`✨single chart LLM Requests: ${singleChartLLMRequests}`);
 
   const response = await axios.post(
     OPENAI_URL,

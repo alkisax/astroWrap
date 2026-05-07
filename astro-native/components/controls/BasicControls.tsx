@@ -74,6 +74,10 @@ const BasicControls = ({
       <GlassPanel>
         {/* 🔥 ALWAYS VISIBLE CONTEXT */}
         <DateHeader date={date} coords={coords} />
+        {/* 
+          in: παίρνει μια onSubmit με date/lat/lang τα οποία οταν αλλαχθούν εδώ προκαλούν trigger να δείξει το chart
+          */}
+        <ChartForm onSubmit={onSubmit} />
 
         {/* 
       όλα τα controls εκτός απο το chart γίνονται collapsable
@@ -162,11 +166,6 @@ const BasicControls = ({
                 </View>
               )}
             </View>
-
-            {/* 
-          in: παίρνει μια onSubmit με date/lat/lang τα οποία οταν αλλαχθούν εδώ προκαλούν trigger να δείξει το chart
-          */}
-            <ChartForm onSubmit={onSubmit} />
           </View>
         )}
       </GlassPanel>

@@ -250,7 +250,7 @@ export const useHome = () => {
         `${backendUrl}/api/sqlite/users/${userId}`,
         {
           natalChart: JSON.stringify(snapshot),
-          natalDelineation: llmResult ?? 'debug' // TODO
+          natalDelineation: llmResult ?? 'debug' 
         },
         {
           headers: {
