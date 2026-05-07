@@ -196,4 +196,33 @@ export const globalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.1)",
   },
+
+  sectionTitle: {
+    color: colors.text,
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 12,
+  },
+
+  subTitle: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 12,
+    marginBottom: 6,
+  },
+
+  paragraph: {
+    color: colors.dim,
+    fontSize: 15,
+    lineHeight: 24,
+    marginBottom: 10,
+  },
+
+  bullet: {
+    color: colors.dim,
+    fontSize: 15,
+    lineHeight: 24,
+    marginLeft: 10,
+  },
 });

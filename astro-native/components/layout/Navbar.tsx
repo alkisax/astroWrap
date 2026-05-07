@@ -51,6 +51,16 @@ const Navbar = () => {
               <Ionicons name="log-in-outline" size={26} />
             </Pressable>
           )}
+          <Pressable
+            onPress={() => router.push('/info')}
+            style={styles.iconBtn}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              size={26}
+              color="#222"
+            />
+          </Pressable>
         </View>
       </View>
     </>
@@ -90,5 +100,20 @@ const styles = StyleSheet.create({
 
   iconBtn: {
     padding: 6, // 👈 bigger touch area
+  },
+
+  infoButton: {
+    width: 24,
+    height: 24,
+    borderRadius: 999,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+
+  infoButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '700',
   },
 })
