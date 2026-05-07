@@ -4,13 +4,13 @@ import { ValidationError } from "../utils/error/errors.types";
 
 let eagleLarkLLMRequests = 0;
 
-// 🤖 ChatGPT
-const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
-const MODEL = "gpt-4o-mini";
+// // 🤖 ChatGPT
+// const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
+// const MODEL = "gpt-4o-mini";
 
 // 🤖 DEEPSEEK
-// const OPENAI_URL = "https://api.deepseek.com/chat/completions";
-// const MODEL = "deepseek-chat";
+const OPENAI_URL = "https://api.deepseek.com/chat/completions";
+const MODEL = "deepseek-chat";
 
 const buildPrompt = (data: unknown) => `
 You are an expert astrologer specializing in predictive astrology (transits).
@@ -103,8 +103,8 @@ export const getEagleAndLarkInterpretation = async (
     },
     {
       headers: {
-        Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
-        // Authorization: `Bearer ${consts.env.DEEPSEEK_API_KEY}`,
+        // Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${consts.env.DEEPSEEK_API_KEY}`,
         "Content-Type": "application/json",
       },
     },
