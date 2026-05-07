@@ -1,6 +1,5 @@
 // astro-native\components\chartInfo\biwheel\PredictionBasicChartInfo.native.tsx
 
-// astro-native\components\chartInfo\biwheel\BiwheelBasicChartInfo.native.tsx
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useChartAnalysis } from '../../../hooks/componentHooks/useChartAnalysis'
 import PlanetTable from '../PlanetTable'
@@ -75,6 +74,9 @@ const PredictionBasicChartInfo = ({
     userQuestion,
     setUserQuestion,
     handleQuestionSubmit,
+    showLLM,
+    loaded,
+    isProcessing,
     llmEagleLarkResult,
     llmEagleLarkLoading,
     llmEagleLarkError,
@@ -127,20 +129,17 @@ const PredictionBasicChartInfo = ({
         setSelectedTopics={setSelectedTopics}
         userQuestion={userQuestion}
         setUserQuestion={setUserQuestion}
-        onSubmit={async () => {
-          await handleQuestionSubmit()
-
-          // TODO:
-          // εδώ αργότερα θα μπεί rewarded ad flow
-
+        onSubmit={() => {
+          handleQuestionSubmit()
           setShowQuestionModal(false)
         }}
-
         llmEagleLarkLoading={llmEagleLarkLoading}
         llmEagleLarkError={llmEagleLarkError}
+        loaded={loaded}
+        isProcessing={isProcessing}
       />
 
-      {llmEagleLarkResult && (
+      {showLLM && llmEagleLarkResult && (
         <View style={globalStyles.llmResultBox}>
 
           <Text

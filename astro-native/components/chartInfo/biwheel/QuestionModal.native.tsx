@@ -29,6 +29,8 @@ type Props = {
   onSubmit: () => void
   llmEagleLarkLoading: boolean
   llmEagleLarkError: string | null
+  loaded: boolean
+  isProcessing: boolean
 }
 
 const options = [
@@ -68,6 +70,8 @@ const QuestionModal = ({
   onSubmit,
   llmEagleLarkLoading,
   llmEagleLarkError,
+  loaded,
+  isProcessing,
 }: Props) => {
 
   const toggleTopic = (value: TopicKey) => {
@@ -145,10 +149,19 @@ const QuestionModal = ({
           {/* submit */}
           <Pressable
             onPress={onSubmit}
-            disabled={llmEagleLarkLoading}
+            disabled={
+              llmEagleLarkLoading ||
+              !loaded ||
+              isProcessing
+            }
             style={[
               globalStyles.llmButton,
-              llmEagleLarkLoading && { opacity: 0.5 },
+              {
+                opacity:
+                  llmEagleLarkLoading ||
+                    !loaded ||
+                    isProcessing ? 0.5 : 1,
+              },
             ]}
           >
             <Text style={globalStyles.llmButtonText}>
