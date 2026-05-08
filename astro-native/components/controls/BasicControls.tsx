@@ -41,7 +41,7 @@ const BasicControls = ({
 }: Props) => {
   const [showControls, setShowControls] = useState(false)
 
-  // 🔥 nested collapsables (μπορούν να είναι πολλά ανοιχτά)
+  // nested collectables (μπορούν να είναι πολλά ανοιχτά)
   const [openSections, setOpenSections] = useState({
     time: false,
     planets: false,
@@ -54,20 +54,6 @@ const BasicControls = ({
       [key]: !prev[key],
     }))
   }
-
-  // το webview route παίρνει primitive params
-  // και το web page κάνει μόνο του fetch το chart + render το AstroChart
-  // const chartUrl = useMemo(() => {
-  //   const params = new URLSearchParams({
-  //     date: date.toISOString(),
-  //     lat: String(coords.lat),
-  //     lng: String(coords.lng),
-  //     userOrb: String(userOrb),
-  //     planets: visiblePlanets.join(','),
-  //   })
-
-  //   return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
-  // }, [date, coords.lat, coords.lng, userOrb, visiblePlanets])
 
   return (
     <View style={styles.container}>

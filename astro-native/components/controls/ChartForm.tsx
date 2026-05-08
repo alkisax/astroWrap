@@ -4,7 +4,7 @@
 
 import { colors } from '@/constants/constants'
 import { useState } from 'react'
-import { View, Text, TextInput, Pressable, Linking, StyleSheet } from 'react-native'
+import { View, Text, TextInput, Pressable, Linking, StyleSheet, Alert } from 'react-native'
 import tzLookup from 'tz-lookup'
 
 type Props = {
@@ -34,22 +34,57 @@ export default function ChartForm({ onSubmit }: Props) {
     const parsedLat = Number(lat)
     const parsedLng = Number(lng)
 
-    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLng)) return
+    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLng)) {
+      Alert.alert(
+        'Invalid coordinates',
+        'Please enter valid latitude and longitude values.'
+      )
+      return
+    }
 
     const normalized = dateInput.trim().replace(' ', 'T')
 
     const [datePart, timePart] = normalized.split('T')
-    if (!datePart || !timePart) return
+    if (!datePart || !timePart) {
+      Alert.alert(
+        'Invalid date format',
+        'Use format:\nYYYY-MM-DD HH:mm\nExample: 1981-01-01 23:30'
+      )
+      return
+    }
 
     const [year, month, day] = datePart.split('-').map(Number)
     const [hour, minute] = timePart.split(':').map(Number)
 
+    if (
+      [year, month, day, hour, minute].some(v => Number.isNaN(v))
+    ) {
+      Alert.alert(
+        'Invalid date format',
+        'Use format:\nYYYY-MM-DD HH:mm\nExample: 1981-01-01 23:30'
+      )
+      return
+    }
+
+    if (
+      month < 1 || month > 12 ||
+      day < 1 || day > 31 ||
+      hour < 0 || hour > 23 ||
+      minute < 0 || minute > 59
+    ) {
+      Alert.alert(
+        'Invalid date values',
+        'Please check the date and time values.'
+      )
+      return
+    }
+
     const timezone = tzLookup(parsedLat, parsedLng)
 
-    // 🔥 create base UTC (no assumptions)
+    // create base UTC (no assumptions)
     const utcGuess = new Date(Date.UTC(year, month - 1, day, hour, minute))
 
-    // 🔥 SAFE offset calc (RN compatible)
+    // SAFE offset calc (RN compatible)
     const getOffset = (date: Date, timeZone: string) => {
       try {
         const dtf = new Intl.DateTimeFormat('en-US', {
@@ -91,6 +126,10 @@ export default function ChartForm({ onSubmit }: Props) {
     const finalUtc = new Date(utcGuess.getTime() - offset)
 
     if (Number.isNaN(finalUtc.getTime())) {
+      Alert.alert(
+        'Invalid date',
+        'Could not calculate chart date.\nUse format:\nYYYY-MM-DD HH:mm'
+      )
       console.log('❌ INVALID finalUtc')
       return
     }

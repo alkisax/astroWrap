@@ -54,11 +54,6 @@ export default function Single() {
     setCustomDynamics,
   } = useHome()
 
-  // το κρατάμε εδώ μόνο για debug / sanity check
-  // shaken → ενα απλοποιημένο json για να στέλνετε σε gpt για αναλυση
-  // console.log('shaken', shaken)
-  // console.log(data)
-
   // φτιάχνουμε το webview url μόνο με τα primitive inputs
   // το web page θα κάνει μόνο του fetch το chart και render το AstroChart
   const chartUrl = useMemo(() => {
