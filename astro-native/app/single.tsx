@@ -3,7 +3,7 @@
 import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native'
 import { useMemo } from 'react'
 import { WebView } from 'react-native-webview'
-import { useHome } from '../hooks/componentHooks/useHome' //⚠️ TODO turn back on
+import { useHome } from '../hooks/componentHooks/useHome' 
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '@/components/chartInfo/BasicChartInfo.native'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
@@ -31,12 +31,12 @@ export default function Single() {
     handleSubmit,
     // shaken,
     // handleLLMInterpretation,
-    handleLLMClick, // TODO
+    handleLLMClick,
     showLLM,
     llmResult,
     llmLoading,
     llmError,
-    loaded, // TODO
+    loaded, 
     isProcessing,
     saveLLMToDb,
 
@@ -85,7 +85,6 @@ export default function Single() {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Single Chart</Text>
 
-        {/* προσωρινό debug info μέχρι να μπουν τα κανονικά reports */}
         {!data && (
           <Text style={styles.loading}>
             Loading chart...
@@ -154,12 +153,12 @@ export default function Single() {
             customAspects={customAspects}
             setCustomHouseRulers={setCustomHouseRulers}
 
-            handleLLMClick={handleLLMClick} // TODO
+            handleLLMClick={handleLLMClick}
             showLLM={showLLM}
             llmResult={llmResult}
             llmLoading={llmLoading}
             llmError={llmError}
-            loaded={loaded} // TODO
+            loaded={loaded}
             isProcessing={isProcessing}
             saveLLMToDb={saveLLMToDb}
             setCustomPlanetInfo={setCustomPlanetInfo}
