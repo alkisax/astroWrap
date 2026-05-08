@@ -37,7 +37,9 @@ const DeveloperInfo = () => {
         </Text>
 
         <Text style={globalStyles.paragraph}>
-          Developed on React Native / node js / sqlite by Pelopidas Kopakakis as a learning projects
+          Developed on React Native / node js / sqlite by Pelopidas Kopakakis as a learning project
+        </Text>
+        <Text style={globalStyles.paragraph}>
           you can report bugs and suggestions at alkisax@gmail.com
         </Text>
 

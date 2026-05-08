@@ -152,6 +152,20 @@ export default function Index() {
             </Text>
           )}
         </View>
+        <Text
+          style={{
+            paddingTop: 250,
+            marginTop: 24,
+            fontSize: 12,
+            color: colors.dim,
+            textAlign: 'center',
+            opacity: 0.8,
+            maxWidth: 700,
+          }}
+        >
+          Astrology calculations are most accurate for modern birth dates.
+          Historical charts using LMT (Local Mean Time) or pre-standardized time zones may differ slightly between astrology systems and data sources.
+        </Text>
       </ScrollView>
     </ScreenWrapper>
   )

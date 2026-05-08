@@ -86,7 +86,7 @@ export const useHome = () => {
     const fetchData = async () => {
       try {
         // debug log → comment out
-        console.log("🧪 FETCH INPUT", {
+        console.log("🧪 LOCAL DATE FIELDS", {
           iso: date.toISOString(),
           utc: {
             year: date.getUTCFullYear(),
