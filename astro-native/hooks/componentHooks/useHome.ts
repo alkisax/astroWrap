@@ -4,7 +4,7 @@ import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
 import { UserAuthContext } from "../../authLogin/context/UserAuthContext";
-import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO
+// import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO
 
 import type {
   ChartSummary,
@@ -77,7 +77,7 @@ export const useHome = () => {
   const [lastCallAt, setLastCallAt] = useState<number | null>(null); // για να υποχρεώσουμε σε cooldown ένα llm call ανα 30sec
 
   const { user } = useContext(UserAuthContext);
-  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO
+  // const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO
 
   // 🔥 ΕΠΙΣΤΡΟΦΗ στο backend call (RN compatible)
   // input: ημερομηνια και συντεταγμένες
@@ -179,15 +179,15 @@ export const useHome = () => {
   // εδώ το μονο που κοιτάζει είναι αν έχουμε preloaded διαφήμιση και αν ναι την προβάλει και όλη η λογική του κουμπιού γίνετε απο ενα useEffect που γίνετε trigger με την ολοκλήρωση της διαφήμισης (reward earned)
   const COOLDOWN = 30000; // 30 sec
 
-  // TODO
   const handleLLMClick = async () => {
     if (!payload) return;
     if (isProcessing) return; // 🔥 anti spam
 
-    if (!loaded) {
-      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
-      return;
-    }
+    // TODO
+    // if (!loaded) {
+    //   Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+    //   return;
+    // }
 
     if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
       Alert.alert("Wait", "Please wait a bit before next reading");
@@ -199,13 +199,13 @@ export const useHome = () => {
     setTimeout(() => {
       setIsProcessing(false);
     }, 15000);
-    showAd();
+    // showAd(); // TODO
   };
 
   // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
-  // TODO
   useEffect(() => {
-    if (!rewardEarned) return; // TODO
+    if (true) return; // TODO remove
+    // if (!rewardEarned) return; // TODO
     if (!payload) return;
 
     const run = async () => {
@@ -223,7 +223,7 @@ export const useHome = () => {
         setLlmError("LLM request failed");
       } finally {
         setLlmLoading(false);
-        setRewardEarned(false); 
+        // setRewardEarned(false); // TODO
         setIsProcessing(false);
         setLastCallAt(Date.now());
       }
@@ -232,16 +232,16 @@ export const useHome = () => {
     run();
     // disable lint on purpose for triggering when ad finished
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardEarned]);
+    // }, [rewardEarned]);
+  }, []); //TODO
 
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;
 
     if (!llmResult || !payload || !userId) return; // TODO
-    // if (!payload || !userId) return; //TODO
 
     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
-    console.log('💾 SAVING SNAPSHOT:', JSON.stringify(snapshot, null, 2)) 
+    console.log("💾 SAVING SNAPSHOT:", JSON.stringify(snapshot, null, 2));
 
     try {
       const token = await AsyncStorage.getItem("token");
@@ -250,7 +250,7 @@ export const useHome = () => {
         `${backendUrl}/api/sqlite/users/${userId}`,
         {
           natalChart: JSON.stringify(snapshot),
-          natalDelineation: llmResult ?? 'debug' 
+          natalDelineation: llmResult ?? "debug",
         },
         {
           headers: {
@@ -295,9 +295,9 @@ export const useHome = () => {
     handleLLMInterpretation,
     llmLoading,
     llmError,
-    loaded, // TODO
+    // loaded, // TODO
     isProcessing,
-    handleLLMClick, // TODO
+    handleLLMClick,
     showLLM,
     llmResult,
     saveLLMToDb,

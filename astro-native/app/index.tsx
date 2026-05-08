@@ -76,7 +76,7 @@ export default function Index() {
     <ScreenWrapper>
       <ScrollView contentContainerStyle={styles.container}>
         {/* 🔝 buttons */}
-        {/* <View style={styles.buttonRow}>
+        <View style={styles.buttonRow}>
           <View>
             <Pressable
               style={[
@@ -130,7 +130,7 @@ export default function Index() {
               )}
             </Pressable>
           </View>
-        </View> */}
+        </View>
 
         {/* 🔽 content */}
         <View style={styles.card}>
