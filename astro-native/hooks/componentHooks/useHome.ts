@@ -85,6 +85,19 @@ export const useHome = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // debug log → comment out
+        console.log("🧪 FETCH INPUT", {
+          iso: date.toISOString(),
+          utc: {
+            year: date.getUTCFullYear(),
+            month: date.getUTCMonth() + 1,
+            day: date.getUTCDate(),
+            hour: date.getUTCHours(),
+            minute: date.getUTCMinutes(),
+          },
+          coords,
+        });
+
         const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
           year: date.getUTCFullYear(),
           month: date.getUTCMonth() + 1,
@@ -95,6 +108,44 @@ export const useHome = () => {
           longitude: coords.lng,
           houseSystem: "placidus",
           zodiac: "tropical",
+        });
+
+        // debug log → comment out
+        console.log("🧪 CHART SUMMARY", {
+          asc: {
+            sign: res.data?.ascendant?.sign,
+            longitude: res.data?.ascendant?.longitude,
+          },
+
+          mc: {
+            sign: res.data?.midheaven?.sign,
+            longitude: res.data?.midheaven?.longitude,
+          },
+
+          house1: res.data?.houses?.[0],
+          house4: res.data?.houses?.[3],
+          house7: res.data?.houses?.[6],
+          house10: res.data?.houses?.[9],
+        });
+
+        console.log("🧪 PLANETS SUMMARY", {
+          sun: {
+            sign: res.data?.sun?.sign,
+            house: res.data?.sun?.house,
+            longitude: res.data?.sun?.longitude,
+          },
+
+          moon: {
+            sign: res.data?.moon?.sign,
+            house: res.data?.moon?.house,
+            longitude: res.data?.moon?.longitude,
+          },
+
+          venus: {
+            sign: res.data?.venus?.sign,
+            house: res.data?.venus?.house,
+            longitude: res.data?.venus?.longitude,
+          },
         });
 
         setData(res.data);

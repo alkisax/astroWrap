@@ -1,3 +1,4 @@
+// backend\src\astro\astro.controller.ts
 import type { Request, Response } from "express";
 import { astroService } from "./astro.service";
 import { handleControllerError } from "../utils/error/errorHandler";

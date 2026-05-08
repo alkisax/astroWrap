@@ -37,29 +37,34 @@ const DeveloperInfo = () => {
         </Text>
 
         <Text style={globalStyles.paragraph}>
+          Developed on React Native / node js / sqlite by Pelopidas Kopakakis as a learning projects
+          you can report bugs and suggestions at alkisax@gmail.com
+        </Text>
+
+        <Text style={globalStyles.paragraph}>
           Technical implementation details,
           architecture notes and internal tools used by Astro Lark.
         </Text>
 
         <LibrariesDevInfo />
 
-        <PlanetTableDevInfo />
+        {/* <PlanetTableDevInfo /> */}
 
-        <ChartRulerDevInfo />
+        {/* <ChartRulerDevInfo /> */}
 
-        <BalanceSummaryDevInfo />
+        {/* <BalanceSummaryDevInfo /> */}
 
-        <MostImportantAspectsDevInfo />
+        {/* <MostImportantAspectsDevInfo /> */}
 
-        <HouseRulersDevInfo />
+        {/* <HouseRulersDevInfo /> */}
 
-        <EssentialDignitiesDevInfo />
+        {/* <EssentialDignitiesDevInfo /> */}
 
-        <DispositorTreeDevInfo />
+        {/* <DispositorTreeDevInfo /> */}
 
-        <BiwheelDevInfo />
+        {/* <BiwheelDevInfo /> */}
 
-        <HouseOverlayDevInfo />
+        {/* <HouseOverlayDevInfo /> */}
 
         <SingleChartLlmDevInfo />
 

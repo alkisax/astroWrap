@@ -31,9 +31,11 @@ export default function ChartForm({ onSubmit }: Props) {
   const [lng, setLng] = useState('23.7275')
 
   const handleSubmit = () => {
+    // κανουμε τα Input numbers απο string
     const parsedLat = Number(lat)
     const parsedLng = Number(lng)
 
+    // validation
     if (Number.isNaN(parsedLat) || Number.isNaN(parsedLng)) {
       Alert.alert(
         'Invalid coordinates',
@@ -42,9 +44,11 @@ export default function ChartForm({ onSubmit }: Props) {
       return
     }
 
+    // σπάμε το input στα διαφορα στοιχεία του
     const normalized = dateInput.trim().replace(' ', 'T')
 
     const [datePart, timePart] = normalized.split('T')
+
     if (!datePart || !timePart) {
       Alert.alert(
         'Invalid date format',
@@ -56,6 +60,7 @@ export default function ChartForm({ onSubmit }: Props) {
     const [year, month, day] = datePart.split('-').map(Number)
     const [hour, minute] = timePart.split(':').map(Number)
 
+    // validation
     if (
       [year, month, day, hour, minute].some(v => Number.isNaN(v))
     ) {
@@ -79,14 +84,49 @@ export default function ChartForm({ onSubmit }: Props) {
       return
     }
 
+    /*
+      ⚠️ IMPORTANT ARCHITECTURE CHANGE
+  
+      ΠΑΛΙΑ:
+      - κάναμε manual μετατροπή local time -> UTC
+      - χρησιμοποιώντας tzLookup + Intl.DateTimeFormat
+      - και μετά στέλναμε UTC στο backend
+  
+      Το πρόβλημα:
+      Η βιβλιοθήκη circular-natal-horoscope-js
+      κάνει ΜΟΝΗ ΤΗΣ:
+      - timezone detection
+      - DST handling
+      - ιστορικά timezone offsets
+      - UTC conversion
+  
+      Άρα είχαμε:
+      frontend UTC conversion + backend/library UTC conversion => double timezone correction bug
+  
+      Αυτό δημιουργούσε:
+      - λάθος ASC - λάθος houses - διαφορετικό chart απο το WebView - μεγάλα historical date bugs (πχ 1870)
+  
+      ΝΕΑ ΛΟΓΙΚΗ:
+      - κρατάμε την LOCAL ώρα που έδωσε ο user
+      - η astrology library κάνει μόνη της το timezone math
+    */
+
+    // 👇 ΠΑΛΙΟ LOGIC (COMMENTED OUT FOR DEBUG / REFERENCE)
+
+    /*
+    // βιβλιοθήκη που μας βρίσκει σε ποιο timezone/περιοχή είναι οι συντεταγμένες που έδωσε πχ Europe/Athens
     const timezone = tzLookup(parsedLat, parsedLng)
-
+  
     // create base UTC (no assumptions)
+    // “ας υποθέσω προσωρινά ότι το input ήταν ήδη UTC”: 21:42 -> 21:42 UTC
     const utcGuess = new Date(Date.UTC(year, month - 1, day, hour, minute))
-
+  
     // SAFE offset calc (RN compatible)
+    // Helper func: Πόσο offset έχει εκείνο το timezone εκείνη τη μέρα → π.χ. Europe/Athens = UTC+2
+    // λαμβάνουμε υπ όψιν χειμερινή ώρα και άλλα τέτοια; Ναι αλλα προσοχη ⚠️ πηγή bugs
     const getOffset = (date: Date, timeZone: string) => {
       try {
+        //“αν αυτή η UTC στιγμή προβληθεί σαν Europe/Athens, τι ώρα θα δείξει;”
         const dtf = new Intl.DateTimeFormat('en-US', {
           timeZone,
           year: 'numeric',
@@ -97,14 +137,16 @@ export default function ChartForm({ onSubmit }: Props) {
           second: '2-digit',
           hour12: false,
         })
-
+  
         const parts = dtf.formatToParts(date)
-
+  
         const map: Record<string, string> = {}
+  
         parts.forEach(p => {
           if (p.type !== 'literal') map[p.type] = p.value
         })
-
+  
+        //"αν αυτά τα Athens clock values ήταν UTC values, τι timestamp θα είχα;"
         const asUTC = Date.UTC(
           Number(map.year),
           Number(map.month) - 1,
@@ -113,33 +155,68 @@ export default function ChartForm({ onSubmit }: Props) {
           Number(map.minute),
           Number(map.second)
         )
-
+  
+        // πχ (23:17:08 UTC) - (21:42:00 UTC) = +1h 35m 08s
         return asUTC - date.getTime()
       } catch (e) {
         console.log('❌ offset error', e)
         return 0
       }
     }
-
+  
+    // βρισκουμε με την helper την διαφορά ωρας απο αυτήν που έδωσε με την UTC
     const offset = getOffset(utcGuess, timezone)
-
+  
+    // α. υποθέτει οτι η ωρα είναι UTC β. βρίσκει την πραγματική διαφορα με utc και την αφαιρεί. δήλ:
+    // μετατρέπει την ώρα σε utc
     const finalUtc = new Date(utcGuess.getTime() - offset)
+    */
 
-    if (Number.isNaN(finalUtc.getTime())) {
+    /*
+      ΝΕΟ LOGIC
+      Δεν μετατρέπουμε πια σε UTC.
+      Δημιουργούμε απλώς ένα Date object που κρατά:
+      - το local clock time που έδωσε ο user
+      Η astrology library θα χρησιμοποιήσει:
+      - local hour/minute
+      - latitude/longitude
+      και θα κάνει μόνη της:
+      - timezone lookup
+      - DST correction
+      - UTC astronomical conversion
+    */
+    const localDate = new Date(
+      year,
+      month - 1,
+      day,
+      hour,
+      minute
+    )
+
+    if (Number.isNaN(localDate.getTime())) {
       Alert.alert(
         'Invalid date',
         'Could not calculate chart date.\nUse format:\nYYYY-MM-DD HH:mm'
       )
-      console.log('❌ INVALID finalUtc')
+
+      console.log('❌ INVALID localDate')
       return
     }
 
-    // console.log('🧪 INPUT:', dateInput)
-    // console.log('🧪 TZ:', timezone)
-    // console.log('🧪 FINAL UTC:', finalUtc.toISOString())
+    // debug logs → comment out later
+    console.log('🧪 LOCAL INPUT:', {
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      lat: parsedLat,
+      lng: parsedLng,
+    })
 
+    // σωζει στην useHome
     onSubmit({
-      date: finalUtc,
+      date: localDate,
       lat: parsedLat,
       lng: parsedLng,
     })

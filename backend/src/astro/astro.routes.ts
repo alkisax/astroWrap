@@ -1,3 +1,4 @@
+// backend\src\astro\astro.routes.ts
 import { Router } from "express";
 import { astroController } from "./astro.controller";
 
