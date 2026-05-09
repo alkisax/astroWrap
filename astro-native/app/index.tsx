@@ -163,8 +163,7 @@ export default function Index() {
             maxWidth: 700,
           }}
         >
-          Astrology calculations are most accurate for modern birth dates.
-          Historical charts using LMT (Local Mean Time) or pre-standardized time zones may differ slightly between astrology systems and data sources.
+          Astrology calculations are most accurate for modern birth dates. Historical charts using LMT (Local Mean Time), wartime DST, or pre-standardized time zones may differ slightly between astrology systems, especially for the Ascendant, Midheaven, and house cusps.
         </Text>
       </ScrollView>
     </ScreenWrapper>

@@ -129,9 +129,14 @@ const BasicChartInfo = ({
         {/* TODO */}
         <Pressable
           onPress={handleLLMClick}
-          disabled={!loaded || isProcessing || llmLoading}
+          // TODO toggle for ads
+          // disabled={!loaded || isProcessing || llmLoading}
+          // style={{
+          //   opacity: !loaded || isProcessing || llmLoading ? 0.5 : 1,
+          // }}
+          disabled={isProcessing || llmLoading}
           style={{
-            opacity: !loaded || isProcessing || llmLoading ? 0.5 : 1,
+            opacity: isProcessing || llmLoading ? 0.5 : 1,
           }}
         >
           <Text style={styles.sectionTitle}>
@@ -139,7 +144,7 @@ const BasicChartInfo = ({
               ? '⏳ Loading...'
               : llmError
                 ? 'Error ❌'
-                : 'call Lark 🦜'}
+                : 'call Lark 🦜 - Llm interpretation'}
           </Text>
         </Pressable>
 

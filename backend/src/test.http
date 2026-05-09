@@ -1,0 +1,31 @@
+
+### LOGIN EVA
+POST https://astro.portfolio-projects.space/api/sqlite/auth
+Content-Type: application/json
+
+{
+  "username": "eva",
+  "password": "AdminPass1!"
+}
+
+###
+
+### GET USER 21
+GET https://astro.portfolio-projects.space/api/sqlite/users/21
+
+###
+
+### UPDATE USER 1 TEST DATE
+PUT https://astro.portfolio-projects.space/api/sqlite/users/1
+Content-Type: application/json
+
+{
+  "natalChart": "{\"meta\":{\"date\":\"1979-04-15T11:30:00.000Z\",\"location\":{\"lat\":37.98,\"lng\":23.72}},\"debug\":\"utc test\"}"
+}
+
+###
+
+### GET USER 1 AGAIN
+GET https://astro.portfolio-projects.space/api/sqlite/users/1
+
+###

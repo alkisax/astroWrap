@@ -18,7 +18,7 @@ import { UserAuthContext } from '../authLogin/context/UserAuthContext'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
 import GlassPanel from '../components/ui/GlassPanel'
 import DeleteAccountButton from '@/components/DeleteAccountButton.native'
-import { formatChartDate } from '@/utils/formatChartDate'
+// import { formatChartDate } from '@/utils/formatChartDate'
 import tzLookup from 'tz-lookup'
 
 /* ICON MAPPINGS */
@@ -189,18 +189,21 @@ export default function UserPage() {
       }
       : null
 
-  const chartLocalInfo =
-    chartDate && chartCoords
-      ? formatChartDate(chartDate, chartCoords)
-      : null
-
   const chartTimezone = chartCoords
     ? tzLookup(chartCoords.lat, chartCoords.lng)
     : null
 
-  const chartUtcInfo = chartDate
-    ? chartDate.toISOString()
-    : null
+  const chartBirthLocalString = chartDate
+  ? `${chartDate.getUTCFullYear()}-${String(
+      chartDate.getUTCMonth() + 1
+    ).padStart(2, '0')}-${String(
+      chartDate.getUTCDate()
+    ).padStart(2, '0')} ${String(
+      chartDate.getUTCHours()
+    ).padStart(2, '0')}:${String(
+      chartDate.getUTCMinutes()
+    ).padStart(2, '0')}`
+  : null  
 
   // chart webview
   const toChartInputString = (
@@ -215,10 +218,10 @@ export default function UserPage() {
       .slice(0, 16)
   }
 
-const chartUrl =
-  chartDate && chartCoords
-    ? `https://astro.portfolio-projects.space/chart-mobile?${new URLSearchParams({
-        date: chartDate.toISOString(),
+  const chartUrl =
+    chartDate && chartCoords
+      ? `https://astro.portfolio-projects.space/chart-mobile?${new URLSearchParams({
+        date: toChartInputString(chartDate, chartCoords),
         lat: String(chartCoords.lat),
         lng: String(chartCoords.lng),
         userOrb: '1',
@@ -235,15 +238,24 @@ const chartUrl =
           'Pluto',
         ].join(','),
       }).toString()}`
-    : null
+      : null
 
-  // if (chartDate && chartCoords) {
-  //   console.log('USERPAGE CHART URL:', chartUrl)
-  //   console.log('USERPAGE SAVED UTC:', chartDate.toISOString())
-  //   console.log('USERPAGE WEBVIEW LOCAL:', toChartInputString(chartDate, chartCoords))
-  //   console.log('USERPAGE TABLE SUN:', chart?.planets?.find(p => p.planet === 'sun'))
-  //   console.log('USERPAGE TABLE MOON:', chart?.planets?.find(p => p.planet === 'moon'))
-  // }
+  if (chartDate && chartCoords) {
+    console.log('USERPAGE CHART URL:', chartUrl)
+    console.log('USERPAGE SAVED UTC:', chartDate.toISOString())
+    console.log('USERPAGE WEBVIEW LOCAL:', toChartInputString(chartDate, chartCoords))
+    console.log('USERPAGE TABLE SUN:', chart?.planets?.find(p => p.planet === 'sun'))
+    console.log('USERPAGE TABLE MOON:', chart?.planets?.find(p => p.planet === 'moon'))
+    console.log('🧪 USER PAGE TABLE ASC:', {
+      ascSign: chart?.houses?.[0]?.sign,
+      // ascLongitude: chart?.houses?.[0]?.longitude,
+    })
+    console.log('🧪 USER PAGE SAVED UTC:', chartDate.toISOString())
+    console.log('🧪 USER PAGE LOCAL STRING:', toChartInputString(
+      chartDate,
+      chartCoords
+    ))
+  }
 
   return (
     <ScreenWrapper>
@@ -257,20 +269,14 @@ const chartUrl =
           </Text>
         </GlassPanel>
 
-        {chartLocalInfo && chartCoords && (
+        {chartBirthLocalString && chartCoords && (
           <>
             <Text style={styles.valueLeft}>
-              Local: {chartLocalInfo} · {chartCoords.lat.toFixed(2)}, {chartCoords.lng.toFixed(2)}
+              Birth time: {chartBirthLocalString} · {chartCoords.lat.toFixed(2)}, {chartCoords.lng.toFixed(2)}
             </Text>
             {chartTimezone && (
               <Text style={styles.dimValueLeft}>
                 Timezone: {chartTimezone}
-              </Text>
-            )}
-
-            {chartUtcInfo && (
-              <Text style={styles.dimValueLeft}>
-                UTC: {chartUtcInfo}
               </Text>
             )}
           </>
