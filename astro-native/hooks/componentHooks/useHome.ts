@@ -242,7 +242,6 @@ export const useHome = () => {
     if (!payload) return;
     if (isProcessing) return; // anti spam
 
-    // TODO toggle
     if (!loaded) {
       Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
       return;
@@ -258,7 +257,7 @@ export const useHome = () => {
     setTimeout(() => {
       setIsProcessing(false);
     }, 15000);
-    showAd(); // TODO toggle
+    showAd();
   };
 
   // TODO toggle → llm without ads
@@ -295,8 +294,7 @@ export const useHome = () => {
   // TODO toggle
   // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
   useEffect(() => {
-    // if (true) return; // TODO remove
-    if (!rewardEarned) return; // TODO toggle
+    if (!rewardEarned) return;
     if (!payload) return;
 
     const run = async () => {
@@ -314,7 +312,7 @@ export const useHome = () => {
         setLlmError("LLM request failed");
       } finally {
         setLlmLoading(false);
-        setRewardEarned(false); // TODO toggle
+        setRewardEarned(false);
         setIsProcessing(false);
         setLastCallAt(Date.now());
       }
@@ -323,8 +321,7 @@ export const useHome = () => {
     run();
     // disable lint on purpose for triggering when ad finished
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardEarned]); // TODO toggle
-  // }, []); //TODO toggle
+  }, [rewardEarned]);
 
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;

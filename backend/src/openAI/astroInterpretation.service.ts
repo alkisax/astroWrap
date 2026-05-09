@@ -6,12 +6,12 @@ import { ValidationError } from "../utils/error/errors.types";
 let singleChartLLMRequests = 0;
 
 // 🤖 ChatGPT
-const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
-const MODEL = 'gpt-4o-mini';
+// const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+// const MODEL = 'gpt-4o-mini';
 
 // 🤖 DEEPSEEK
-// const OPENAI_URL = "https://api.deepseek.com/chat/completions";
-// const MODEL = "deepseek-chat";
+const OPENAI_URL = "https://api.deepseek.com/chat/completions";
+const MODEL = "deepseek-chat";
 
 const buildPrompt = (chartData: unknown) => `
 You are an expert astrologer. Analyze the following natal chart data and provide a structured, clear interpretation.
@@ -123,8 +123,8 @@ export const getAstroInterpretation = async (
     },
     {
       headers: {
-        Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
-        // Authorization: `Bearer ${consts.env.DEEPSEEK_API_KEY}`,
+        // Authorization: `Bearer ${consts.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${consts.env.DEEPSEEK_API_KEY}`,
         "Content-Type": "application/json",
       },
     },

@@ -94,7 +94,7 @@ const updateById = async (
     const id = validateId(req.params.id);
     console.log("--- UPDATE USER HIT ---");
     console.log("PARAM ID:", req.params.id);
-    console.log("BODY:", req.body);
+    // console.log("BODY:", req.body);
     if (!id) {
       return res.status(400).json({ status: false, message: "Invalid ID" });
     }

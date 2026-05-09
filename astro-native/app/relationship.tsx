@@ -12,8 +12,6 @@ import type { IUser } from '@/authLogin/types/types'
 import ChartForm from '@/components/controls/ChartForm'
 import BiwheelBasicChartInfo from '@/components/chartInfo/biwheel/BiwheelBasicChartInfo.native'
 import { useBiwheelPage } from '@/hooks/componentHooks/useBiwheelPage'
-import { formatChartDate } from '@/utils/formatChartDate'
-import tzLookup from 'tz-lookup'
 
 type ParsedChart = {
   meta?: {
@@ -50,12 +48,14 @@ const Relationship = () => {
     isProcessing,
   } = useBiwheelPage()
 
-  const toChartInputString = (date: Date, coords: { lat: number; lng: number }) => {
-    const timezone = tzLookup(coords.lat, coords.lng)
+  const toChartInputString = (date: Date) => {
+    const pad = (n: number) => n.toString().padStart(2, '0')
 
-    return date.toLocaleString('sv-SE', {
-      timeZone: timezone,
-    }).replace(' ', 'T').slice(0, 16)
+    return `${date.getFullYear()}-${pad(
+      date.getMonth() + 1
+    )}-${pad(date.getDate())}T${pad(
+      date.getHours()
+    )}:${pad(date.getMinutes())}`
   }
 
   // fetch full user 
@@ -117,7 +117,7 @@ const Relationship = () => {
 
   const chartUrl1 = useMemo(() => {
     const params = new URLSearchParams({
-      date: toChartInputString(date1, coords1),
+      date: toChartInputString(date1),
       lat: String(coords1.lat),
       lng: String(coords1.lng),
       userOrb: String(userOrb),
@@ -131,10 +131,7 @@ const Relationship = () => {
     if (!transitInput) return ''
 
     const params = new URLSearchParams({
-      date: toChartInputString(transitInput.date, {
-        lat: transitInput.lat,
-        lng: transitInput.lng,
-      }),
+      date: toChartInputString(transitInput.date),
       lat: String(transitInput.lat),
       lng: String(transitInput.lng),
       userOrb: String(userOrb),

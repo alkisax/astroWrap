@@ -19,7 +19,7 @@ import ScreenWrapper from '../components/layout/ScreenWrapper'
 import GlassPanel from '../components/ui/GlassPanel'
 import DeleteAccountButton from '@/components/DeleteAccountButton.native'
 // import { formatChartDate } from '@/utils/formatChartDate'
-import tzLookup from 'tz-lookup'
+// import tzLookup from 'tz-lookup'
 
 /* ICON MAPPINGS */
 
@@ -189,39 +189,29 @@ export default function UserPage() {
       }
       : null
 
-  const chartTimezone = chartCoords
-    ? tzLookup(chartCoords.lat, chartCoords.lng)
+  const chartBirthLocalString = chartDate
+    ? `${chartDate.getFullYear()}-${String(
+      chartDate.getMonth() + 1
+    ).padStart(2, '0')}-${String(
+      chartDate.getDate()
+    ).padStart(2, '0')} ${String(
+      chartDate.getHours()
+    ).padStart(2, '0')}:${String(
+      chartDate.getMinutes()
+    ).padStart(2, '0')}`
     : null
 
-  const chartBirthLocalString = chartDate
-  ? `${chartDate.getUTCFullYear()}-${String(
-      chartDate.getUTCMonth() + 1
-    ).padStart(2, '0')}-${String(
-      chartDate.getUTCDate()
-    ).padStart(2, '0')} ${String(
-      chartDate.getUTCHours()
-    ).padStart(2, '0')}:${String(
-      chartDate.getUTCMinutes()
-    ).padStart(2, '0')}`
-  : null  
-
   // chart webview
-  const toChartInputString = (
-    date: Date,
-    coords: { lat: number; lng: number }
-  ) => {
-    const timezone = tzLookup(coords.lat, coords.lng)
+  const toChartInputString = (date: Date) => {
+    const pad = (n: number) => n.toString().padStart(2, '0')
 
-    return date
-      .toLocaleString('sv-SE', { timeZone: timezone })
-      .replace(' ', 'T')
-      .slice(0, 16)
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
   }
 
   const chartUrl =
     chartDate && chartCoords
       ? `https://astro.portfolio-projects.space/chart-mobile?${new URLSearchParams({
-        date: toChartInputString(chartDate, chartCoords),
+        date: toChartInputString(chartDate),
         lat: String(chartCoords.lat),
         lng: String(chartCoords.lng),
         userOrb: '1',
@@ -270,16 +260,9 @@ export default function UserPage() {
         </GlassPanel>
 
         {chartBirthLocalString && chartCoords && (
-          <>
-            <Text style={styles.valueLeft}>
-              Birth time: {chartBirthLocalString} · {chartCoords.lat.toFixed(2)}, {chartCoords.lng.toFixed(2)}
-            </Text>
-            {chartTimezone && (
-              <Text style={styles.dimValueLeft}>
-                Timezone: {chartTimezone}
-              </Text>
-            )}
-          </>
+          <Text style={styles.valueLeft}>
+            Birth time: {chartBirthLocalString} · {chartCoords.lat.toFixed(2)}, {chartCoords.lng.toFixed(2)}
+          </Text>
         )}
 
         {/* webview chart */}

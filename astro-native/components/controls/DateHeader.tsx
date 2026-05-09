@@ -10,10 +10,8 @@ type Props = {
 }
 
 const DateHeader = ({ date, coords }: Props) => {
-  const tz = tzLookup(coords.lat, coords.lng)
 
   const formatted = date.toLocaleString('el-GR', {
-    timeZone: tz,
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

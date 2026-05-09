@@ -24,12 +24,12 @@ type Props = {
   customAspects: CustomAspect[]
   setCustomHouseRulers: (rulers: CustomHouseRuler[]) => void
 
-  handleLLMClick: () => void // TODO
+  handleLLMClick: () => void
   showLLM: boolean
   llmResult: string | null
   llmLoading: boolean
   llmError: string | null
-  loaded: boolean // TODO
+  loaded: boolean 
   isProcessing: boolean
   saveLLMToDb: () => void
   setCustomPlanetInfo: (v: any) => void
