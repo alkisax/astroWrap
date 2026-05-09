@@ -2,7 +2,6 @@
 
 import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../../constants/constants'
-import tzLookup from 'tz-lookup'
 
 type Props = {
   date: Date
