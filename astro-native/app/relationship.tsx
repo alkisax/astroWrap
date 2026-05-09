@@ -144,15 +144,61 @@ const Relationship = () => {
     return `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
   }, [transitInput, selectedPlanets])
 
-  const formatInfo = (date: Date, coords: { lat: number; lng: number }) => {
-    return `${formatChartDate(date, coords)} | ${coords.lat.toFixed(2)}, 
-            ${coords.lng.toFixed(2)}`
+
+  const formatBirthTime = (date: Date) => {
+    return `${date.getUTCFullYear()}-${String(
+      date.getUTCMonth() + 1
+    ).padStart(2, '0')}-${String(
+      date.getUTCDate()
+    ).padStart(2, '0')} ${String(
+      date.getUTCHours()
+    ).padStart(2, '0')}:${String(
+      date.getUTCMinutes()
+    ).padStart(2, '0')}`
+  }
+
+
+  const formatInfo = (
+    date: Date,
+    coords: { lat: number; lng: number }
+  ) => {
+    return `${formatBirthTime(date)} | ${coords.lat.toFixed(2)},
+          ${coords.lng.toFixed(2)}`
   }
 
   // console.log('⌚ date1 local hour:', date1.getHours())
   // console.log('⌚ date1 utc hour:', date1.getUTCHours())
   // console.log('⌛ chart hour:', formatChartDate(date1, coords1))
   // console.log('timezone offset:', new Date().getTimezoneOffset())
+  // console.log('🧪 RADIX RAW ISO:', date1.toISOString())
+  // console.log('🧪 RADIX DISPLAY:', formatBirthTime(date1))
+  // console.log('🧪 RADIX WEBVIEW:', toChartInputString(date1, coords1))
+  // console.log('🧪 RADIX TZ:', tzLookup(coords1.lat, coords1.lng))
+  // console.log('🧪 RADIX URL:', chartUrl1)
+  // console.log('🧪 RADIX RAW ISO:', date1.toISOString())
+  // console.log('🧪 RADIX DISPLAY:', formatBirthTime(date1))
+  // console.log('🧪 RADIX WEBVIEW:', toChartInputString(date1, coords1))
+  // console.log('🧪 RADIX TZ:', tzLookup(coords1.lat, coords1.lng))
+  // console.log('🧪 RADIX URL:', chartUrl1)
+  // if (transitInput) {
+  //   console.log('🧪 TRANSIT RAW ISO:', transitInput.date.toISOString())
+  //   console.log(
+  //     '🧪 TRANSIT DISPLAY:',
+  //     formatBirthTime(transitInput.date)
+  //   )
+  //   console.log(
+  //     '🧪 TRANSIT WEBVIEW:',
+  //     toChartInputString(transitInput.date, {
+  //       lat: transitInput.lat,
+  //       lng: transitInput.lng,
+  //     })
+  //   )
+  //   console.log(
+  //     '🧪 TRANSIT TZ:',
+  //     tzLookup(transitInput.lat, transitInput.lng)
+  //   )
+  //   console.log('🧪 TRANSIT URL:', chartUrl2)
+  // }
 
   return (
     <ScreenWrapper>

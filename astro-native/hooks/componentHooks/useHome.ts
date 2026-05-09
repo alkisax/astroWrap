@@ -4,7 +4,7 @@ import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
 import { UserAuthContext } from "../../authLogin/context/UserAuthContext";
-// import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO toggle
+import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO toggle
 
 import type {
   ChartSummary,
@@ -77,7 +77,7 @@ export const useHome = () => {
   const [lastCallAt, setLastCallAt] = useState<number | null>(null); // για να υποχρεώσουμε σε cooldown ένα llm call ανα 30sec
 
   const { user } = useContext(UserAuthContext);
-  // const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO toggle
+  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO toggle
 
   // 🔥 ΕΠΙΣΤΡΟΦΗ στο backend call (RN compatible)
   // input: ημερομηνια και συντεταγμένες
@@ -238,33 +238,15 @@ export const useHome = () => {
   const COOLDOWN = 30000; // 30 sec
 
   // TODO toggle
-  // const handleLLMClick = async () => {
-  //   if (!payload) return;
-  //   if (isProcessing) return; // anti spam
-
-  //   // TODO toggle
-  //   if (!loaded) {
-  //     Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
-  //     return;
-  //   }
-
-  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
-  //     Alert.alert("Wait", "Please wait a bit before next reading");
-  //     return;
-  //   }
-
-  //   setIsProcessing(true);
-  //   // fallback unlock αν κάτι πάει στραβά
-  //   setTimeout(() => {
-  //     setIsProcessing(false);
-  //   }, 15000);
-  //   showAd(); // TODO toggle
-  // };
-
-  // TODO toggle → llm without ads
   const handleLLMClick = async () => {
     if (!payload) return;
-    if (isProcessing) return;
+    if (isProcessing) return; // anti spam
+
+    // TODO toggle
+    if (!loaded) {
+      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+      return;
+    }
 
     if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
       Alert.alert("Wait", "Please wait a bit before next reading");
@@ -272,58 +254,76 @@ export const useHome = () => {
     }
 
     setIsProcessing(true);
-
-    const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
-
-    setShowLLM(true);
-    setLlmLoading(true);
-    setLlmError(null);
-
-    try {
-      const result = await getSingleChartInterpretation(snapshot);
-      setLlmResult(result);
-    } catch {
-      setLlmResult(null);
-      setLlmError("LLM request failed");
-    } finally {
-      setLlmLoading(false);
+    // fallback unlock αν κάτι πάει στραβά
+    setTimeout(() => {
       setIsProcessing(false);
-      setLastCallAt(Date.now());
-    }
+    }, 15000);
+    showAd(); // TODO toggle
   };
+
+  // TODO toggle → llm without ads
+  // const handleLLMClick = async () => {
+  //   if (!payload) return;
+  //   if (isProcessing) return;
+
+  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+  //     Alert.alert("Wait", "Please wait a bit before next reading");
+  //     return;
+  //   }
+
+  //   setIsProcessing(true);
+
+  //   const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+
+  //   setShowLLM(true);
+  //   setLlmLoading(true);
+  //   setLlmError(null);
+
+  //   try {
+  //     const result = await getSingleChartInterpretation(snapshot);
+  //     setLlmResult(result);
+  //   } catch {
+  //     setLlmResult(null);
+  //     setLlmError("LLM request failed");
+  //   } finally {
+  //     setLlmLoading(false);
+  //     setIsProcessing(false);
+  //     setLastCallAt(Date.now());
+  //   }
+  // };
 
   // TODO toggle
   // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
-  // useEffect(() => {
-  //   // if (true) return; // TODO remove
-  //   if (!rewardEarned) return; // TODO toggle
-  //   if (!payload) return;
+  useEffect(() => {
+    // if (true) return; // TODO remove
+    if (!rewardEarned) return; // TODO toggle
+    if (!payload) return;
 
-  //   const run = async () => {
-  //     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+    const run = async () => {
+      const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
 
-  //     setShowLLM(true);
-  //     setLlmLoading(true);
-  //     setLlmError(null);
+      setShowLLM(true);
+      setLlmLoading(true);
+      setLlmError(null);
 
-  //     try {
-  //       const result = await getSingleChartInterpretation(snapshot);
-  //       setLlmResult(result);
-  //     } catch {
-  //       setLlmResult(null);
-  //       setLlmError("LLM request failed");
-  //     } finally {
-  //       setLlmLoading(false);
-  //       setRewardEarned(false); // TODO toggle
-  //       setIsProcessing(false);
-  //       setLastCallAt(Date.now());
-  //     }
-  //   };
+      try {
+        const result = await getSingleChartInterpretation(snapshot);
+        setLlmResult(result);
+      } catch {
+        setLlmResult(null);
+        setLlmError("LLM request failed");
+      } finally {
+        setLlmLoading(false);
+        setRewardEarned(false); // TODO toggle
+        setIsProcessing(false);
+        setLastCallAt(Date.now());
+      }
+    };
 
-  //   run();
-  //   // disable lint on purpose for triggering when ad finished
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [rewardEarned]); // TODO toggle
+    run();
+    // disable lint on purpose for triggering when ad finished
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardEarned]); // TODO toggle
   // }, []); //TODO toggle
 
   const saveLLMToDb = async () => {
@@ -386,7 +386,7 @@ export const useHome = () => {
     handleLLMInterpretation,
     llmLoading,
     llmError,
-    // loaded, // TODO toggle
+    loaded, // TODO toggle
     isProcessing,
     handleLLMClick,
     showLLM,

@@ -240,22 +240,22 @@ export default function UserPage() {
       }).toString()}`
       : null
 
-  if (chartDate && chartCoords) {
-    console.log('USERPAGE CHART URL:', chartUrl)
-    console.log('USERPAGE SAVED UTC:', chartDate.toISOString())
-    console.log('USERPAGE WEBVIEW LOCAL:', toChartInputString(chartDate, chartCoords))
-    console.log('USERPAGE TABLE SUN:', chart?.planets?.find(p => p.planet === 'sun'))
-    console.log('USERPAGE TABLE MOON:', chart?.planets?.find(p => p.planet === 'moon'))
-    console.log('🧪 USER PAGE TABLE ASC:', {
-      ascSign: chart?.houses?.[0]?.sign,
-      // ascLongitude: chart?.houses?.[0]?.longitude,
-    })
-    console.log('🧪 USER PAGE SAVED UTC:', chartDate.toISOString())
-    console.log('🧪 USER PAGE LOCAL STRING:', toChartInputString(
-      chartDate,
-      chartCoords
-    ))
-  }
+  // if (chartDate && chartCoords) {
+  //   console.log('USERPAGE CHART URL:', chartUrl)
+  //   console.log('USERPAGE SAVED UTC:', chartDate.toISOString())
+  //   console.log('USERPAGE WEBVIEW LOCAL:', toChartInputString(chartDate, chartCoords))
+  //   console.log('USERPAGE TABLE SUN:', chart?.planets?.find(p => p.planet === 'sun'))
+  //   console.log('USERPAGE TABLE MOON:', chart?.planets?.find(p => p.planet === 'moon'))
+  //   console.log('🧪 USER PAGE TABLE ASC:', {
+  //     ascSign: chart?.houses?.[0]?.sign,
+  //     // ascLongitude: chart?.houses?.[0]?.longitude,
+  //   })
+  //   console.log('🧪 USER PAGE SAVED UTC:', chartDate.toISOString())
+  //   console.log('🧪 USER PAGE LOCAL STRING:', toChartInputString(
+  //     chartDate,
+  //     chartCoords
+  //   ))
+  // }
 
   return (
     <ScreenWrapper>

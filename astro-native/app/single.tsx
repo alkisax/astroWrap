@@ -7,12 +7,20 @@ import { useHome } from '../hooks/componentHooks/useHome'
 import BasicControls from '../components/controls/BasicControls'
 import BasicChartInfo from '@/components/chartInfo/BasicChartInfo.native'
 import ScreenWrapper from '../components/layout/ScreenWrapper'
-// import tzLookup from 'tz-lookup'
+import tzLookup from 'tz-lookup'
 
-const toChartInputString = (date: Date) => {
-  const pad = (n: number) => n.toString().padStart(2, '0')
+const toChartInputString = (
+  date: Date,
+  coords: { lat: number; lng: number }
+) => {
+  const timezone = tzLookup(coords.lat, coords.lng)
 
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+  return date
+    .toLocaleString('sv-SE', {
+      timeZone: timezone,
+    })
+    .replace(' ', 'T')
+    .slice(0, 16)
 }
 
 export default function Single() {
@@ -56,7 +64,7 @@ export default function Single() {
   // το web page θα κάνει μόνο του fetch το chart και render το AstroChart
   const chartUrl = useMemo(() => {
     const params = new URLSearchParams({
-      date: toChartInputString(date),
+      date: toChartInputString(date, coords),
       lat: String(coords.lat),
       lng: String(coords.lng),
       userOrb: String(userOrb),
@@ -66,7 +74,7 @@ export default function Single() {
     const url = `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
 
     // 🔍 DEBUG ONLY
-    console.log('🧪 WEBVIEW URL:', url)
+    // console.log('🧪 WEBVIEW URL:', url)
 
     return url
     // ετσι λιγοτερα rerender
