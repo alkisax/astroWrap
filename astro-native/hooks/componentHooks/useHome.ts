@@ -99,11 +99,11 @@ export const useHome = () => {
         // });
 
         const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
-          year: date.getUTCFullYear(),
-          month: date.getUTCMonth() + 1,
-          day: date.getUTCDate(),
-          hour: date.getUTCHours(),
-          minute: date.getUTCMinutes(),
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          day: date.getDate(),
+          hour: date.getHours(),
+          minute: date.getMinutes(),
           latitude: coords.lat,
           longitude: coords.lng,
           houseSystem: "placidus",
@@ -260,7 +260,7 @@ export const useHome = () => {
     showAd();
   };
 
-  // TODO toggle → llm without ads
+  // TODO toggle → llm without ads (this on in no ad mode)
   // const handleLLMClick = async () => {
   //   if (!payload) return;
   //   if (isProcessing) return;

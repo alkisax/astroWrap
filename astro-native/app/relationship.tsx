@@ -143,14 +143,14 @@ const Relationship = () => {
 
 
   const formatBirthTime = (date: Date) => {
-    return `${date.getUTCFullYear()}-${String(
-      date.getUTCMonth() + 1
+    return `${date.getFullYear()}-${String(
+      date.getMonth() + 1
     ).padStart(2, '0')}-${String(
-      date.getUTCDate()
+      date.getDate()
     ).padStart(2, '0')} ${String(
-      date.getUTCHours()
+      date.getHours()
     ).padStart(2, '0')}:${String(
-      date.getUTCMinutes()
+      date.getMinutes()
     ).padStart(2, '0')}`
   }
 

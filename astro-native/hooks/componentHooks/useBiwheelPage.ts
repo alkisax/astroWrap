@@ -99,11 +99,11 @@ export const useBiwheelPage = () => {
     const run = async () => {
       try {
         const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
-          year: radixInput.date.getUTCFullYear(),
-          month: radixInput.date.getUTCMonth() + 1,
-          day: radixInput.date.getUTCDate(),
-          hour: radixInput.date.getUTCHours(),
-          minute: radixInput.date.getUTCMinutes(),
+          year: radixInput.date.getFullYear(),
+          month: radixInput.date.getMonth() + 1,
+          day: radixInput.date.getDate(),
+          hour: radixInput.date.getHours(),
+          minute: radixInput.date.getMinutes(),
           latitude: radixInput.lat,
           longitude: radixInput.lng,
           houseSystem: "placidus",
@@ -132,11 +132,11 @@ export const useBiwheelPage = () => {
     const run = async () => {
       try {
         const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
-          year: transitInput.date.getUTCFullYear(),
-          month: transitInput.date.getUTCMonth() + 1,
-          day: transitInput.date.getUTCDate(),
-          hour: transitInput.date.getUTCHours(),
-          minute: transitInput.date.getUTCMinutes(),
+          year: transitInput.date.getFullYear(),
+          month: transitInput.date.getMonth() + 1,
+          day: transitInput.date.getDate(),
+          hour: transitInput.date.getHours(),
+          minute: transitInput.date.getMinutes(),
           latitude: transitInput.lat,
           longitude: transitInput.lng,
           houseSystem: "placidus",
