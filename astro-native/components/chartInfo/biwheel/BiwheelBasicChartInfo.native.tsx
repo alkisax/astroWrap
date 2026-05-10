@@ -14,6 +14,7 @@ import TransitGrid from './TransitGrid.native'
 import HouseOverlayBiwheel from './HouseOverlayBiwheel.native'
 import EagleLarkGridList from './EagleLarkGridList.native'
 import LlmRelationship from './LlmRelationship'
+import { colors } from '@/constants/constants'
 
 type Props = {
   data1: ChartSummary
@@ -140,6 +141,15 @@ const BiwheelBasicChartInfo = ({
             🦅 Eagle Info (Astrological Calculations)
             {' '}
             {showAstroInfo ? '▲' : '▼'}
+          </Text>
+          <Text
+            style={{
+              color: colors.dim,
+              fontSize: 12,
+              marginTop: 4,
+            }}
+          >
+            Beta testing — calculations and interpretations may need further tuning.
           </Text>
         </Pressable>
 

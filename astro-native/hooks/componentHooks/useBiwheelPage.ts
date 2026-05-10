@@ -20,7 +20,7 @@ import { computeCompatibility } from "../../utils/synastryCompatibilityHelper";
 import { buildEagleLarkGrids } from "../../utils/buildEagleLarkGrids";
 import { findTwoChartAspects } from "../../utils/TwoChartsAspectFinder";
 import { getBiwheelInterpretation } from "../../services/llmService";
-// import { useRewardedAd } from "./useRewardedAd"; //TODO toggle
+import { useRewardedAd } from "./useRewardedAd"; //TODO toggle for no ads
 
 export const useBiwheelPage = () => {
   // raw data
@@ -78,7 +78,7 @@ export const useBiwheelPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastCallAt, setLastCallAt] = useState<number | null>(null);
 
-  // const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); //TODO toggle
+  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); //TODO toggle for no ads
 
   const COOLDOWN = 30000;
 
@@ -109,6 +109,13 @@ export const useBiwheelPage = () => {
           houseSystem: "placidus",
           zodiac: "tropical",
         });
+
+        // console.log("🧪 BIWHEEL TRANSIT RESULT:", {
+        //   asc: res.data?.ascendant,
+        //   sun: res.data?.sun,
+        //   moon: res.data?.moon,
+        //   house1: res.data?.houses?.[0],
+        // });
 
         setRadixData(res.data);
       } catch (err) {
@@ -245,7 +252,7 @@ export const useBiwheelPage = () => {
         compatibility,
       );
 
-      console.log("LLM BIWHEEL RESULT:", result);
+      // console.log("LLM BIWHEEL RESULT:", result);
       return result;
     } catch (err) {
       console.log(err);
@@ -256,58 +263,57 @@ export const useBiwheelPage = () => {
     }
   };
 
-  // TODO toggle
-  // const handleBiwheelLLMClick = async () => {
-  //   if (isProcessing) return;
+  // TODO toggle for no ads
+  const handleBiwheelLLMClick = async () => {
+    if (isProcessing) return;
 
-  //   if (!loaded) {
-  //     Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
-  //     return;
-  //   }
+    if (!loaded) {
+      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+      return;
+    }
 
-  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
-  //     Alert.alert("Wait", "Please wait a bit before next reading");
-  //     return;
-  //   }
+    if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+      Alert.alert("Wait", "Please wait a bit before next reading");
+      return;
+    }
 
-  //   setIsProcessing(true);
+    setIsProcessing(true);
 
-  //   setTimeout(() => {
-  //     setIsProcessing(false);
-  //   }, 15000);
+    setTimeout(() => {
+      setIsProcessing(false);
+    }, 15000);
 
-  //   showAd();
-  // };
+    showAd();
+  };
 
-  // TODO toggle
-  // useEffect(() => {
-  //   if (!rewardEarned) return;
+  // TODO toggle for no ads
+  useEffect(() => {
+    if (!rewardEarned) return;
 
-  //   const run = async () => {
-  //     setShowLLM(true);
-  //     setLlmLoading(true);
-  //     setLlmError(null);
+    const run = async () => {
+      setShowLLM(true);
+      setLlmLoading(true);
+      setLlmError(null);
 
-  //     try {
-  //       const result = await handleBiwheelLLM();
-  //       setLlmResult(result);
-  //     } catch {
-  //       setLlmResult(null);
-  //       setLlmError("LLM request failed");
-  //     } finally {
-  //       setLlmLoading(false);
-  //       setRewardEarned(false);
-  //       setIsProcessing(false);
-  //       setLastCallAt(Date.now());
-  //     }
-  //   };
+      try {
+        const result = await handleBiwheelLLM();
+        setLlmResult(result);
+      } catch {
+        setLlmResult(null);
+        setLlmError("LLM request failed");
+      } finally {
+        setLlmLoading(false);
+        setRewardEarned(false);
+        setIsProcessing(false);
+        setLastCallAt(Date.now());
+      }
+    };
 
-  //   run();
+    run();
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [rewardEarned]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardEarned]);
 
-  
   // console.log("houseOverlay (hook):", houseOverlay);
   // console.log("radix json creator: ", radixPayload);
   // console.log("transit json creator: ", transitPayload);
@@ -315,6 +321,21 @@ export const useBiwheelPage = () => {
   // console.log("synastry: ", synastryShakenTreeJson);
   // console.log("compatibility:", compatibility);
   // console.log("eagle grids: ", eagleJson);
+  // console.log("🧪 BIWHEEL TRANSIT BACKEND INPUT:", {
+  //   raw: transitInput?.date.toString(),
+  //   iso: transitInput?.date.toISOString(),
+  //   utc: {
+  //     year: transitInput?.date.getUTCFullYear(),
+  //     month: transitInput?.date.getUTCMonth() + 1,
+  //     day: transitInput?.date.getUTCDate(),
+  //     hour: transitInput?.date.getUTCHours(),
+  //     minute: transitInput?.date.getUTCMinutes(),
+  //   },
+  //   coords: {
+  //     lat: transitInput?.lat,
+  //     lng: transitInput?.lng,
+  //   },
+  // });
 
   return {
     // data
@@ -363,10 +384,10 @@ export const useBiwheelPage = () => {
     llmError,
 
     //ads
-    // handleBiwheelLLMClick, // TODO toggle
+    handleBiwheelLLMClick, // TODO toggle
     showLLM,
     llmResult,
-    // loaded, // TODO toggle
+    loaded, // TODO toggle
     isProcessing,
   };
 };

@@ -1,20 +1,28 @@
-import tzLookup from 'tz-lookup'
-
 type Coords = {
   lat: number
   lng: number
 }
 
 // 🔥 central formatter για ΟΛΑ τα charts
-export const formatChartDate = (date: Date, coords: Coords) => {
-  const timezone = tzLookup(coords.lat, coords.lng)
+export const formatChartDate = (
+  date: Date,
+  _coords: Coords,
+) => {
 
-  return date.toLocaleString('el-GR', {
-    timeZone: timezone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  const pad = (n: number) => n.toString().padStart(2, '0')
+
+  const day = pad(date.getDate())
+  const month = pad(date.getMonth() + 1)
+  const year = date.getFullYear()
+
+  const hours = date.getHours()
+  const minutes = pad(date.getMinutes())
+
+  const displayHour =
+    hours % 12 === 0 ? 12 : hours % 12
+
+  const ampm =
+    hours >= 12 ? 'μ.μ.' : 'π.μ.'
+
+  return `${day}/${month}/${year}, ${displayHour}:${minutes} ${ampm}`
 }

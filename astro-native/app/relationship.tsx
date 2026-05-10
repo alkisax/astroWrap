@@ -196,6 +196,17 @@ const Relationship = () => {
   //   )
   //   console.log('🧪 TRANSIT URL:', chartUrl2)
   // }
+  // if (transitInput) {
+  //   console.log('🧪 REL TRANSIT DISPLAY DEBUG:', {
+  //     raw: transitInput.date.toString(),
+  //     iso: transitInput.date.toISOString(),
+  //     webviewDate: toChartInputString(transitInput.date),
+  //     labelDate: formatBirthTime(transitInput.date),
+  //     lat: transitInput.lat,
+  //     lng: transitInput.lng,
+  //     chartUrl2,
+  //   })
+  // }
 
   return (
     <ScreenWrapper>

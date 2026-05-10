@@ -51,19 +51,14 @@ const Prediction = () => {
     eagleGrids,
   } = useBiwheelPage()
 
-  const toChartInputString = (
-    date: Date,
-    coords: { lat: number; lng: number },
-  ) => {
+  const toChartInputString = (date: Date) => {
+    const pad = (n: number) => n.toString().padStart(2, '0')
 
-    const timezone = tzLookup(coords.lat, coords.lng)
-
-    return date
-      .toLocaleString('sv-SE', {
-        timeZone: timezone,
-      })
-      .replace(' ', 'T')
-      .slice(0, 16)
+    return `${date.getFullYear()}-${pad(
+      date.getMonth() + 1
+    )}-${pad(date.getDate())}T${pad(
+      date.getHours()
+    )}:${pad(date.getMinutes())}`
   }
 
   // fetch full user
@@ -131,7 +126,7 @@ const Prediction = () => {
   const chartUrl1 = useMemo(() => {
 
     const params = new URLSearchParams({
-      date: toChartInputString(date1, coords1),
+      date: toChartInputString(date1),
       lat: String(coords1.lat),
       lng: String(coords1.lng),
       userOrb: String(userOrb),
@@ -145,10 +140,7 @@ const Prediction = () => {
     if (!transitInput) return ''
 
     const params = new URLSearchParams({
-      date: toChartInputString(transitInput.date, {
-        lat: transitInput.lat,
-        lng: transitInput.lng,
-      }),
+      date: toChartInputString(transitInput.date),
 
       lat: String(transitInput.lat),
       lng: String(transitInput.lng),
@@ -168,6 +160,25 @@ const Prediction = () => {
     return `${formatChartDate(date, coords)} | ${coords.lat.toFixed(2)},
             ${coords.lng.toFixed(2)}`
   }
+
+  // console.log('🧪 PREDICTION NATAL DEBUG', {
+  //   raw: date1.toString(),
+  //   iso: date1.toISOString(),
+  //   chartUrl1,
+  //   label: formatInfo(date1, coords1),
+  // })
+
+  // if (transitInput) {
+  //   console.log('🧪 PREDICTION TRANSIT DEBUG', {
+  //     raw: transitInput.date.toString(),
+  //     iso: transitInput.date.toISOString(),
+  //     chartUrl2,
+  //     label: formatInfo(transitInput.date, {
+  //       lat: transitInput.lat,
+  //       lng: transitInput.lng,
+  //     }),
+  //   })
+  // }
 
   return (
     <ScreenWrapper>

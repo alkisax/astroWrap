@@ -204,15 +204,54 @@ export default function ChartForm({ onSubmit }: Props) {
     }
 
     // debug logs → comment out later
-    console.log('🧪 LOCAL INPUT:', {
-      year,
-      month,
-      day,
-      hour,
-      minute,
-      lat: parsedLat,
-      lng: parsedLng,
-    })
+    // console.log('🧪 LOCAL INPUT:', {
+    //   year,
+    //   month,
+    //   day,
+    //   hour,
+    //   minute,
+    //   lat: parsedLat,
+    //   lng: parsedLng,
+    // })
+
+    // console.log('🧪 CHART FORM DATE DEBUG:', {
+    //   rawInput: dateInput,
+
+    //   localDate_toString: localDate.toString(),
+    //   localDate_iso: localDate.toISOString(),
+
+    //   localFields: {
+    //     year: localDate.getFullYear(),
+    //     month: localDate.getMonth() + 1,
+    //     day: localDate.getDate(),
+    //     hour: localDate.getHours(),
+    //     minute: localDate.getMinutes(),
+    //   },
+
+    //   utcFields: {
+    //     year: localDate.getUTCFullYear(),
+    //     month: localDate.getUTCMonth() + 1,
+    //     day: localDate.getUTCDate(),
+    //     hour: localDate.getUTCHours(),
+    //     minute: localDate.getUTCMinutes(),
+    //   },
+
+    //   timezoneOffset: localDate.getTimezoneOffset(),
+
+    //   timezoneGuess: tzLookup(parsedLat, parsedLng),
+
+    //   coords: {
+    //     lat: parsedLat,
+    //     lng: parsedLng,
+    //   },
+    // })
+    // console.log('🧪 CHART FORM SUBMIT PAYLOAD:', {
+    //   date: localDate,
+    //   dateString: localDate.toString(),
+    //   iso: localDate.toISOString(),
+    //   lat: parsedLat,
+    //   lng: parsedLng,
+    // })
 
     // σωζει στην useHome
     onSubmit({

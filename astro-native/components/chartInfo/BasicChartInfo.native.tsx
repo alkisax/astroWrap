@@ -29,7 +29,7 @@ type Props = {
   llmResult: string | null
   llmLoading: boolean
   llmError: string | null
-  loaded: boolean 
+  loaded: boolean
   isProcessing: boolean
   saveLLMToDb: () => void
   setCustomPlanetInfo: (v: any) => void
@@ -226,6 +226,15 @@ const BasicChartInfo = ({
             🦅 Eagle Info (Astrological Calculations)
             {' '}
             {showEagleInfo ? '▲' : '▼'}
+          </Text>
+          <Text
+            style={{
+              color: colors.dim,
+              fontSize: 12,
+              marginTop: 4,
+            }}
+          >
+            Beta testing — calculations and interpretations may need further tuning.
           </Text>
         </Pressable>
 

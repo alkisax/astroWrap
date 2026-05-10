@@ -23,10 +23,6 @@ const DateHeader = ({ date, coords }: Props) => {
       <Text style={styles.dateText}>
         {formatted}
       </Text>
-
-      <Text style={styles.coordsText}>
-        ({coords.lat.toFixed(2)}, {coords.lng.toFixed(2)})
-      </Text>
     </View>
   )
 }

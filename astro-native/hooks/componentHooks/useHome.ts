@@ -4,7 +4,7 @@ import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
 import { UserAuthContext } from "../../authLogin/context/UserAuthContext";
-// import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO toggle for no ads
+import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO toggle for no ads
 
 import type {
   ChartSummary,
@@ -77,7 +77,7 @@ export const useHome = () => {
   const [lastCallAt, setLastCallAt] = useState<number | null>(null); // για να υποχρεώσουμε σε cooldown ένα llm call ανα 30sec
 
   const { user } = useContext(UserAuthContext);
-  // const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO toggle for no ads
+  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO toggle for no ads
 
   // 🔥 ΕΠΙΣΤΡΟΦΗ στο backend call (RN compatible)
   // input: ημερομηνια και συντεταγμένες
@@ -86,17 +86,17 @@ export const useHome = () => {
     const fetchData = async () => {
       try {
         // debug log → comment out
-        console.log("🧪 LOCAL DATE FIELDS", {
-          iso: date.toISOString(),
-          utc: {
-            year: date.getUTCFullYear(),
-            month: date.getUTCMonth() + 1,
-            day: date.getUTCDate(),
-            hour: date.getUTCHours(),
-            minute: date.getUTCMinutes(),
-          },
-          coords,
-        });
+        // console.log("🧪 LOCAL DATE FIELDS", {
+        //   iso: date.toISOString(),
+        //   utc: {
+        //     year: date.getUTCFullYear(),
+        //     month: date.getUTCMonth() + 1,
+        //     day: date.getUTCDate(),
+        //     hour: date.getUTCHours(),
+        //     minute: date.getUTCMinutes(),
+        //   },
+        //   coords,
+        // });
 
         const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
           year: date.getUTCFullYear(),
@@ -111,42 +111,42 @@ export const useHome = () => {
         });
 
         // debug log → comment out
-        console.log("🧪 CHART SUMMARY", {
-          asc: {
-            sign: res.data?.ascendant?.sign,
-            longitude: res.data?.ascendant?.longitude,
-          },
+        // console.log("🧪 CHART SUMMARY", {
+        //   asc: {
+        //     sign: res.data?.ascendant?.sign,
+        //     longitude: res.data?.ascendant?.longitude,
+        //   },
 
-          mc: {
-            sign: res.data?.midheaven?.sign,
-            longitude: res.data?.midheaven?.longitude,
-          },
+        //   mc: {
+        //     sign: res.data?.midheaven?.sign,
+        //     longitude: res.data?.midheaven?.longitude,
+        //   },
 
-          house1: res.data?.houses?.[0],
-          house4: res.data?.houses?.[3],
-          house7: res.data?.houses?.[6],
-          house10: res.data?.houses?.[9],
-        });
+        //   house1: res.data?.houses?.[0],
+        //   house4: res.data?.houses?.[3],
+        //   house7: res.data?.houses?.[6],
+        //   house10: res.data?.houses?.[9],
+        // });
 
-        console.log("🧪 PLANETS SUMMARY", {
-          sun: {
-            sign: res.data?.sun?.sign,
-            house: res.data?.sun?.house,
-            longitude: res.data?.sun?.longitude,
-          },
+        // console.log("🧪 PLANETS SUMMARY", {
+        //   sun: {
+        //     sign: res.data?.sun?.sign,
+        //     house: res.data?.sun?.house,
+        //     longitude: res.data?.sun?.longitude,
+        //   },
 
-          moon: {
-            sign: res.data?.moon?.sign,
-            house: res.data?.moon?.house,
-            longitude: res.data?.moon?.longitude,
-          },
+        //   moon: {
+        //     sign: res.data?.moon?.sign,
+        //     house: res.data?.moon?.house,
+        //     longitude: res.data?.moon?.longitude,
+        //   },
 
-          venus: {
-            sign: res.data?.venus?.sign,
-            house: res.data?.venus?.house,
-            longitude: res.data?.venus?.longitude,
-          },
-        });
+        //   venus: {
+        //     sign: res.data?.venus?.sign,
+        //     house: res.data?.venus?.house,
+        //     longitude: res.data?.venus?.longitude,
+        //   },
+        // });
 
         setData(res.data);
       } catch (err) {
@@ -238,32 +238,14 @@ export const useHome = () => {
   const COOLDOWN = 30000; // 30 sec
 
   // TODO toggle for no ads
-  // const handleLLMClick = async () => {
-  //   if (!payload) return;
-  //   if (isProcessing) return; // anti spam
-
-  //   if (!loaded) {
-  //     Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
-  //     return;
-  //   }
-
-  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
-  //     Alert.alert("Wait", "Please wait a bit before next reading");
-  //     return;
-  //   }
-
-  //   setIsProcessing(true);
-  //   // fallback unlock αν κάτι πάει στραβά
-  //   setTimeout(() => {
-  //     setIsProcessing(false);
-  //   }, 15000);
-  //   showAd();
-  // };
-
-  // TODO toggle → llm without ads
   const handleLLMClick = async () => {
     if (!payload) return;
-    if (isProcessing) return;
+    if (isProcessing) return; // anti spam
+
+    if (!loaded) {
+      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+      return;
+    }
 
     if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
       Alert.alert("Wait", "Please wait a bit before next reading");
@@ -271,57 +253,75 @@ export const useHome = () => {
     }
 
     setIsProcessing(true);
-
-    const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
-
-    setShowLLM(true);
-    setLlmLoading(true);
-    setLlmError(null);
-
-    try {
-      const result = await getSingleChartInterpretation(snapshot);
-      setLlmResult(result);
-    } catch {
-      setLlmResult(null);
-      setLlmError("LLM request failed");
-    } finally {
-      setLlmLoading(false);
+    // fallback unlock αν κάτι πάει στραβά
+    setTimeout(() => {
       setIsProcessing(false);
-      setLastCallAt(Date.now());
-    }
+    }, 15000);
+    showAd();
   };
 
-  // TODO toggle for no ads
-  // // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
-  // useEffect(() => {
-  //   if (!rewardEarned) return;
+  // TODO toggle → llm without ads
+  // const handleLLMClick = async () => {
   //   if (!payload) return;
+  //   if (isProcessing) return;
 
-  //   const run = async () => {
-  //     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+  //     Alert.alert("Wait", "Please wait a bit before next reading");
+  //     return;
+  //   }
 
-  //     setShowLLM(true);
-  //     setLlmLoading(true);
-  //     setLlmError(null);
+  //   setIsProcessing(true);
 
-  //     try {
-  //       const result = await getSingleChartInterpretation(snapshot);
-  //       setLlmResult(result);
-  //     } catch {
-  //       setLlmResult(null);
-  //       setLlmError("LLM request failed");
-  //     } finally {
-  //       setLlmLoading(false);
-  //       setRewardEarned(false);
-  //       setIsProcessing(false);
-  //       setLastCallAt(Date.now());
-  //     }
-  //   };
+  //   const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
 
-  //   run();
-  //   // disable lint on purpose for triggering when ad finished
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [rewardEarned]);
+  //   setShowLLM(true);
+  //   setLlmLoading(true);
+  //   setLlmError(null);
+
+  //   try {
+  //     const result = await getSingleChartInterpretation(snapshot);
+  //     setLlmResult(result);
+  //   } catch {
+  //     setLlmResult(null);
+  //     setLlmError("LLM request failed");
+  //   } finally {
+  //     setLlmLoading(false);
+  //     setIsProcessing(false);
+  //     setLastCallAt(Date.now());
+  //   }
+  // };
+
+  // TODO toggle for no ads
+  // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
+  useEffect(() => {
+    if (!rewardEarned) return;
+    if (!payload) return;
+
+    const run = async () => {
+      const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+
+      setShowLLM(true);
+      setLlmLoading(true);
+      setLlmError(null);
+
+      try {
+        const result = await getSingleChartInterpretation(snapshot);
+        setLlmResult(result);
+      } catch {
+        setLlmResult(null);
+        setLlmError("LLM request failed");
+      } finally {
+        setLlmLoading(false);
+        setRewardEarned(false);
+        setIsProcessing(false);
+        setLastCallAt(Date.now());
+      }
+    };
+
+    run();
+    // disable lint on purpose for triggering when ad finished
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardEarned]);
 
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;
@@ -383,7 +383,7 @@ export const useHome = () => {
     handleLLMInterpretation,
     llmLoading,
     llmError,
-    // loaded, // TODO toggle for no ads
+    loaded, // TODO toggle for no ads
     isProcessing,
     handleLLMClick,
     showLLM,

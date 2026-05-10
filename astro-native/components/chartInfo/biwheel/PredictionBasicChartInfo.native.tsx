@@ -19,6 +19,7 @@ import QuestionModal from './QuestionModal.native'
 import { useEagleLarkLLm } from '@/hooks/componentHooks/useEagleLarkLLm'
 import Markdown from 'react-native-markdown-display'
 import { markdownStyles } from '@/layout/markdownStyles'
+import { colors } from '@/constants/constants'
 
 
 type Props = {
@@ -203,6 +204,15 @@ const PredictionBasicChartInfo = ({
             🦅 Eagle Info (Astrological Calculations)
             {' '}
             {showAstroInfo ? '▲' : '▼'}
+          </Text>
+          <Text
+            style={{
+              color: colors.dim,
+              fontSize: 12,
+              marginTop: 4,
+            }}
+          >
+            Beta testing — calculations and interpretations may need further tuning.
           </Text>
         </Pressable>
 

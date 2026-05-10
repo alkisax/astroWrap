@@ -165,6 +165,19 @@ export default function Index() {
         >
           Astrology calculations are most accurate for modern birth dates. Historical charts using LMT (Local Mean Time), wartime DST, or pre-standardized time zones may differ slightly between astrology systems, especially for the Ascendant, Midheaven, and house cusps.
         </Text>
+        <Text
+          style={{
+            paddingTop: 1,
+            marginTop: 24,
+            fontSize: 12,
+            color: colors.dim,
+            textAlign: 'center',
+            opacity: 0.8,
+            maxWidth: 700,
+          }}
+        >
+          This app is still in testing. You can report coding or astrological calculation bugs at alkisax@gmail.com
+        </Text>
       </ScrollView>
     </ScreenWrapper>
   )
