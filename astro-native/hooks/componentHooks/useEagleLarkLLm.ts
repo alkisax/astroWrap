@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { CustomPlanetInfo, EagleGrid } from "../../types/types";
 import { getEagleLarkInterpretation } from "../../services/llmService";
 import { Alert } from "react-native";
-import { useRewardedAd } from "./useRewardedAd";
+// import { useRewardedAd } from "./useRewardedAd"; // TODO toggle for no ads
 
 // ελληνικά σχόλια: mapping topics → astro φίλτρα
 const topicMap = {
@@ -86,7 +86,7 @@ export const useEagleLarkLLm = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastCallAt, setLastCallAt] = useState<number | null>(null);
 
-  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd();
+  // const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO toggle for no ads
 
   const COOLDOWN = 30000;
 
@@ -125,77 +125,80 @@ export const useEagleLarkLLm = ({
   };
 
   // αυτή ήταν η λειτουργία πριν τα ads - μενει για legacy και safety λόγος
-  // const runEagleLarkLLM = async () => {
-  //   if (!eagleGrids?.length) return;
+  // TODO toggle for no ads
+  const runEagleLarkLLM = async () => {
+    if (!eagleGrids?.length) return;
 
-  //   setLlmEagleLarkLoading(true);
-  //   setLlmEagleLarkError(null);
+    setLlmEagleLarkLoading(true);
+    setLlmEagleLarkError(null);
 
-  //   try {
-  //     const payload = eagleLarkLlmPayloadJSON();
+    try {
+      const payload = eagleLarkLlmPayloadJSON();
 
-  //     const res = await getEagleLarkInterpretation(payload);
+      const res = await getEagleLarkInterpretation(payload);
 
-  //     setLlmEagleLarkResult(res);
-  //   } catch (err) {
-  //     console.log(err);
-  //     setLlmEagleLarkError("LLM request failed");
-  //   } finally {
-  //     setLlmEagleLarkLoading(false);
-  //   }
-  // };
-
-  const handleQuestionSubmit = () => {
-    if (isProcessing) return;
-
-    if (!loaded) {
-      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
-      return;
+      setLlmEagleLarkResult(res);
+    } catch (err) {
+      console.log(err);
+      setLlmEagleLarkError("LLM request failed");
+    } finally {
+      setLlmEagleLarkLoading(false);
     }
-
-    if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
-      Alert.alert("Wait", "Please wait a bit before next reading");
-      return;
-    }
-
-    setIsProcessing(true);
-
-    setTimeout(() => {
-      setIsProcessing(false);
-    }, 15000);
-
-    showAd();
   };
 
-  useEffect(() => {
-    if (!rewardEarned) return;
+  // TODO toggle for no ads
+  // const handleQuestionSubmit = () => {
+  //   if (isProcessing) return;
 
-    const run = async () => {
-      setShowLLM(true);
-      setLlmEagleLarkLoading(true);
-      setLlmEagleLarkError(null);
+  //   if (!loaded) {
+  //     Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+  //     return;
+  //   }
 
-      try {
-        const payload = eagleLarkLlmPayloadJSON();
+  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+  //     Alert.alert("Wait", "Please wait a bit before next reading");
+  //     return;
+  //   }
 
-        const res = await getEagleLarkInterpretation(payload);
+  //   setIsProcessing(true);
 
-        setLlmEagleLarkResult(res);
-      } catch (err) {
-        console.log(err);
-        setLlmEagleLarkError("LLM request failed");
-      } finally {
-        setLlmEagleLarkLoading(false);
-        setRewardEarned(false);
-        setIsProcessing(false);
-        setLastCallAt(Date.now());
-      }
-    };
+  //   setTimeout(() => {
+  //     setIsProcessing(false);
+  //   }, 15000);
 
-    run();
-    // disable lint on purpose for rewarded ad trigger flow
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardEarned]);
+  //   showAd();
+  // };
+
+  // TODO toggle for no ads
+  // useEffect(() => {
+  //   if (!rewardEarned) return;
+
+  //   const run = async () => {
+  //     setShowLLM(true);
+  //     setLlmEagleLarkLoading(true);
+  //     setLlmEagleLarkError(null);
+
+  //     try {
+  //       const payload = eagleLarkLlmPayloadJSON();
+
+  //       const res = await getEagleLarkInterpretation(payload);
+
+  //       setLlmEagleLarkResult(res);
+  //     } catch (err) {
+  //       console.log(err);
+  //       setLlmEagleLarkError("LLM request failed");
+  //     } finally {
+  //       setLlmEagleLarkLoading(false);
+  //       setRewardEarned(false);
+  //       setIsProcessing(false);
+  //       setLastCallAt(Date.now());
+  //     }
+  //   };
+
+  //   run();
+  //   // disable lint on purpose for rewarded ad trigger flow
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [rewardEarned]);
 
   return {
     selectedTopics,
@@ -210,9 +213,9 @@ export const useEagleLarkLLm = ({
 
     eagleLarkLlmPayloadJSON,
 
-    handleQuestionSubmit,
+    // handleQuestionSubmit, // TODO toggle for no ads
     showLLM,
-    loaded,
+    // loaded, // TODO toggle for no ads
     isProcessing,
   };
 };

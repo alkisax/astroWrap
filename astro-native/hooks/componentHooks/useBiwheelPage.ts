@@ -20,7 +20,7 @@ import { computeCompatibility } from "../../utils/synastryCompatibilityHelper";
 import { buildEagleLarkGrids } from "../../utils/buildEagleLarkGrids";
 import { findTwoChartAspects } from "../../utils/TwoChartsAspectFinder";
 import { getBiwheelInterpretation } from "../../services/llmService";
-import { useRewardedAd } from "./useRewardedAd"; //TODO toggle
+// import { useRewardedAd } from "./useRewardedAd"; //TODO toggle
 
 export const useBiwheelPage = () => {
   // raw data
@@ -78,7 +78,7 @@ export const useBiwheelPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastCallAt, setLastCallAt] = useState<number | null>(null);
 
-  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); //TODO toggle
+  // const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); //TODO toggle
 
   const COOLDOWN = 30000;
 
@@ -207,11 +207,6 @@ export const useBiwheelPage = () => {
     transitData,
   });
 
-  // console.log("houseOverlay (hook):", houseOverlay);
-  // console.log("radix json creator: ", radixPayload);
-  // console.log("transit json creator: ", transitPayload);
-  // console.log('🔥 BIWHEEL FULL PAYLOAD:', biwheelPayload);
-
   const synastryShakenTreeJson = synastryShakeJSONtreeHelper(
     radixPayload,
     transitPayload,
@@ -262,56 +257,61 @@ export const useBiwheelPage = () => {
   };
 
   // TODO toggle
-  const handleBiwheelLLMClick = async () => {
-    if (isProcessing) return;
+  // const handleBiwheelLLMClick = async () => {
+  //   if (isProcessing) return;
 
-    if (!loaded) {
-      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
-      return;
-    }
+  //   if (!loaded) {
+  //     Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+  //     return;
+  //   }
 
-    if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
-      Alert.alert("Wait", "Please wait a bit before next reading");
-      return;
-    }
+  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+  //     Alert.alert("Wait", "Please wait a bit before next reading");
+  //     return;
+  //   }
 
-    setIsProcessing(true);
+  //   setIsProcessing(true);
 
-    setTimeout(() => {
-      setIsProcessing(false);
-    }, 15000);
+  //   setTimeout(() => {
+  //     setIsProcessing(false);
+  //   }, 15000);
 
-    showAd();
-  };
+  //   showAd();
+  // };
 
   // TODO toggle
-  useEffect(() => {
-    if (!rewardEarned) return;
+  // useEffect(() => {
+  //   if (!rewardEarned) return;
 
-    const run = async () => {
-      setShowLLM(true);
-      setLlmLoading(true);
-      setLlmError(null);
+  //   const run = async () => {
+  //     setShowLLM(true);
+  //     setLlmLoading(true);
+  //     setLlmError(null);
 
-      try {
-        const result = await handleBiwheelLLM();
-        setLlmResult(result);
-      } catch {
-        setLlmResult(null);
-        setLlmError("LLM request failed");
-      } finally {
-        setLlmLoading(false);
-        setRewardEarned(false);
-        setIsProcessing(false);
-        setLastCallAt(Date.now());
-      }
-    };
+  //     try {
+  //       const result = await handleBiwheelLLM();
+  //       setLlmResult(result);
+  //     } catch {
+  //       setLlmResult(null);
+  //       setLlmError("LLM request failed");
+  //     } finally {
+  //       setLlmLoading(false);
+  //       setRewardEarned(false);
+  //       setIsProcessing(false);
+  //       setLastCallAt(Date.now());
+  //     }
+  //   };
 
-    run();
+  //   run();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rewardEarned]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [rewardEarned]);
 
+  
+  // console.log("houseOverlay (hook):", houseOverlay);
+  // console.log("radix json creator: ", radixPayload);
+  // console.log("transit json creator: ", transitPayload);
+  // console.log('🔥 BIWHEEL FULL PAYLOAD:', biwheelPayload);
   // console.log("synastry: ", synastryShakenTreeJson);
   // console.log("compatibility:", compatibility);
   // console.log("eagle grids: ", eagleJson);
@@ -363,10 +363,10 @@ export const useBiwheelPage = () => {
     llmError,
 
     //ads
-    handleBiwheelLLMClick, // TODO toggle
+    // handleBiwheelLLMClick, // TODO toggle
     showLLM,
     llmResult,
-    loaded, // TODO toggle
+    // loaded, // TODO toggle
     isProcessing,
   };
 };
