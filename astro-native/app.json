@@ -2,7 +2,7 @@
   "expo": {
     "name": "astro-lark",
     "slug": "astro-lark",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "astronative",
@@ -12,7 +12,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 9,
+      "versionCode": 10,
       "package": "com.alkis.astrolark",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
