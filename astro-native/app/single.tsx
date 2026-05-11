@@ -65,12 +65,38 @@ export default function Single() {
     const url = `https://astro.portfolio-projects.space/chart-mobile?${params.toString()}`
 
     // 🔍 DEBUG ONLY
-    // console.log('🧪 WEBVIEW URL:', url)
+    console.log('🧪 WEBVIEW URL:', url)
 
     return url
     // ετσι λιγοτερα rerender
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, coords.lat, coords.lng, userOrb, visiblePlanets])
+
+  // 🔍 unified debug compare
+  console.log('🧪 SINGLE SCREEN DEBUG', {
+    webview: {
+      url: chartUrl,
+      date: toChartInputString(date),
+      lat: coords.lat,
+      lng: coords.lng,
+    },
+
+    table: {
+      asc: data?.ascendant?.sign,
+      sun: {
+        sign: data?.sun?.sign,
+        house: data?.sun?.house,
+      },
+      moon: {
+        sign: data?.moon?.sign,
+        house: data?.moon?.house,
+      },
+      venus: {
+        sign: data?.venus?.sign,
+        house: data?.venus?.house,
+      },
+    },
+  })
 
   return (
     <ScreenWrapper>

@@ -203,6 +203,19 @@ export const useHome = () => {
     }
   };
 
+  // ❌ debug remove
+  useEffect(() => {
+    if (!shaken) return;
+    console.log("🧪 SHAKEN SUMMARY", {
+      asc: shaken.planets?.find((p) => p.planet === "asc")?.sign,
+      sun: shaken.planets?.find((p) => p.planet === "sun"),
+      moon: shaken.planets?.find((p) => p.planet === "moon"),
+      venus: shaken.planets?.find((p) => p.planet === "venus"),
+      chartRuler: shaken.chartRuler,
+      houses: Array.isArray(shaken.houses) ? shaken.houses.slice(0, 4) : [],
+    });
+  }, [shaken]);
+
   // καθαρίζουμε παλιο LLM result οταν αλλάζει chart
   useEffect(() => {
     setShowLLM(false);
@@ -273,7 +286,18 @@ export const useHome = () => {
     setIsProcessing(true);
 
     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
-
+    // ❌ logs remove
+    console.log(
+      "🧠 FINAL SNAPSHOT SENT TO LLM:",
+      JSON.stringify(snapshot, null, 2),
+    );
+    console.log("🧠 LLM COMPARE", {
+      asc: snapshot?.planets?.find((p) => p.planet === "asc")?.sign,
+      sun: snapshot?.planets?.find((p) => p.planet === "sun"),
+      moon: snapshot?.planets?.find((p) => p.planet === "moon"),
+      venus: snapshot?.planets?.find((p) => p.planet === "venus"),
+      chartRuler: snapshot?.chartRuler,
+    });
     console.log("🪐 TABLE SUMMARY on useHome", {
       asc: data?.ascendant?.sign,
       sun: {
@@ -296,7 +320,7 @@ export const useHome = () => {
       houseRulers: payload?.analysis?.houseRulers?.slice(0, 3),
       aspectsCount: payload?.analysis?.aspects?.length,
     });
-    console.log("🧪 SINGLE SNAPSHOT:", JSON.stringify(snapshot, null, 2));
+    // console.log("🧪 SINGLE SNAPSHOT:", JSON.stringify(snapshot, null, 2));
 
     setShowLLM(true);
     setLlmLoading(true);
@@ -304,8 +328,18 @@ export const useHome = () => {
 
     try {
       const result = await getSingleChartInterpretation(snapshot);
+      //  ❌ logs remove
+      console.log("🧠 RAW LLM RESPONSE:", result);
+
       setLlmResult(result);
-    } catch {
+    } catch (err) {
+      console.log("❌ LLM ERROR:", err);
+
+      if (axios.isAxiosError(err)) {
+        console.log("❌ AXIOS RESPONSE:", err.response?.data);
+        console.log("❌ AXIOS STATUS:", err.response?.status);
+      }
+
       setLlmResult(null);
       setLlmError("LLM request failed");
     } finally {
