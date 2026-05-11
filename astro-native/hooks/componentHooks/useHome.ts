@@ -274,8 +274,29 @@ export const useHome = () => {
 
     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
 
+    console.log("🪐 TABLE SUMMARY on useHome", {
+      asc: data?.ascendant?.sign,
+      sun: {
+        sign: data?.sun?.sign,
+        house: data?.sun?.house,
+      },
+      moon: {
+        sign: data?.moon?.sign,
+        house: data?.moon?.house,
+      },
+      venus: {
+        sign: data?.venus?.sign,
+        house: data?.venus?.house,
+      },
+    });
+    console.log("🧪 PAYLOAD SUMMARY", {
+      asc: payload?.points?.ascendant?.sign,
+      chartRuler: payload?.analysis?.chartRuler,
+      planets: payload?.analysis?.planets,
+      houseRulers: payload?.analysis?.houseRulers?.slice(0, 3),
+      aspectsCount: payload?.analysis?.aspects?.length,
+    });
     console.log("🧪 SINGLE SNAPSHOT:", JSON.stringify(snapshot, null, 2));
-    console.log("🧪 RAW PAYLOAD:", JSON.stringify(payload, null, 2));
 
     setShowLLM(true);
     setLlmLoading(true);
