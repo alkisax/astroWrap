@@ -18,7 +18,7 @@ type SignKey = keyof typeof signKeywords
 
 const PlanetTable = ({ data }: any) => {
 
-  // console.log('PLANET TABLE DATA:', data)
+  console.log('PLANET TABLE DATA:', data)
 
   // ✅ strict typing → δεν χρειάζονται casts μετά
   const [selected, setSelected] = useState<{

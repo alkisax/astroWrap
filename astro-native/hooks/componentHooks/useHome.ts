@@ -274,6 +274,9 @@ export const useHome = () => {
 
     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
 
+    console.log("🧪 SINGLE SNAPSHOT:", JSON.stringify(snapshot, null, 2));
+    console.log("🧪 RAW PAYLOAD:", JSON.stringify(payload, null, 2));
+
     setShowLLM(true);
     setLlmLoading(true);
     setLlmError(null);
