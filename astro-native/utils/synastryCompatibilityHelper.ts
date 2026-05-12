@@ -1,6 +1,6 @@
 // astro-native\utils\synastryCompatibilityHelper.ts
 
-import type { CleanSynastryPayload } from './synastryShakeJSONtreeHelper';
+import type { CleanSynastryPayload } from "./synastryShakeJSONtreeHelper";
 
 type Score = {
   attraction: number;
@@ -11,7 +11,8 @@ type Score = {
 };
 
 type ExplanationItem = {
-  type: 'aspect' | 'overlay';
+  type: "aspect" | "overlay";
+  title?: string;
   text: string;
   score: number;
 };
@@ -37,14 +38,14 @@ const aspectWeights: Record<string, number> = {
 };
 
 // 🔥 normalize planet key
-const getPlanet = (key?: string): string => (key ?? '').toLowerCase();
+const getPlanet = (key?: string): string => (key ?? "").toLowerCase();
 
 // 🔥 base scoring (χωρίς special logic)
-const scoreAspect = (type?: string, orb?: number): number => {
-  const base = aspectWeights[type ?? ''] ?? 0;
+const scoreAspect = (type?: string, orb?: number): number | null => {
+  const base = aspectWeights[type ?? ""] ?? 0;
 
   // 🔥 cutoff → αγνοούμε πολύ loose aspects
-  if ((orb ?? 10) > 3) return 0;
+  if ((orb ?? 10) > 3) return null;
 
   const orbPenalty = (orb ?? 5) * 0.3;
 
@@ -57,15 +58,14 @@ const getAdjustedAspectScore = (
   p2: string,
   type?: string,
   orb?: number,
-): number => {
+): number | null => {
   const base = scoreAspect(type, orb);
 
+  if (base === null) return null;
+
   // 🔥 Venus-Mars → κρατά attraction ακόμα και σε hard aspects
-  if (
-    (p1 === 'venus' && p2 === 'mars') ||
-    (p1 === 'mars' && p2 === 'venus')
-  ) {
-    if (type === 'square' || type === 'opposition') {
+  if ((p1 === "venus" && p2 === "mars") || (p1 === "mars" && p2 === "venus")) {
+    if (type === "square" || type === "opposition") {
       return Math.abs(base) * 0.8;
     }
   }
@@ -87,23 +87,23 @@ const overlayRules = (o: {
   const h = o.house ?? -1;
 
   // 💖 attraction
-  if ((p === 'venus' || p === 'mars') && h === 7) {
-    return { type: 'attraction', score: 2 };
+  if ((p === "venus" || p === "mars") && h === 7) {
+    return { type: "attraction", score: 2 };
   }
 
   // 🌙 emotional
-  if (p === 'moon' && (h === 4 || h === 7)) {
-    return { type: 'emotional', score: 2 };
+  if (p === "moon" && (h === 4 || h === 7)) {
+    return { type: "emotional", score: 2 };
   }
 
   // 🧠 communication
-  if (p === 'mercury' && (h === 3 || h === 7)) {
-    return { type: 'communication', score: 1.5 };
+  if (p === "mercury" && (h === 3 || h === 7)) {
+    return { type: "communication", score: 1.5 };
   }
 
   // 🪨 stability
-  if (p === 'saturn' && (h === 7 || h === 10)) {
-    return { type: 'stability', score: 1.5 };
+  if (p === "saturn" && (h === 7 || h === 10)) {
+    return { type: "stability", score: 1.5 };
   }
 
   return null;
@@ -133,125 +133,130 @@ export const computeCompatibility = (
     const p2 = getPlanet(a.point2Key);
 
     const s = getAdjustedAspectScore(p1, p2, a.type, a.orb);
+    if (s === null) return;
 
     total += s;
 
-    const text = `${p1} ${a.type} ${p2} (orb ${a.orb?.toFixed(2)})`;
+    const text = `${p1} ${a.type} ${p2} • orb ${a.orb?.toFixed(2)}`;
 
     // 🔹 overall
     explanations.overall.push({
-      type: 'aspect',
+      type: "aspect",
       text,
       score: s,
     });
 
     // 💖 attraction
-    if (['venus', 'mars'].includes(p1) || ['venus', 'mars'].includes(p2)) {
-      const other = p1 === 'venus' || p1 === 'mars' ? p2 : p1;
+    if (["venus", "mars"].includes(p1) || ["venus", "mars"].includes(p2)) {
+      const other = p1 === "venus" || p1 === "mars" ? p2 : p1;
 
-      let label = 'Attraction aspect';
+      let label = "Attraction aspect";
 
       if (
-        (p1 === 'venus' && p2 === 'mars') ||
-        (p1 === 'mars' && p2 === 'venus')
+        (p1 === "venus" && p2 === "mars") ||
+        (p1 === "mars" && p2 === "venus")
       ) {
-        label = 'Venus-Mars (strong attraction)';
-      } else if (other === 'moon') {
-        label = 'Moon-Venus/Mars (romantic/emotional attraction)';
-      } else if (other === 'sun') {
-        label = 'Sun-Venus/Mars (natural attraction)';
+        label = "Venus-Mars (strong attraction)";
+      } else if (other === "moon") {
+        label = "Moon-Venus/Mars (romantic/emotional attraction)";
+      } else if (other === "sun") {
+        label = "Sun-Venus/Mars (natural attraction)";
       }
 
       const finalScore =
-        label === 'Venus-Mars (strong attraction)' ? s * 1.3 : s;
+        label === "Venus-Mars (strong attraction)" ? s * 1.3 : s;
 
       attraction += finalScore;
 
       explanations.attraction.push({
-        type: 'aspect',
-        text: `${label}: ${text}`,
+        type: "aspect",
+        title: label,
+        text,
         score: finalScore,
       });
     }
 
     // 🌙 emotional
-    if (p1 === 'moon' || p2 === 'moon') {
-      const other = p1 === 'moon' ? p2 : p1;
+    if (p1 === "moon" || p2 === "moon") {
+      const other = p1 === "moon" ? p2 : p1;
 
-      let label = 'Moon aspect';
+      let label = "Moon aspect";
 
-      if (other === 'venus') label = 'Moon-Venus (emotional harmony)';
-      else if (other === 'mars')
-        label = 'Moon-Mars (emotional tension/passion)';
-      else if (other === 'saturn') label = 'Moon-Saturn (emotional heaviness)';
-      else if (other === 'sun') label = 'Moon-Sun (core emotional bond)';
+      if (other === "venus") label = "Moon-Venus (emotional harmony)";
+      else if (other === "mars")
+        label = "Moon-Mars (emotional tension/passion)";
+      else if (other === "saturn") label = "Moon-Saturn (emotional heaviness)";
+      else if (other === "sun") label = "Moon-Sun (core emotional bond)";
 
       let finalScore = s;
 
-      if (other === 'venus') finalScore *= 1.2;
-      if (other === 'saturn') finalScore *= 1.2;
+      if (other === "venus") finalScore *= 1.2;
+      if (other === "saturn") finalScore *= 1.2;
 
       emotional += finalScore;
 
       explanations.emotional.push({
-        type: 'aspect',
-        text: `${label}: ${text}`,
+        type: "aspect",
+        title: label,
+        text,
         score: finalScore,
       });
     }
 
     // 🧠 communication
-    if (p1 === 'mercury' || p2 === 'mercury') {
-      const other = p1 === 'mercury' ? p2 : p1;
+    if (p1 === "mercury" || p2 === "mercury") {
+      const other = p1 === "mercury" ? p2 : p1;
 
-      let label = 'Mercury aspect';
+      let label = "Mercury aspect";
 
-      if (other === 'mercury') label = 'Mercury-Mercury (communication flow)';
-      else if (other === 'venus')
-        label = 'Mercury-Venus (pleasant communication)';
-      else if (other === 'mars') label = 'Mercury-Mars (arguments)';
-      else if (other === 'saturn')
-        label = 'Mercury-Saturn (serious/heavy communication)';
-      else if (other === 'moon')
-        label = 'Mercury-Moon (emotional communication)';
+      if (other === "mercury") label = "Mercury-Mercury (communication flow)";
+      else if (other === "venus")
+        label = "Mercury-Venus (pleasant communication)";
+      else if (other === "mars") label = "Mercury-Mars (arguments)";
+      else if (other === "saturn")
+        label = "Mercury-Saturn (serious/heavy communication)";
+      else if (other === "moon")
+        label = "Mercury-Moon (emotional communication)";
 
       let finalScore = s;
 
-      if (other === 'mercury') finalScore *= 1.2;
-      if (other === 'mars') finalScore *= 1.1;
+      if (other === "mercury") finalScore *= 1.2;
+      if (other === "mars") finalScore *= 1.1;
 
       communication += finalScore;
 
       explanations.communication.push({
-        type: 'aspect',
-        text: `${label}: ${text}`,
+        type: "aspect",
+        title: label,
+        text,
         score: finalScore,
       });
     }
 
     // 🪨 stability
-    if (p1 === 'saturn' || p2 === 'saturn') {
-      const other = p1 === 'saturn' ? p2 : p1;
+    if (p1 === "saturn" || p2 === "saturn") {
+      const other = p1 === "saturn" ? p2 : p1;
 
-      let label = 'Saturn aspect';
+      let label = "Saturn aspect";
 
-      if (other === 'venus') label = 'Saturn-Venus (long-term bonding)';
-      else if (other === 'moon') label = 'Saturn-Moon (emotional burden)';
-      else if (other === 'sun') label = 'Saturn-Sun (pressure/responsibility)';
-      else if (other === 'mercury')
-        label = 'Saturn-Mercury (serious communication)';
-      else if (other === 'mars') label = 'Saturn-Mars (blocked energy)';
+      if (other === "venus") label = "Saturn-Venus (long-term bonding)";
+      else if (other === "moon") label = "Saturn-Moon (emotional burden)";
+      else if (other === "sun") label = "Saturn-Sun (pressure/responsibility)";
+      else if (other === "mercury")
+        label = "Saturn-Mercury (serious communication)";
+      else if (other === "mars") label = "Saturn-Mars (blocked energy)";
 
       let finalScore = s;
 
-      if (other === 'venus') finalScore *= 1.3;
-      if (other === 'moon') finalScore *= 1.2;
+      if (other === "venus") finalScore *= 1.3;
+      if (other === "moon") finalScore *= 1.2;
 
       stability += finalScore;
 
       explanations.stability.push({
-        type: 'aspect',
-        text: `${label}: ${text}`,
+        type: "aspect",
+        title: label,
+        text,
         score: finalScore,
       });
     }
@@ -263,13 +268,13 @@ export const computeCompatibility = (
 
     if (!rule) return;
 
-    if (rule.type === 'attraction') attraction += rule.score;
-    if (rule.type === 'emotional') emotional += rule.score;
-    if (rule.type === 'communication') communication += rule.score;
-    if (rule.type === 'stability') stability += rule.score;
+    if (rule.type === "attraction") attraction += rule.score;
+    if (rule.type === "emotional") emotional += rule.score;
+    if (rule.type === "communication") communication += rule.score;
+    if (rule.type === "stability") stability += rule.score;
 
     explanations[rule.type].push({
-      type: 'overlay',
+      type: "overlay",
       text: `${o.planet} in house ${o.house}`,
       score: rule.score,
     });

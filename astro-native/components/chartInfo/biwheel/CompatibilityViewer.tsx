@@ -10,6 +10,7 @@ import { colors } from '@/constants/constants'
 
 type AspectItem = {
   type: string
+  title?: string
   text: string
   score: number
 }
@@ -97,17 +98,26 @@ const CompatibilityViewer = ({
 
           ) : (
 
-            items.map((item, i) => (
-              <Text
-                key={i}
-                style={styles.itemText}
-              >
-                • {item.text} ({item.score.toFixed(2)})
-              </Text>
-            ))
+            <>
+              {items.map((item, i) => {
 
+                console.log('🧪 COMPAT ITEM', {
+                  section: key,
+                  item,
+                })
+
+                return (
+                  <Text
+                    key={i}
+                    style={styles.itemText}
+                  >
+                    • {item.title && `${item.title}: `}
+                    {item.text} ({item.score.toFixed(2)})
+                  </Text>
+                )
+              })}
+            </>
           )}
-
         </View>
       ))}
 
