@@ -20,6 +20,7 @@ import { useEagleLarkLLm } from '@/hooks/componentHooks/useEagleLarkLLm'
 import Markdown from 'react-native-markdown-display'
 import { markdownStyles } from '@/layout/markdownStyles'
 import { colors } from '@/constants/constants'
+import { useChartDataDebug } from '@/hooks/componentHooks/useChartDataDebug'
 
 
 type Props = {
@@ -31,6 +32,8 @@ type Props = {
   setSelectedPlanets: Dispatch<SetStateAction<string[]>>
   radixCustomAspects: CustomAspect[]
   transitCustomAspects: CustomAspect[]
+  radixPayload: ReturnType<typeof useChartDataDebug>
+  transitPayload: ReturnType<typeof useChartDataDebug>
   houseOverlay: Overlay[]
 
   compatibility: Compatibility
@@ -55,6 +58,8 @@ const PredictionBasicChartInfo = ({
   radixCustomPlanetInfo,
   transitCustomPlanetInfo,
   eagleGrids,
+  radixPayload,
+  transitPayload,
 }: Props) => {
   const [showPlanets, setShowPlanets] = useState(false)
   const [showTables, setShowTables] = useState(false)
@@ -84,8 +89,20 @@ const PredictionBasicChartInfo = ({
     setLlmEagleLarkResult,
   } = useEagleLarkLLm({
     eagleGrids,
-    radixCustomPlanetInfo,
-    transitCustomPlanetInfo,
+    radixPlanets:
+      radixCustomPlanetInfo.length > 0
+        ? radixCustomPlanetInfo
+        : (radixPayload?.analysis?.planets ?? []).filter(
+          (p): p is CustomPlanetInfo =>
+            !!p.sign && p.house !== undefined,
+        ),
+    transitPlanets:
+      transitCustomPlanetInfo.length > 0
+        ? transitCustomPlanetInfo
+        : (transitPayload?.analysis?.planets ?? []).filter(
+          (p): p is CustomPlanetInfo =>
+            !!p.sign && p.house !== undefined,
+        ),
   })
 
   useEffect(() => {

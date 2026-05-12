@@ -5,7 +5,7 @@ import { getEagleLarkInterpretation } from "../../services/llmService";
 import { Alert } from "react-native";
 // import { useRewardedAd } from "./useRewardedAd"; // TODO toggle for no ads
 
-// ελληνικά σχόλια: mapping topics → astro φίλτρα
+// σχόλια: mapping topics → astro φίλτρα
 const topicMap = {
   career: {
     houses: [10],
@@ -35,7 +35,7 @@ const topicMap = {
 
 type TopicKey = keyof typeof topicMap;
 
-// ελληνικά σχόλια: φιλτράρει grids με βάση topics + strongest
+// φιλτράρει grids με βάση topics + strongest
 const filterGrids = (grids: EagleGrid[], topics: TopicKey[]) => {
   const selected = topics.flatMap((t) => topicMap[t]);
 
@@ -63,14 +63,14 @@ const filterGrids = (grids: EagleGrid[], topics: TopicKey[]) => {
 
 type Props = {
   eagleGrids: EagleGrid[];
-  radixCustomPlanetInfo: CustomPlanetInfo[];
-  transitCustomPlanetInfo: CustomPlanetInfo[];
+  radixPlanets: CustomPlanetInfo[];
+  transitPlanets: CustomPlanetInfo[];
 };
 
 export const useEagleLarkLLm = ({
   eagleGrids,
-  radixCustomPlanetInfo,
-  transitCustomPlanetInfo,
+  radixPlanets,
+  transitPlanets,
 }: Props) => {
   const [selectedTopics, setSelectedTopics] = useState<TopicKey[]>([]);
   const [userQuestion, setUserQuestion] = useState("");
@@ -98,8 +98,8 @@ export const useEagleLarkLLm = ({
       question: userQuestion,
       topics: selectedTopics,
 
-      radix: radixCustomPlanetInfo,
-      transit: transitCustomPlanetInfo,
+      radix: radixPlanets,
+      transit: transitPlanets,
 
       grids: filtered.map((g) => ({
         transitPlanet: g.transitPlanet,
@@ -135,7 +135,33 @@ export const useEagleLarkLLm = ({
     try {
       const payload = eagleLarkLlmPayloadJSON();
 
+      console.log(
+        "🦅 EAGLE SUMMARY",
+        JSON.stringify(
+          {
+            question: payload.question,
+            topics: payload.topics,
+
+            radix: payload.radix?.slice(0, 3),
+            transit: payload.transit?.slice(0, 3),
+
+            grids: payload.grids?.slice(0, 5).map((g) => ({
+              t: g.transitPlanet,
+              n: g.natalPlanet,
+              a: g.aspect,
+              orb: Number(g.orb?.toFixed(2)),
+            })),
+          },
+          null,
+          2,
+        ),
+      );
+
       const res = await getEagleLarkInterpretation(payload);
+
+      console.log("🧠 EAGLE RESPONSE LENGTH", res?.length);
+      console.log("🤖 LLM res: ", res);
+      
 
       setLlmEagleLarkResult(res);
     } catch (err) {
@@ -144,6 +170,14 @@ export const useEagleLarkLLm = ({
     } finally {
       setLlmEagleLarkLoading(false);
     }
+  };
+
+  const handleQuestionSubmit = async () => {
+    if (isProcessing) return;
+
+    setShowLLM(true);
+
+    await runEagleLarkLLM();
   };
 
   // TODO toggle for no ads
@@ -213,9 +247,10 @@ export const useEagleLarkLLm = ({
 
     eagleLarkLlmPayloadJSON,
 
-    // handleQuestionSubmit, // TODO toggle for no ads
+    handleQuestionSubmit, // TODO toggle for no ads
     showLLM,
     // loaded, // TODO toggle for no ads
+    loaded: true,
     isProcessing,
   };
 };

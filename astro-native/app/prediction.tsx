@@ -34,6 +34,8 @@ const Prediction = () => {
   const {
     radixData,
     transitData,
+    radixPayload,
+    transitPayload,
     setTransitInput,
     selectedPlanets,
     setSelectedPlanets,
@@ -161,24 +163,24 @@ const Prediction = () => {
             ${coords.lng.toFixed(2)}`
   }
 
-  // console.log('🧪 PREDICTION NATAL DEBUG', {
-  //   raw: date1.toString(),
-  //   iso: date1.toISOString(),
-  //   chartUrl1,
-  //   label: formatInfo(date1, coords1),
-  // })
+  console.log('🧪 PREDICTION NATAL DEBUG', {
+    raw: date1.toString(),
+    iso: date1.toISOString(),
+    chartUrl1,
+    label: formatInfo(date1, coords1),
+  })
 
-  // if (transitInput) {
-  //   console.log('🧪 PREDICTION TRANSIT DEBUG', {
-  //     raw: transitInput.date.toString(),
-  //     iso: transitInput.date.toISOString(),
-  //     chartUrl2,
-  //     label: formatInfo(transitInput.date, {
-  //       lat: transitInput.lat,
-  //       lng: transitInput.lng,
-  //     }),
-  //   })
-  // }
+  if (transitInput) {
+    console.log('🧪 PREDICTION TRANSIT DEBUG', {
+      raw: transitInput.date.toString(),
+      iso: transitInput.date.toISOString(),
+      chartUrl2,
+      label: formatInfo(transitInput.date, {
+        lat: transitInput.lat,
+        lng: transitInput.lng,
+      }),
+    })
+  }
 
   return (
     <ScreenWrapper>
@@ -290,6 +292,8 @@ const Prediction = () => {
             setSelectedPlanets={setSelectedPlanets}
             radixCustomAspects={radixCustomAspects}
             transitCustomAspects={transitCustomAspects}
+            radixPayload={radixPayload}
+            transitPayload={transitPayload}
             houseOverlay={houseOverlay}
             compatibility={compatibility}
             handleBiwheelLLM={handleBiwheelLLM}

@@ -214,9 +214,9 @@ export const useBiwheelPage = () => {
     transitData,
   });
 
-  console.log("🧪 RADIX PAYLOAD PLANETS:", radixPayload?.analysis?.planets);
+  // console.log("🧪 RADIX PAYLOAD PLANETS:", radixPayload?.analysis?.planets);
 
-  console.log("🧪 TRANSIT PAYLOAD PLANETS:", transitPayload?.analysis?.planets);
+  // console.log("🧪 TRANSIT PAYLOAD PLANETS:", transitPayload?.analysis?.planets);
 
   const synastryShakenTreeJson = synastryShakeJSONtreeHelper(
     radixPayload,
