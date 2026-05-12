@@ -71,26 +71,38 @@ export const useChartDataDebug = (params: Params) => {
       midheaven: data.midheaven,
     }
 
-    return {
-      meta: {
-        date: date.toISOString(),
-        location: coords,
-        zodiac: 'tropical',
-        houseSystem: 'placidus'
-      },
-      points,
-      houses: data.houses,
-      analysis: {
-        planets: customPlanetInfo,
-        chartRuler: customChartRuler,
-        balance: customBalance,
-        houseRulers: customHouseRulers,
-        aspects: customAspects,
-        dignities: customDignities,
-        dispositors: customDispositors,
-        dynamics: customDynamics
-      }
-    }
+const fallbackPlanets = Object.entries(filteredPlanets).map(
+  ([planet, value]) => ({
+    planet,
+    sign: value.sign,
+    house: value.house,
+  })
+)
+
+return {
+  meta: {
+    date: date.toISOString(),
+    location: coords,
+    zodiac: 'tropical',
+    houseSystem: 'placidus'
+  },
+  points,
+  houses: data.houses,
+  analysis: {
+    planets:
+      customPlanetInfo.length > 0
+        ? customPlanetInfo
+        : fallbackPlanets,
+
+    chartRuler: customChartRuler,
+    balance: customBalance,
+    houseRulers: customHouseRulers,
+    aspects: customAspects,
+    dignities: customDignities,
+    dispositors: customDispositors,
+    dynamics: customDynamics
+  }
+}
 
   }, [params])
 }

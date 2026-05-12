@@ -214,6 +214,10 @@ export const useBiwheelPage = () => {
     transitData,
   });
 
+  console.log("🧪 RADIX PAYLOAD PLANETS:", radixPayload?.analysis?.planets);
+
+  console.log("🧪 TRANSIT PAYLOAD PLANETS:", transitPayload?.analysis?.planets);
+
   const synastryShakenTreeJson = synastryShakeJSONtreeHelper(
     radixPayload,
     transitPayload,
@@ -314,6 +318,89 @@ export const useBiwheelPage = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [rewardEarned]);
 
+  // TODO toggle → llm without ads
+  const handleBiwheelLLMClick = async () => {
+    if (isProcessing) return;
+
+    if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+      Alert.alert("Wait", "Please wait a bit before next reading");
+      return;
+    }
+
+    setIsProcessing(true);
+
+    setShowLLM(true);
+    setLlmLoading(true);
+    setLlmError(null);
+
+    try {
+      // 🔍 DEBUG SUMMARY
+      console.log("🧪 RELATIONSHIP UI SUMMARY", {
+        radix: {
+          asc: radixData?.ascendant?.sign,
+          sun: {
+            sign: radixData?.sun?.sign,
+            house: radixData?.sun?.house,
+          },
+          moon: {
+            sign: radixData?.moon?.sign,
+            house: radixData?.moon?.house,
+          },
+        },
+
+        transit: {
+          asc: transitData?.ascendant?.sign,
+          sun: {
+            sign: transitData?.sun?.sign,
+            house: transitData?.sun?.house,
+          },
+          moon: {
+            sign: transitData?.moon?.sign,
+            house: transitData?.moon?.house,
+          },
+        },
+      });
+
+      // 🔍 SHAKEN SUMMARY
+      console.log("🧪 SYNASTRY SHAKEN SUMMARY", {
+        radix: {
+          asc: radixPayload?.analysis?.planets?.find((p) => p.planet === "asc"),
+        },
+
+        transit: {
+          asc: transitPayload?.analysis?.planets?.find(
+            (p) => p.planet === "asc",
+          ),
+        },
+        compatibility,
+      });
+
+      // 🔍 FINAL PAYLOAD
+      console.log(
+        "🧠 FINAL SYNASTRY SNAPSHOT:",
+        JSON.stringify(
+          {
+            synastry: synastryShakenTreeJson,
+            compatibility,
+          },
+          null,
+          2,
+        ),
+      );
+      const result = await handleBiwheelLLM();
+      console.log("🧠 RAW RELATIONSHIP LLM RESPONSE:", result);
+      setLlmResult(result);
+    } catch (err) {
+      console.log("❌ RELATIONSHIP LLM ERROR:", err);
+      setLlmResult(null);
+      setLlmError("LLM request failed");
+    } finally {
+      setLlmLoading(false);
+      setIsProcessing(false);
+      setLastCallAt(Date.now());
+    }
+  };
+
   // console.log("houseOverlay (hook):", houseOverlay);
   // console.log("radix json creator: ", radixPayload);
   // console.log("transit json creator: ", transitPayload);
@@ -384,7 +471,7 @@ export const useBiwheelPage = () => {
     llmError,
 
     //ads
-    // handleBiwheelLLMClick, // TODO toggle
+    handleBiwheelLLMClick, // TODO toggle
     showLLM,
     llmResult,
     // loaded, // TODO toggle

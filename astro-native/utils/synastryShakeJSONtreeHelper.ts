@@ -184,10 +184,18 @@ const sortByScore = (arr: Aspect[]): Aspect[] => {
 const limitAspects = (arr: Aspect[], limit = 5): Aspect[] =>
   arr.slice(0, limit);
 
+const normalizePlanet = (p: string) => {
+  if (p === "asc") return "ASC";
+  if (p === "mc") return "MC";
+
+  return p.charAt(0).toUpperCase() + p.slice(1).toLowerCase();
+};
+
 // 🔥 filter planets
 const filterPlanets = (planets: PlanetItem[]): PlanetItem[] => {
+  console.log("🧪 SYNASTRY FILTERED PLANETS", planets);
   return planets.filter((p) =>
-    ALLOWED_PLANETS.includes(p.planet as PlanetName),
+    ALLOWED_PLANETS.includes(normalizePlanet(p.planet) as PlanetName),
   );
 };
 
