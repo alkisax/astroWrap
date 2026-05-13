@@ -74,6 +74,7 @@ const PredictionBasicChartInfo = ({
 
   const { aspects } = useChartAnalysis(data1, userOrb)
 
+  // TODO add comments
   const {
     selectedTopics,
     setSelectedTopics,
@@ -157,7 +158,7 @@ const PredictionBasicChartInfo = ({
         isProcessing={isProcessing}
       />
 
-      {showLLM && llmEagleLarkResult && (
+      {showLLM && (
         <View style={globalStyles.llmResultBox}>
 
           <Text
@@ -169,11 +170,25 @@ const PredictionBasicChartInfo = ({
             🔮 Prediction Result
           </Text>
 
-          <Markdown
-            style={markdownStyles}
-          >
-            {llmEagleLarkResult}
-          </Markdown>
+          {llmEagleLarkLoading && (
+            <Text style={globalStyles.subTitle}>
+              Loading prediction...
+            </Text>
+          )}
+
+          {!llmEagleLarkLoading && llmEagleLarkResult && (
+            <Markdown
+              style={markdownStyles}
+            >
+              {llmEagleLarkResult}
+            </Markdown>
+          )}
+
+          {!llmEagleLarkLoading && llmEagleLarkError && (
+            <Text style={globalStyles.subTitle}>
+              {llmEagleLarkError}
+            </Text>
+          )}
 
         </View>
       )}
