@@ -4,7 +4,7 @@ import { getSingleChartInterpretation } from "../../services/llmService";
 import { useChartDataDebug } from "./useChartDataDebug";
 import { natalChartShakeJSONTreeHelper } from "../../utils/natalChartShakeJSONTreeHelper";
 import { UserAuthContext } from "../../authLogin/context/UserAuthContext";
-// import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO toggle for no ads
+import { useRewardedAd } from "../../hooks/componentHooks/useRewardedAd"; // TODO toggle for no ads
 
 import type {
   ChartSummary,
@@ -77,7 +77,7 @@ export const useHome = () => {
   const [lastCallAt, setLastCallAt] = useState<number | null>(null); // για να υποχρεώσουμε σε cooldown ένα llm call ανα 30sec
 
   const { user } = useContext(UserAuthContext);
-  // const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO toggle for no ads
+  const { loaded, rewardEarned, setRewardEarned, showAd } = useRewardedAd(); // TODO toggle for no ads
 
   // 🔥 ΕΠΙΣΤΡΟΦΗ στο backend call (RN compatible)
   // input: ημερομηνια και συντεταγμένες
@@ -85,19 +85,6 @@ export const useHome = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // debug log → comment out
-        // console.log("🧪 LOCAL DATE FIELDS", {
-        //   iso: date.toISOString(),
-        //   utc: {
-        //     year: date.getUTCFullYear(),
-        //     month: date.getUTCMonth() + 1,
-        //     day: date.getUTCDate(),
-        //     hour: date.getUTCHours(),
-        //     minute: date.getUTCMinutes(),
-        //   },
-        //   coords,
-        // });
-
         const res = await axios.post(`${backendUrl}/api/astro/calculate`, {
           year: date.getFullYear(),
           month: date.getMonth() + 1,
@@ -109,44 +96,6 @@ export const useHome = () => {
           houseSystem: "placidus",
           zodiac: "tropical",
         });
-
-        // debug log → comment out
-        // console.log("🧪 CHART SUMMARY", {
-        //   asc: {
-        //     sign: res.data?.ascendant?.sign,
-        //     longitude: res.data?.ascendant?.longitude,
-        //   },
-
-        //   mc: {
-        //     sign: res.data?.midheaven?.sign,
-        //     longitude: res.data?.midheaven?.longitude,
-        //   },
-
-        //   house1: res.data?.houses?.[0],
-        //   house4: res.data?.houses?.[3],
-        //   house7: res.data?.houses?.[6],
-        //   house10: res.data?.houses?.[9],
-        // });
-
-        // console.log("🧪 PLANETS SUMMARY", {
-        //   sun: {
-        //     sign: res.data?.sun?.sign,
-        //     house: res.data?.sun?.house,
-        //     longitude: res.data?.sun?.longitude,
-        //   },
-
-        //   moon: {
-        //     sign: res.data?.moon?.sign,
-        //     house: res.data?.moon?.house,
-        //     longitude: res.data?.moon?.longitude,
-        //   },
-
-        //   venus: {
-        //     sign: res.data?.venus?.sign,
-        //     house: res.data?.venus?.house,
-        //     longitude: res.data?.venus?.longitude,
-        //   },
-        // });
 
         setData(res.data);
       } catch (err) {
@@ -203,18 +152,6 @@ export const useHome = () => {
     }
   };
 
-  // ❌ debug remove
-  useEffect(() => {
-    if (!shaken) return;
-    console.log("🧪 SHAKEN SUMMARY", {
-      asc: shaken.planets?.find((p) => p.planet === "asc")?.sign,
-      sun: shaken.planets?.find((p) => p.planet === "sun"),
-      moon: shaken.planets?.find((p) => p.planet === "moon"),
-      venus: shaken.planets?.find((p) => p.planet === "venus"),
-      chartRuler: shaken.chartRuler,
-      houses: Array.isArray(shaken.houses) ? shaken.houses.slice(0, 4) : [],
-    });
-  }, [shaken]);
 
   // καθαρίζουμε παλιο LLM result οταν αλλάζει chart
   useEffect(() => {
@@ -251,32 +188,14 @@ export const useHome = () => {
   const COOLDOWN = 30000; // 30 sec
 
   // TODO toggle for no ads
-  // const handleLLMClick = async () => {
-  //   if (!payload) return;
-  //   if (isProcessing) return; // anti spam
-
-  //   if (!loaded) {
-  //     Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
-  //     return;
-  //   }
-
-  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
-  //     Alert.alert("Wait", "Please wait a bit before next reading");
-  //     return;
-  //   }
-
-  //   setIsProcessing(true);
-  //   // fallback unlock αν κάτι πάει στραβά
-  //   setTimeout(() => {
-  //     setIsProcessing(false);
-  //   }, 15000);
-  //   showAd();
-  // };
-
-  // TODO toggle → llm without ads (this on in no ad mode)
   const handleLLMClick = async () => {
     if (!payload) return;
-    if (isProcessing) return;
+    if (isProcessing) return; // anti spam
+
+    if (!loaded) {
+      Alert.alert("Loading...", "Ad is preparing, try again in a few seconds");
+      return;
+    }
 
     if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
       Alert.alert("Wait", "Please wait a bit before next reading");
@@ -284,102 +203,76 @@ export const useHome = () => {
     }
 
     setIsProcessing(true);
-
-    const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
-    // ❌ logs remove
-    console.log(
-      "🧠 FINAL SNAPSHOT SENT TO LLM:",
-      JSON.stringify(snapshot, null, 2),
-    );
-    console.log("🧠 LLM COMPARE", {
-      asc: snapshot?.planets?.find((p) => p.planet === "asc")?.sign,
-      sun: snapshot?.planets?.find((p) => p.planet === "sun"),
-      moon: snapshot?.planets?.find((p) => p.planet === "moon"),
-      venus: snapshot?.planets?.find((p) => p.planet === "venus"),
-      chartRuler: snapshot?.chartRuler,
-    });
-    console.log("🪐 TABLE SUMMARY on useHome", {
-      asc: data?.ascendant?.sign,
-      sun: {
-        sign: data?.sun?.sign,
-        house: data?.sun?.house,
-      },
-      moon: {
-        sign: data?.moon?.sign,
-        house: data?.moon?.house,
-      },
-      venus: {
-        sign: data?.venus?.sign,
-        house: data?.venus?.house,
-      },
-    });
-    console.log("🧪 PAYLOAD SUMMARY", {
-      asc: payload?.points?.ascendant?.sign,
-      chartRuler: payload?.analysis?.chartRuler,
-      planets: payload?.analysis?.planets,
-      houseRulers: payload?.analysis?.houseRulers?.slice(0, 3),
-      aspectsCount: payload?.analysis?.aspects?.length,
-    });
-    // console.log("🧪 SINGLE SNAPSHOT:", JSON.stringify(snapshot, null, 2));
-
-    setShowLLM(true);
-    setLlmLoading(true);
-    setLlmError(null);
-
-    try {
-      const result = await getSingleChartInterpretation(snapshot);
-      //  ❌ logs remove
-      console.log("🧠 RAW LLM RESPONSE:", result);
-
-      setLlmResult(result);
-    } catch (err) {
-      console.log("❌ LLM ERROR:", err);
-
-      if (axios.isAxiosError(err)) {
-        console.log("❌ AXIOS RESPONSE:", err.response?.data);
-        console.log("❌ AXIOS STATUS:", err.response?.status);
-      }
-
-      setLlmResult(null);
-      setLlmError("LLM request failed");
-    } finally {
-      setLlmLoading(false);
+    // fallback unlock αν κάτι πάει στραβά
+    setTimeout(() => {
       setIsProcessing(false);
-      setLastCallAt(Date.now());
-    }
+    }, 15000);
+    showAd();
   };
 
-  // TODO toggle for no ads
-  // // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
-  // useEffect(() => {
-  //   if (!rewardEarned) return;
+  // TODO toggle → llm without ads (this on in no ad mode)
+  // const handleLLMClick = async () => {
   //   if (!payload) return;
+  //   if (isProcessing) return;
 
-  //   const run = async () => {
-  //     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+  //   if (lastCallAt && Date.now() - lastCallAt < COOLDOWN) {
+  //     Alert.alert("Wait", "Please wait a bit before next reading");
+  //     return;
+  //   }
 
-  //     setShowLLM(true);
-  //     setLlmLoading(true);
-  //     setLlmError(null);
+  //   setIsProcessing(true);
 
-  //     try {
-  //       const result = await getSingleChartInterpretation(snapshot);
-  //       setLlmResult(result);
-  //     } catch {
-  //       setLlmResult(null);
-  //       setLlmError("LLM request failed");
-  //     } finally {
-  //       setLlmLoading(false);
-  //       setRewardEarned(false);
-  //       setIsProcessing(false);
-  //       setLastCallAt(Date.now());
-  //     }
-  //   };
+  //   const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+  //   setShowLLM(true);
+  //   setLlmLoading(true);
+  //   setLlmError(null);
 
-  //   run();
-  //   // disable lint on purpose for triggering when ad finished
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [rewardEarned]);
+  //   try {
+  //     const result = await getSingleChartInterpretation(snapshot);
+
+  //     setLlmResult(result);
+  //   } catch (err) {
+  //     console.log("❌ LLM ERROR:", err);
+  //     setLlmResult(null);
+  //     setLlmError("LLM request failed");
+  //   } finally {
+  //     setLlmLoading(false);
+  //     setIsProcessing(false);
+  //     setLastCallAt(Date.now());
+  //   }
+  // };
+
+  // TODO toggle for no ads
+  // και εδώ είναι το υπόλοιπο της λογικής που ήταν στο handleLLMClick σε useEffect πια
+  useEffect(() => {
+    if (!rewardEarned) return;
+    if (!payload) return;
+
+    const run = async () => {
+      const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
+
+      setShowLLM(true);
+      setLlmLoading(true);
+      setLlmError(null);
+
+      try {
+        const result = await getSingleChartInterpretation(snapshot);
+        setLlmResult(result);
+      } catch {
+        setLlmResult(null);
+        setLlmError("LLM request failed");
+      } finally {
+        setLlmLoading(false);
+        setRewardEarned(false);
+        setIsProcessing(false);
+        setLastCallAt(Date.now());
+      }
+    };
+
+    run();
+    // disable lint on purpose for triggering when ad finished
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rewardEarned]);
 
   const saveLLMToDb = async () => {
     const userId = user?.id || user?._id;
@@ -387,7 +280,7 @@ export const useHome = () => {
     if (!llmResult || !payload || !userId) return;
 
     const snapshot = natalChartShakeJSONTreeHelper(payload, customPlanetInfo);
-    console.log("💾 SAVING SNAPSHOT:", JSON.stringify(snapshot, null, 2));
+    // console.log("💾 SAVING SNAPSHOT:", JSON.stringify(snapshot, null, 2));
 
     try {
       const token = await AsyncStorage.getItem("token");
@@ -441,7 +334,7 @@ export const useHome = () => {
     handleLLMInterpretation,
     llmLoading,
     llmError,
-    // loaded, // TODO toggle for no ads
+    loaded, // TODO toggle for no ads
     isProcessing,
     handleLLMClick,
     showLLM,

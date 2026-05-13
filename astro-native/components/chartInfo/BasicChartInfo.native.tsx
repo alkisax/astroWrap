@@ -46,13 +46,13 @@ const BasicChartInfo = ({
   setCustomAspects,
   customAspects,
   setCustomHouseRulers,
-  handleLLMClick, // TODO
+  handleLLMClick, 
   showLLM,
   llmResult,
   llmLoading,
   llmError,
   isProcessing,
-  loaded, // TODO
+  loaded, 
   saveLLMToDb,
   setCustomPlanetInfo,
   setCustomChartRuler,
@@ -130,14 +130,14 @@ const BasicChartInfo = ({
         <Pressable
           onPress={handleLLMClick}
           // TODO toggle for ads
-          // disabled={!loaded || isProcessing || llmLoading}
-          // style={{
-          //   opacity: !loaded || isProcessing || llmLoading ? 0.5 : 1,
-          // }}
-          disabled={isProcessing || llmLoading}
+          disabled={!loaded || isProcessing || llmLoading}
           style={{
-            opacity: isProcessing || llmLoading ? 0.5 : 1,
+            opacity: !loaded || isProcessing || llmLoading ? 0.5 : 1,
           }}
+          // disabled={isProcessing || llmLoading}
+          // style={{
+          //   opacity: isProcessing || llmLoading ? 0.5 : 1,
+          // }}
         >
           <Text style={styles.sectionTitle}>
             {llmLoading
@@ -187,22 +187,6 @@ const BasicChartInfo = ({
           </>
         )}
       </GlassPanel>
-
-      {/* TODO REMOVE */}
-      {/* <Pressable
-        onPress={saveLLMToDb}
-        style={{
-          marginTop: 10,
-          padding: 10,
-          backgroundColor: colors.secondary,
-          borderRadius: 8,
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: colors.text, fontWeight: '600' }}>
-          Save interpretation
-        </Text>
-      </Pressable> */}
 
       <GlassPanel>
         <PlanetTable data={data} />
