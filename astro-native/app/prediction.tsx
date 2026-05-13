@@ -14,7 +14,6 @@ import ChartForm from '@/components/controls/ChartForm'
 import PredictionBasicChartInfo from '@/components/chartInfo/biwheel/PredictionBasicChartInfo.native'
 import { useBiwheelPage } from '@/hooks/componentHooks/useBiwheelPage'
 import { formatChartDate } from '@/utils/formatChartDate'
-import tzLookup from 'tz-lookup'
 
 type ParsedChart = {
   meta?: {
@@ -161,25 +160,6 @@ const Prediction = () => {
 
     return `${formatChartDate(date, coords)} | ${coords.lat.toFixed(2)},
             ${coords.lng.toFixed(2)}`
-  }
-
-  console.log('🧪 PREDICTION NATAL DEBUG', {
-    raw: date1.toString(),
-    iso: date1.toISOString(),
-    chartUrl1,
-    label: formatInfo(date1, coords1),
-  })
-
-  if (transitInput) {
-    console.log('🧪 PREDICTION TRANSIT DEBUG', {
-      raw: transitInput.date.toString(),
-      iso: transitInput.date.toISOString(),
-      chartUrl2,
-      label: formatInfo(transitInput.date, {
-        lat: transitInput.lat,
-        lng: transitInput.lng,
-      }),
-    })
   }
 
   return (

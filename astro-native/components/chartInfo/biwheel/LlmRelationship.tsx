@@ -57,8 +57,8 @@ const LlmRelationship = ({
     <>
       <Pressable
         onPress={handlePress}
-        // disabled={!loaded || isProcessing || llmLoading} // TODO toggle for no ads
-        disabled={isProcessing || llmLoading}
+        disabled={!loaded || isProcessing || llmLoading} // TODO toggle for no ads
+        // disabled={isProcessing || llmLoading} // TODO toggle for no ads - this on on no ads
         style={[
           globalStyles.llmButton,
           {
