@@ -69,7 +69,6 @@ export default function Single() {
 
     return url
     // ετσι λιγοτερα rerender
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, coords.lat, coords.lng, userOrb, visiblePlanets])
 
   // // 🔍 unified debug compare
