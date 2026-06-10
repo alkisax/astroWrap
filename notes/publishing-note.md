@@ -56,3 +56,41 @@ React Native, Expo Router, Node.js, Express, SQLite, JWT, Socket.io, Swagger, Zo
 
 Μπορείτε να τη δείτε στο Google Play Store εδώ:
 [βάλε link]
+
+---
+
+Astro Lark – an astrology app I built
+
+I'd like to share a side project I've been working on recently.
+
+Astro Lark is an Android application that calculates a natal chart and provides AI-generated astrological interpretations. The app calculates planetary positions, signs, houses, chart ruler, elemental balance, aspects, house rulers, essential dignities, dispositors, and other chart data based on the birth date, birth time, and location provided by the user.
+
+Once the chart has been calculated, the user can press the "Call Lark" button. The chart data is converted into a structured prompt and sent to an AI model, which generates a detailed interpretation of the chart.
+
+Because AI calls are not free, I had to include rewarded advertisements in the app to help cover part of the operating costs — sorry about that 😄
+
+Users who create an account can save their chart information and interpretations so they don't have to enter everything again each time they use the app.
+
+Logged-in users also have access to a double-chart mode. This can be used either for relationship/synastry questions involving another person or for predictive questions about a future moment in time. In both cases, chart data is processed and sent to the AI system for interpretation.
+
+The name Astro Lark was inspired by astrologer Bernadette Brady, who contrasts the hawk that flies high and sees the landscape from above with the lark that sings beautifully but remains closer to the ground. I liked the analogy because the application combines the mathematical side of astrology with AI-generated narrative interpretation.
+
+I'm not a professional astrologer, so one of the reasons I'm posting this is to get feedback. I'm particularly interested in hearing whether the calculations look correct, whether the interpretations feel useful, and what could be improved in the overall experience.
+
+I should also admit that the current UI looks much more like a developer tool that solves technical problems than a polished consumer mobile application 😄 Most of the effort went into getting the functionality working rather than making it pretty. If people find the project interesting, a future redesign is definitely on the table.
+
+For developers
+
+The application was built with React Native, Node.js, and SQLite, using Expo/EAS for the mobile build and deployment workflow. User accounts are handled through JWT authentication, while the backend is deployed on a Hetzner VPS.
+
+For astrology calculations and chart generation, the two main libraries used were:
+
+astrodraw / astrochart
+circular-natal-horoscope-js
+
+The AI functionality works as a wrapper around an LLM. Rather than sending raw chart text, the application generates structured JSON containing planetary positions, houses, aspects, rulers, dignities, elemental balances, and other chart data. This payload is filtered and transformed before being included in a structured prompt.
+
+One of the original goals of the project was to learn the complete mobile publishing process, including Play Store testing, reviews, app signing, privacy requirements, and AdMob integration.
+
+Google Play:
+https://play.google.com/store/apps/details?id=com.alkis.astrolark
